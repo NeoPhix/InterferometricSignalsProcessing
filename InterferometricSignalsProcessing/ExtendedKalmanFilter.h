@@ -3,12 +3,16 @@
 
 #include <opencv\cv.h>
 #include "IFilter.h"
+#include "IDynamicSystem.h"
 
 class ExtendedKalmanFilter : public IFilter
 {
 public:
 	ExtendedKalmanFilter();
 	~ExtendedKalmanFilter();
+
+private:
+
 };
 
 #endif

@@ -18,18 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicSystem.cpp">
+    <ClCompile Include="ExtendedKalmanFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExtendedKalmanFilter.cpp">
+    <ClCompile Include="IDynamicSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterferometricSystem1D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DynamicSystem.h">
+    <ClInclude Include="ExtendedKalmanFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExtendedKalmanFilter.h">
+    <ClInclude Include="IDynamicSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InterferometricSystem1D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
