@@ -7,7 +7,8 @@ class IDynamicSystem
 {
 public:
 	virtual void Translate() = 0 ;									//Translate to the next state
-	virtual std::vector<double>& Observe() const = 0 ;
+	virtual std::vector<double>& Observe() const = 0 ;				//Get observation from current state of the system
+	//virtual void 
 private:
 	std::vector<double> State;
 };
