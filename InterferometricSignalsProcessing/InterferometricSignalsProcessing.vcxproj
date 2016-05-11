@@ -155,16 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="IDynamicSystem.cpp" />
     <ClCompile Include="ExtendedKalmanFilter.cpp" />
-    <ClCompile Include="IFilter.cpp" />
     <ClCompile Include="InterferometricSystem1D.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IDynamicSystem.h" />
     <ClInclude Include="ExtendedKalmanFilter.h" />
-    <ClInclude Include="IFilter.h" />
     <ClInclude Include="InterferometricSystem1D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

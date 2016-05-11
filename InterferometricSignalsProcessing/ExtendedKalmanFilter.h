@@ -1,18 +1,17 @@
 #ifndef EXTNDED_KALMAN_FILTER_H
 #define EXTNDED_KALMAN_FILTER_H
 
-#include <opencv\cv.h>
-#include "IFilter.h"
-#include "IDynamicSystem.h"
+#include <Eigen/Dense>
 
-class ExtendedKalmanFilter : public IFilter
+template <class System>
+class ExtendedKalmanFilter
 {
 public:
-	ExtendedKalmanFilter();
+	ExtendedKalmanFilter(System *SYSTEM);
 	~ExtendedKalmanFilter();
 
 private:
-
+	System system ;
 };
 
 #endif
