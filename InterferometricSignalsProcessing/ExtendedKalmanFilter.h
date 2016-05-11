@@ -3,15 +3,13 @@
 
 #include <Eigen/Dense>
 
-template <class System>
 class ExtendedKalmanFilter
 {
 public:
-	ExtendedKalmanFilter(System *SYSTEM);
+	ExtendedKalmanFilter();
 	~ExtendedKalmanFilter();
 
 private:
-	System system ;
 };
 
 #endif
