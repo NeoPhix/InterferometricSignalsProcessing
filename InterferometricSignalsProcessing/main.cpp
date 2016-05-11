@@ -5,5 +5,4 @@
 
 void main()
 {
-	std::function<int> a;
 }

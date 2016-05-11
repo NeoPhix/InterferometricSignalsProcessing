@@ -6,10 +6,8 @@
 class IDynamicSystem
 {
 public:
-	IDynamicSystem();
-	~IDynamicSystem();
-	virtual void Translate() = 0 ;
-	virtual std::vector<double> Observe() = 0 ;
+	virtual void Translate() = 0 ;									//Translate to the next state
+	virtual std::vector<double>& Observe() const = 0 ;
 private:
 	std::vector<double> State;
 };
