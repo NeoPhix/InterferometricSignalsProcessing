@@ -9,30 +9,39 @@
 
 #include "InterferometricSystem1D.h"
 
-template <class State, class Observation, class StateDerivative, class ObservationDerivative>
+template <class State, class Obs, class StateDer, class ObsDer>
 class ExtendedKalmanFilter
 {
 public:
 	ExtendedKalmanFilter(std::function<State(State)> trans,
-		std::function<StateDerivative(State)> transDer,
-		std::function<Observation(State)> obs,
-		std::function<ObservationDerivative(State)> obsDer,
+		std::function<StateDer(State)> transDer,
+		std::function<Obs(State)> obs,
+		std::function<ObsDer(State)> obsDer,
 		State st,
-		Observation ob
+		Obs ob
 	);
 	~ExtendedKalmanFilter();
 
 	//State operator()(Observation obs);
 private:
 	std::function<State(State)> translate;
-	std::function<StateDerivative(State)> translateDerivative;
-	std::function<Observation(State)> observe;
-	std::function<ObservationDerivative(State)> observeDerivative;
+	std::function<StateDer(State)> getTranslationDerivative;
+	std::function<Obs(State)> observe;
+	std::function<ObsDer(State)> getObservationDerivative;
 	State state;
-	Observation observation;
+	Obs obs;
 };
 
+template <class State, class Obs, class StateDer, class ObsDer>
+ExtendedKalmanFilter::ExtendedKalmanFilter(std::function<State(State)> trans,
+	std::function<StateDer(State)> transDer,
+	std::function<Obs(State)> obs,
+	std::function<ObsDer(State)> obsDer,
+	State st,
+	Obs ob)
+{
 
+}
 
 double h(Eigen::Vector4d state)
 {
