@@ -21,18 +21,9 @@
     <ClCompile Include="ExtendedKalmanFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InterferometricSystem1D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExtendedKalmanFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IDynamicSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InterferometricSystem1D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
