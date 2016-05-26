@@ -8,10 +8,11 @@ class ExtendedKalmanFilter
 {
 public:
 	ExtendedKalmanFilter(std::function<State(State)> trans,
-		std::function<StateDer(State)> transDer,
 		std::function<Obs(State)> obs,
+		std::function<StateDer(State)> transDer,
 		std::function<ObsDer(State)> obsDer,
-		State st);
+		State st)
+		: translate(trans), observe(obs), getTranslationDerivative(transDer), getObservationDerivative(obsDer), state(st) {}
 	//~ExtendedKalmanFilter();
 
 	//State operator()(Observation obs);
