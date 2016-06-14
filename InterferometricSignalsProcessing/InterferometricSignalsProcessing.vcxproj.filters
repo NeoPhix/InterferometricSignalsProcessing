@@ -18,12 +18,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExtendedKalmanFilter.cpp">
+    <ClCompile Include="EKFIneterferometricSignal1D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExtendedKalmanFilter.h">
+    <ClInclude Include="EKFIneterferometricSignal1D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

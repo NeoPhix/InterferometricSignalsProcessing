@@ -7,13 +7,8 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
-#include "ExtendedKalmanFilter.h"
+#include "EKFIneterferometricSignal1D.h"
 
-
-double h(Eigen::Vector4d state) ;
-Eigen::Vector4d f(Eigen::Vector4d state);
-Eigen::Matrix4d Ft(Eigen::Vector4d state);
-Eigen::RowVector4d Ht(Eigen::Vector4d state);
 
 int main(int argc, char **argv)
 {
@@ -22,37 +17,12 @@ int main(int argc, char **argv)
 		std::cout << argv[i] << std::endl ;
 
 	Eigen::Vector4d beginState(127, 50, 3, 0) ;
-	ExtendedKalmanFilter<Eigen::Vector4d, double, Eigen::Matrix4d, Eigen::RowVector4d> EKF(f, h, Ft, Ht, beginState);
 	
 	std::cin >> argc ;
 	return 0 ;
 }
 
 
-
-double h(Eigen::Vector4d state)
-{
-	return state(0) + state(1)*cos(state(3));
-}
-
-Eigen::Vector4d f(Eigen::Vector4d state)
-{
-	return state + Eigen::Vector4d(0, 0, 0, 2 * M_PI*state(2));
-}
-
-Eigen::Matrix4d Ft(Eigen::Vector4d state)
-{
-	double F[] = { 1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 2 * M_PI, 1 };
-	return Eigen::Matrix4d(F);
-}
-
-Eigen::RowVector4d Ht(Eigen::Vector4d state)
-{
-	return Eigen::RowVector4d(1, cos(state(3)), 0, -state(1)*sin(state(3)));
-}
 
 //Eigen::Matrix2d *m2 = new Eigen::Matrix2d;
 //Eigen::Matrix2d &m = *m2;
