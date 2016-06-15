@@ -6,8 +6,13 @@
 class EKFIneterferometricSignal1D
 {
 public:
-	EKFIneterferometricSignal1D();
+	EKFIneterferometricSignal1D(Eigen::Vector4d state,
+	Eigen::Matrix4d R,
+	Eigen::Matrix4d Rw,
+	double Rn);
 	~EKFIneterferometricSignal1D();
+
+	Eigen::Vector4d getState();
 
 private:
 	Eigen::Vector4d state;
