@@ -43,6 +43,6 @@ void EKFIneterferometricSignal1D::estimate(double obs)
 	Eigen::Matrix4d F = Ft(state);
 	Eigen::Matrix4d Rpr = F*R*F.transpose() + Rw;
 	Eigen::RowVector4d H = Ht(predict);
-	Eigen::Vector4d P = Rpr*H / (H*Rpr*H.transpose() + Rn);
+	Eigen::Vector4d P = Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
 	state = predict + P*(obs - h(predict));
 }

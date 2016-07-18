@@ -30,12 +30,19 @@ int main(int argc, char **argv)
 	double frequency[N] = { 0 };
 	double phase[N] = { 0 };
 	double signal[N] = { 0 };
+
+	//Noise
+	std::default_random_engine gen((unsigned int)time(NULL));
+
+	double noiseSigma = 10 ;
+	double noiseMean = 0 ;
 	double noise[N] = { 0 };
 
-	std::default_random_engine gen(time(NULL));
+	std::normal_distribution<double> distribution(noiseMean, noiseSigma) ;
 
 	for (int i = 0; i < N; i++)
 	{
+		noise[i] = distribution(gen) ;
 		background[i] = 100;
 		amplitude[i] = 50 + E_max*exp(-((i - z1)*(i - z1)) / (sigma1*sigma1)) +
 			E_max*exp(-((i - z2)*(i - z2)) / (sigma2*sigma2));
@@ -43,6 +50,7 @@ int main(int argc, char **argv)
 		if (i > 0)
 			phase[i] = phase[i - 1] + 2 * M_PI*frequency[i] * delta_z;
 		signal[i] = background[i] + amplitude[i] * cos(phase[i]) + noise[i];
+		std::cout << noise[i] << std::endl ;
 	}
 
 	//Kalman parameters
