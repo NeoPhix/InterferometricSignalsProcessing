@@ -53,6 +53,8 @@ int main(int argc, char **argv)
 		std::cout << noise[i] << std::endl ;
 	}
 
+	std::cin >> argc;
+
 	//Kalman parameters
 	Eigen::Vector4d beginState(95, 35, 0.015, 24);
 	double tmp[] = { 0.1, 0, 0, 0,
@@ -72,6 +74,7 @@ int main(int argc, char **argv)
 	{
 		EKF.estimate(i);
 		states[i] = EKF.getState();
+		
 	}
 
 	std::cin >> argc;
