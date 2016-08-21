@@ -3,12 +3,15 @@
 #include <functional>
 #include <cmath>
 #include <random>
+#include <fstream>
 
 #include <Eigen/Dense>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
 #include "EKFIneterferometricSignal1D.h"
+
+void print_states(char *filename, Eigen::Vector4d *states, int N) ;
 
 
 int main(int argc, char **argv)
@@ -56,7 +59,7 @@ int main(int argc, char **argv)
 	std::cin >> argc;
 
 	//Kalman parameters
-	Eigen::Vector4d beginState(95, 35, 0.015, 24);
+	Eigen::Vector4d beginState(100, 70, 0.05, 1);
 	double tmp[] = { 0.1, 0, 0, 0,
 					0, 0.15, 0, 0,
 					0, 0, 0.0001, 0,
@@ -68,15 +71,28 @@ int main(int argc, char **argv)
 	// Creation of EKF
 	EKFIneterferometricSignal1D EKF(beginState, Rw_start, Rw, Rn);
 
-	int count = 100;
-	Eigen::Vector4d states[100];
-	for (int i = 0; i < count; i++)
+	Eigen::Vector4d *states = new Eigen::Vector4d[N];
+
+	for (int i = 0; i < N; i++)
 	{
-		EKF.estimate(i);
+		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
-		
 	}
+
+	print_states("out.txt", states, N) ;
 
 	std::cin >> argc;
 	return 0;
+}
+
+void print_states(char *filename, Eigen::Vector4d *states, int N)
+{
+	std::ofstream out ;
+	out.open(filename) ;
+//	out << "Back\tAmp\tFreq\tPhase" << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		out << states[i](0) << "\t" << states[i](1) << "\t" << states[i](2) << "\t" << states[i](3) << std::endl;
+	}
+	out.close() ;
 }
