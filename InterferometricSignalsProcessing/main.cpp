@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		background[i] = 100;
 		amplitude[i] = 50 + E_max*exp(-((i - z1)*(i - z1)) / (sigma1*sigma1)) +
 			E_max*exp(-((i - z2)*(i - z2)) / (sigma2*sigma2));
-		frequency[N - i - 1] = 0.03 + 0.00015*i;
+		frequency[N - i - 1] = 0.03;// +0.0001*i;
 	}
 	for (int i = 1; i < N; i++)
 	{
@@ -61,11 +61,11 @@ int main(int argc, char **argv)
 	//std::cin >> argc ; 
 
 	//Kalman parameters
-	Eigen::Vector4d beginState(100, 70, 0.05, 1);
+	Eigen::Vector4d beginState(100, 55, 0.03, 0);
 	double tmp[] = { 0.1, 0, 0, 0,
 					0, 0.15, 0, 0,
-					0, 0, 0.0001, 0,
-					0, 0, 0, 0.002 };
+					0, 0, 0.00001, 0,
+					0, 0, 0, 0.2 };
 	Eigen::Matrix4d Rw(tmp);
 	Eigen::Matrix4d Rw_start(tmp);
 	double Rn = 5;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	for (int i = 0; i < N; i++)
+	for (int i = 1; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
