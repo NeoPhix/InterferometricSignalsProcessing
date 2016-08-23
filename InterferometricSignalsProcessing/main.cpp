@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 
 	std::normal_distribution<double> distribution(noiseMean, noiseSigma) ;
 
+	//Signal modeling
 	for (int i = 0; i < N; i++)
 	{
 		noise[i] = distribution(gen) ;
@@ -50,13 +51,14 @@ int main(int argc, char **argv)
 		amplitude[i] = 50 + E_max*exp(-((i - z1)*(i - z1)) / (sigma1*sigma1)) +
 			E_max*exp(-((i - z2)*(i - z2)) / (sigma2*sigma2));
 		frequency[N - i - 1] = 0.03 + 0.00015*i;
-		if (i > 0)
-			phase[i] = phase[i - 1] + 2 * M_PI*frequency[i] * delta_z;
+	}
+	for (int i = 1; i < N; i++)
+	{
+		phase[i] = phase[i - 1] + 2 * M_PI*frequency[i] * delta_z;
 		signal[i] = background[i] + amplitude[i] * cos(phase[i]) + noise[i];
-		std::cout << noise[i] << std::endl ;
 	}
 
-	std::cin >> argc;
+	//std::cin >> argc ; 
 
 	//Kalman parameters
 	Eigen::Vector4d beginState(100, 70, 0.05, 1);
@@ -71,17 +73,32 @@ int main(int argc, char **argv)
 	// Creation of EKF
 	EKFIneterferometricSignal1D EKF(beginState, Rw_start, Rw, Rn);
 
+	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-
 	for (int i = 0; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
 	}
 
-	print_states("out.txt", states, N) ;
+	//Output to file
+	print_states("EKFdata.txt", states, N);
 
-	std::cin >> argc;
+	//Output real data to file
+	Eigen::Vector4d *real_states = new Eigen::Vector4d[N];
+	for (int i = 0; i < N; i++)
+	{	
+		real_states[i](0) = 100;
+		real_states[i](1) = amplitude[i];
+		real_states[i](2) = frequency[i];
+		real_states[i](3) = phase[i];
+	}
+	print_states("data.txt", real_states, N);
+
+	//Memory release
+	delete[] states;
+	delete[] real_states ;
+
 	return 0;
 }
 

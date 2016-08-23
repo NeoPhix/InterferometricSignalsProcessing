@@ -26,5 +26,11 @@
     <ClInclude Include="EKFIneterferometricSignal1D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PFInterferometricSignal1D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
   </ItemGroup>
 </Project>

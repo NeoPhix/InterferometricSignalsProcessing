@@ -160,6 +160,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EKFIneterferometricSignal1D.h" />
+    <ClInclude Include="PFInterferometricSignal1D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
