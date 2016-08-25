@@ -3,6 +3,14 @@
 
 #include <Eigen\Dense>
 
+struct ExtendedKalmanFilterIS1DState
+{
+	Eigen::Vector4d state;
+	Eigen::Matrix4d R;
+	Eigen::Matrix4d Rw;
+	double Rn;
+};
+
 class EKFIneterferometricSignal1D
 {
 public:
@@ -11,6 +19,7 @@ public:
 
 	Eigen::Vector4d getState();
 	void estimate(double obs);
+	ExtendedKalmanFilterIS1DState getFullState() ;
 private:
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;

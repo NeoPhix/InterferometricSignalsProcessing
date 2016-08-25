@@ -47,3 +47,9 @@ void EKFIneterferometricSignal1D::estimate(double obs)
 	state = predict + P*(obs - h(predict));
 	R = (Eigen::Matrix4d::Identity()-P*H)*Rpr ;
 }
+
+ExtendedKalmanFilterIS1DState EKFIneterferometricSignal1D::getFullState()
+{
+	ExtendedKalmanFilterIS1DState st = { state, R, Rw, Rn };
+	return st ;
+}
