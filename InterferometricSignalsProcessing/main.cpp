@@ -60,26 +60,27 @@ int main(int argc, char **argv)
 		//	frequency[N - i - 1] = frequency[i];
 		//}
 	}
+	signal[0] = background[0] + amplitude[0] * cos(phase[0]);// +noise[0];
 	for (int i = 1; i < N; i++)
 	{
 		phase[i] = phase[i - 1] + 2 * M_PI*frequency[i] * delta_z;
-		signal[i] = background[i] + amplitude[i] * cos(phase[i]) + noise[i];
+		signal[i] = background[i] + amplitude[i] * cos(phase[i]);// +noise[i];
 	}
 	print_signal("out.txt", signal, N) ;
 	//std::cin >> argc ; 
 
 	//Kalman parameters
 	Eigen::Vector4d beginState(100, 70, 0.05, 1);
-	double tmp[] = { 0.1, 0, 0, 0,
-					0, 0.15, 0, 0,
-					0, 0, 0.001, 0,
-					0, 0, 0, 0.002 };
-	Eigen::Matrix4d Rw(tmp);
-	Eigen::Matrix4d Rw_start(tmp);
+	Eigen::Matrix4d Rw;
+	Rw << 0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.001, 0,
+		0, 0, 0, 0.002 ;
+	Eigen::Matrix4d Rw_start(Rw);
 	double Rn = 5;
 
 	// Creation of EKF
-	EKFIneterferometricSignal1D EKF(beginState, Rw_start, Rw, Rn);
+	EKFIneterferometricSignal1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
