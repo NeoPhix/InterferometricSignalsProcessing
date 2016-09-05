@@ -155,12 +155,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EKFIneterferometricSignal1D.cpp" />
+    <ClCompile Include="ExtendedKalmanFilterIS1D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParticleFilterIS1D.cpp" />
+    <ClCompile Include="SignalMaker.cpp" />
+    <ClCompile Include="StatePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EKFIneterferometricSignal1D.h" />
-    <ClInclude Include="PFInterferometricSignal1D.h" />
+    <ClInclude Include="ExtendedKalmanFilterIS1D.h" />
+    <ClInclude Include="ParticleFilterIS1D.h" />
+    <ClInclude Include="SignalMaker.h" />
+    <ClInclude Include="StatePrinter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />

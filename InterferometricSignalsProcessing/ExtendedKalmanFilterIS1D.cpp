@@ -1,30 +1,30 @@
-#include "EKFIneterferometricSignal1D.h"
+#include "ExtendedKalmanFilterIS1D.h"
 #include <iostream>
 
-EKFIneterferometricSignal1D::EKFIneterferometricSignal1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
+ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
 	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
 
 
-EKFIneterferometricSignal1D::~EKFIneterferometricSignal1D()
+ExtendedKalmanFilterIS1D::~ExtendedKalmanFilterIS1D()
 {
 }
 
-Eigen::Vector4d EKFIneterferometricSignal1D::getState()
+Eigen::Vector4d ExtendedKalmanFilterIS1D::getState()
 {
 	return state ;
 }
 
-double EKFIneterferometricSignal1D::h(Eigen::Vector4d state)
+double ExtendedKalmanFilterIS1D::h(Eigen::Vector4d state)
 {
 	return state(0) + state(1)*cos(state(3));
 }
 
-Eigen::Vector4d EKFIneterferometricSignal1D::f(Eigen::Vector4d state)
+Eigen::Vector4d ExtendedKalmanFilterIS1D::f(Eigen::Vector4d state)
 {
 	return state + Eigen::Vector4d(0, 0, 0, 2 * M_PI*state(2));
 }
 
-Eigen::Matrix4d EKFIneterferometricSignal1D::Ft(Eigen::Vector4d state)
+Eigen::Matrix4d ExtendedKalmanFilterIS1D::Ft(Eigen::Vector4d state)
 {
 //	double F[] = { 
 	Eigen::Matrix4d F;
@@ -35,12 +35,12 @@ Eigen::Matrix4d EKFIneterferometricSignal1D::Ft(Eigen::Vector4d state)
 	return F;
 }
 
-Eigen::RowVector4d EKFIneterferometricSignal1D::Ht(Eigen::Vector4d state)
+Eigen::RowVector4d ExtendedKalmanFilterIS1D::Ht(Eigen::Vector4d state)
 {
 	return Eigen::RowVector4d(1, cos(state(3)), 0, -state(1)*sin(state(3)));
 }
 
-void EKFIneterferometricSignal1D::estimate(double obs)
+void ExtendedKalmanFilterIS1D::estimate(double obs)
 {
 	Eigen::Vector4d predict = f(state);
 	Eigen::Matrix4d F = Ft(state);
@@ -51,7 +51,7 @@ void EKFIneterferometricSignal1D::estimate(double obs)
 	R = (Eigen::Matrix4d::Identity()-P*H)*Rpr;
 }
 
-ExtendedKalmanFilterIS1DState EKFIneterferometricSignal1D::getFullState()
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1D::getFullState()
 {
 	ExtendedKalmanFilterIS1DState st = { state, R, Rw, Rn };
 	return st ;

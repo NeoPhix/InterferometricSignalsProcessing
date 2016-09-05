@@ -1,4 +1,3 @@
-0. matlab import graphics
 1. Particle filter
 2. Kalman filter test/approximate
 3. full search
@@ -9,3 +8,5 @@
 9. Autoregression models?
 10. Neural networks for filter creation
 ~~Time tests? 
+11. Qt iterface
+

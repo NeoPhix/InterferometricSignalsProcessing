@@ -1,5 +1,5 @@
-#ifndef EKFIneterferometricSignal1D_H
-#define EKFIneterferometricSignal1D_H
+#ifndef ExtendedKalmanFilterIS1D_H
+#define ExtendedKalmanFilterIS1D_H
 
 #include <Eigen\Dense>
 
@@ -11,11 +11,11 @@ struct ExtendedKalmanFilterIS1DState
 	double Rn;
 };
 
-class EKFIneterferometricSignal1D
+class ExtendedKalmanFilterIS1D
 {
 public:
-	EKFIneterferometricSignal1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
-	~EKFIneterferometricSignal1D();
+	ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
+	~ExtendedKalmanFilterIS1D();
 
 	Eigen::Vector4d getState();
 	void estimate(double obs);
