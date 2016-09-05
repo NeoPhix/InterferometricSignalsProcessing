@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 		frequency[N - i - 1] = 0.03 + 0.00015*i;
 	}
 
-
 	double *phase = SignalMaker::phaseFromFrequency(0.03, N, delta_z);
 	double *noise = SignalMaker::normalDistribution(0, 10, N) ;
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
@@ -87,6 +86,7 @@ int main(int argc, char **argv)
 	//Memory release
 	delete[] noise;
 	delete[] phase;
+	delete[] signal;
 
 	//States
 	delete[] states;

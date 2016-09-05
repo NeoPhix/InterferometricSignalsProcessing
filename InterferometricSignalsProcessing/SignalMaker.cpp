@@ -48,7 +48,7 @@ double* SignalMaker::phaseFromFrequency(double frequency, int N, double delta_z)
 	return phase;
 }
 
-double* SignalMaker::getSignalValue(double background, double amplitude, double phase)
+double SignalMaker::getSignalValue(double background, double amplitude, double phase)
 {
 	return background + amplitude * cos(phase);
 }
