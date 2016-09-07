@@ -15,7 +15,9 @@ public:
 	void estimate(double obs);
 private:
 	std::vector<double> state;
-	Eigen::Matrix4d Rw;
+	std::vector<double> means;
+	std::vector<double> vars;
+
 	double Rn;
 
 	double h(Eigen::Vector4d state);
