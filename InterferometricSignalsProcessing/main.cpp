@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 		states[i] = EKF.getState();
 	}
 
+
 	//Output to file
 	StatePrinter::print_states("EKFdata.txt", states, N);
 	StatePrinter::print_full_Kalman_states("EKF_fullstates.txt", full_states, N) ;

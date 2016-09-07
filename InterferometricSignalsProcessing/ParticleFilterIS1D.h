@@ -1,6 +1,7 @@
-
 #ifndef ParticleFilterIS1D_H
 #define ParticleFilterIS1D_H
+
+#include <vector>
 
 #include <Eigen\Dense>
 
@@ -13,8 +14,7 @@ public:
 	Eigen::Vector4d getState();
 	void estimate(double obs);
 private:
-	Eigen::Vector4d state;
-	Eigen::Matrix4d R;
+	std::vector<double> state;
 	Eigen::Matrix4d Rw;
 	double Rn;
 

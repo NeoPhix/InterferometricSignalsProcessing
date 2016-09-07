@@ -1,4 +1,5 @@
 1. Particle filter
+	//to be or not to be with multivariate normal distribution? :)
 2. Kalman filter test/approximate
 3. full search
 4. Gradient descent for kalman parameters (it can be used and for particle filter too)
