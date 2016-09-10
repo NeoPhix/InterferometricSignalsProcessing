@@ -2,6 +2,9 @@
 
 *.lib
 *.dll
+*.txt
+!todo.txt
+
 
 #################
 ## Visual Studio
