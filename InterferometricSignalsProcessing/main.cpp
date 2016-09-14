@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 
 	//Signals
 	int sigCount = 10;
-	double E_max = 20;
-	double sigma = 150;
+	double E_max = 50;
+	double sigma = 50;
 	
 	double background[N] = { 0 };
 	double amplitude[N] = { 0 };
@@ -43,19 +43,24 @@ int main(int argc, char **argv)
 	{
 		signals[k] = new double[N];
 		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
-		std::cout << startPhase << std::endl ;
 		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
 		double *noise = SignalMaker::normalDistribution(0, 10, N);
 		
-		int edgesCount = gen() % 4 + 1;		//Count of gaussian amplitudes in out signal
+		int edgesCount = gen() % 6 + 1;		//Count of gaussian amplitudes in out signal
+		int *z = new int[edgesCount];	//Edges 
+		for (int j = 0; j < edgesCount; j++)
+		{
+			z[j] = (gen() % 20) * 50;	//Now it is edge!
+		}
 		for (int i = 0; i < N; i++)
 		{
 			amplitude[i] = 50 ;
+
 			for (int j = 0; j < edgesCount; j++)
 			{
-				int z = gen() % 20 * 50 ;	//Now it is edge!
-				amplitude[i] += E_max*SignalMaker::gaussianAmplitude(i, z, sigma) ;
+				amplitude[i] += E_max*SignalMaker::gaussianAmplitude(i, z[j], sigma) ;
 			}
+
 		}
 
 		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ; 
@@ -63,6 +68,7 @@ int main(int argc, char **argv)
 		
 		delete[] phase;
 		delete[] noise;
+		delete[] z;
 	}
 
 	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
