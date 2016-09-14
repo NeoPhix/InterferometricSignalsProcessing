@@ -3,13 +3,13 @@
 
 namespace SignalMaker
 {
-	double* createSignal1D(double *background, double *amplitude, double *phase, double *noise, int N, double delta_z);
-	double* normalDistribution(double mean, double sigma, int N);
+	double* createSignal1D(double *background, double *amplitude, double *phase, double *noise, const int N, const double delta_z);
+	double* normalDistribution(double mean, double sigma, const int N, std::default_random_engine &gen);
 	double gaussianAmplitude(double x, double mean, double sigma);
 	double* phaseFromFrequency(const double *frequency, double startPhase, int N, double delta_z);
 	double* phaseFromFrequency(double frequency, double startPhase, int N, double delta_z);
 	double getSignalValue(double background, double amplitude, double phase);
-	
+	double* randomGaussianAmplitude(const int N, double minValue, double maxValue, double sigma, int maxGaussiansCount, std::default_random_engine &gen) ;
 }
 
 #endif

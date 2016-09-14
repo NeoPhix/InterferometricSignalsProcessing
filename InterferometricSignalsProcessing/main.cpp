@@ -28,7 +28,6 @@ int main(int argc, char **argv)
 	double sigma = 50;
 	
 	double background[N] = { 0 };
-	double amplitude[N] = { 0 };
 	double frequency[N] = { 0 };
 	
 	for (int i = 0; i < N; i++)
@@ -41,43 +40,24 @@ int main(int argc, char **argv)
 	std::default_random_engine gen((unsigned int)time(NULL));
 	for (int k = 0; k < sigCount; k++)
 	{
-		signals[k] = new double[N];
 		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
 		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
-		double *noise = SignalMaker::normalDistribution(0, 10, N);
-		
-		int edgesCount = gen() % 6 + 1;		//Count of gaussian amplitudes in out signal
-		int *z = new int[edgesCount];	//Edges 
-		for (int j = 0; j < edgesCount; j++)
-		{
-			z[j] = (gen() % 20) * 50;	//Now it is edge!
-		}
-		for (int i = 0; i < N; i++)
-		{
-			amplitude[i] = 50 ;
+		double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
+		double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen) ;
 
-			for (int j = 0; j < edgesCount; j++)
-			{
-				amplitude[i] += E_max*SignalMaker::gaussianAmplitude(i, z[j], sigma) ;
-			}
-
-		}
-
-		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ; 
-		StatePrinter::print_signal("out.txt", signals[k], N);
+		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
+		StatePrinter::print_signal("out.txt", noise, N);
 		
 		delete[] phase;
 		delete[] noise;
-		delete[] z;
 	}
 
+	double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen);
 	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
-	double *noise = SignalMaker::normalDistribution(0, 10, N);
-	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
+	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
+	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z);
 
 	StatePrinter::print_signal("out.txt", signal, N) ;
-
-	
 
 	// Creation of EKF
 	Eigen::Vector4d beginState(100, 70, 0.05, 1);
