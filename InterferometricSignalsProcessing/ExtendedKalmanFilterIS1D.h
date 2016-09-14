@@ -15,6 +15,7 @@ class ExtendedKalmanFilterIS1D
 {
 public:
 	ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
+	ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState full_state);
 	~ExtendedKalmanFilterIS1D();
 
 	Eigen::Vector4d getState();

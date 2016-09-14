@@ -46,10 +46,10 @@ int main(int argc, char **argv)
 		double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen) ;
 
 		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
-		StatePrinter::print_signal("out.txt", noise, N);
-		
+	
 		delete[] phase;
 		delete[] noise;
+		delete[] amplitude;
 	}
 
 	double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen);
