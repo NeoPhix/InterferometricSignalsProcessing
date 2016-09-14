@@ -9,5 +9,6 @@
 9. Autoregression models?
 10. Neural networks for filter creation
 ~~Time tests? 
-11. Qt iterface
+12. Qt interface
+
 

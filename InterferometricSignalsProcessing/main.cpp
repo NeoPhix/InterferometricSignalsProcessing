@@ -2,6 +2,8 @@
 #include <functional>
 #include <cmath>
 #include <fstream>
+#include <ctime>
+#include <random>
 
 #include <Eigen/Dense>
 #include <opencv/cv.h>
@@ -20,32 +22,58 @@ int main(int argc, char **argv)
 	for (int i = 0; i < argc; i++)
 		std::cout << argv[i] << std::endl;
 
-	//Signal
+	//Signals
+	int sigCount = 10;
 	double E_max = 20;
-	double z1 = 250;
-	double z2 = 800;
-	double sigma1 = 200;
-	double sigma2 = 150;
-
+	double sigma = 150;
+	
 	double background[N] = { 0 };
 	double amplitude[N] = { 0 };
 	double frequency[N] = { 0 };
-
-	//Signal modeling
+	
 	for (int i = 0; i < N; i++)
 	{
 		background[i] = 100;
-		amplitude[i] = 50 + E_max*SignalMaker::gaussianAmplitude(i, z1, sigma1) + E_max*SignalMaker::gaussianAmplitude(i, z2, sigma2);
 		frequency[N - i - 1] = 0.03 + 0.00015*i;
 	}
 
-	double *phase = SignalMaker::phaseFromFrequency(0.03, N, delta_z);
-	double *noise = SignalMaker::normalDistribution(0, 10, N) ;
+	double **signals = new double*[sigCount];
+	std::default_random_engine gen((unsigned int)time(NULL));
+	for (int k = 0; k < sigCount; k++)
+	{
+		signals[k] = new double[N];
+		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
+		std::cout << startPhase << std::endl ;
+		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
+		double *noise = SignalMaker::normalDistribution(0, 10, N);
+		
+		int edgesCount = gen() % 4 + 1;		//Count of gaussian amplitudes in out signal
+		for (int i = 0; i < N; i++)
+		{
+			amplitude[i] = 50 ;
+			for (int j = 0; j < edgesCount; j++)
+			{
+				int z = gen() % 20 * 50 ;	//Now it is edge!
+				amplitude[i] += E_max*SignalMaker::gaussianAmplitude(i, z, sigma) ;
+			}
+		}
+
+		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ; 
+		StatePrinter::print_signal("out.txt", signals[k], N);
+		
+		delete[] phase;
+		delete[] noise;
+	}
+
+	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
+	double *noise = SignalMaker::normalDistribution(0, 10, N);
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
 
 	StatePrinter::print_signal("out.txt", signal, N) ;
 
-	//Kalman parameters
+	
+
+	// Creation of EKF
 	Eigen::Vector4d beginState(100, 70, 0.05, 1);
 	Eigen::Matrix4d Rw;
 	Rw << 0.1, 0, 0, 0,
@@ -55,15 +83,12 @@ int main(int argc, char **argv)
 	Eigen::Matrix4d Rw_start(Rw);
 	double Rn = 5;
 
-	// Creation of EKF
 	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	ExtendedKalmanFilterIS1DState * full_states = new ExtendedKalmanFilterIS1DState[N] ;
 	for (int i = 0; i < N; i++)
 	{
-		full_states[i] = EKF.getFullState();
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
 	}
@@ -71,9 +96,7 @@ int main(int argc, char **argv)
 
 	//Output to file
 	StatePrinter::print_states("EKFdata.txt", states, N);
-	StatePrinter::print_full_Kalman_states("EKF_fullstates.txt", full_states, N) ;
 
-	//Output real data to file
 	Eigen::Vector4d *real_states = new Eigen::Vector4d[N];
 	for (int i = 0; i < N; i++)
 	{	
@@ -85,6 +108,13 @@ int main(int argc, char **argv)
 	StatePrinter::print_states("data.txt", real_states, N);
 
 	//Memory release
+	for (int i = 0; i < sigCount; i++)
+	{
+		delete[] signals[i];
+	}
+	delete[] signals;
+
+	//
 	delete[] noise;
 	delete[] phase;
 	delete[] signal;
@@ -92,7 +122,6 @@ int main(int argc, char **argv)
 	//States
 	delete[] states;
 	delete[] real_states;
-	delete[] full_states;
 
 	return 0;
 }

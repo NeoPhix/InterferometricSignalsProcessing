@@ -28,9 +28,10 @@ double* SignalMaker::normalDistribution(double mean, double sigma, int N)
 	return noise;
 }
 
-double* SignalMaker::phaseFromFrequency(const double *frequency, int N, double delta_z)
+double* SignalMaker::phaseFromFrequency(const double *frequency, double startPhase, int N, double delta_z)
 {
 	double *phase = new double[N];
+	phase[0] = startPhase;
 	for (int i = 1; i < N; i++)
 	{
 		phase[i] = phase[i - 1] + 2 * M_PI*frequency[i] * delta_z;
@@ -38,9 +39,10 @@ double* SignalMaker::phaseFromFrequency(const double *frequency, int N, double d
 	return phase;
 }
 
-double* SignalMaker::phaseFromFrequency(double frequency, int N, double delta_z)
+double* SignalMaker::phaseFromFrequency(double frequency, double startPhase, int N, double delta_z)
 {
 	double *phase = new double[N];
+	phase[0] = startPhase;
 	for (int i = 1; i < N; i++)
 	{
 		phase[i] = phase[i - 1] + 2 * M_PI*frequency * delta_z;
@@ -57,3 +59,4 @@ double SignalMaker::gaussianAmplitude(double x, double mean, double sigma)
 {
 	return exp(-((x - mean)*(x - mean)) / (sigma*sigma));
 }
+
