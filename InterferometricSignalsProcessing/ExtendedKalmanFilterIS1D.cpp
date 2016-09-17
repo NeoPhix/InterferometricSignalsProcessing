@@ -4,6 +4,8 @@
 ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
 	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
 
+ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState full_state)
+	: state(full_state.state), R(full_state.R), Rw(full_state.Rw), Rn(full_state.Rn) {}
 
 ExtendedKalmanFilterIS1D::~ExtendedKalmanFilterIS1D()
 {
@@ -56,3 +58,4 @@ ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1D::getFullState()
 	ExtendedKalmanFilterIS1DState st = { state, R, Rw, Rn };
 	return st ;
 }
+
