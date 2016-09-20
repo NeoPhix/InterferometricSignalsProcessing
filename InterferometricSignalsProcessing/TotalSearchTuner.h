@@ -1,6 +1,8 @@
 #ifndef TOTAL_SEARCH_TUNER_H
 #define TOTAL_SEARCH_TUNER_H
 
+#include <random>
+
 namespace FilterTuning
 {
 	class TotalSearchTuner
@@ -9,6 +11,9 @@ namespace FilterTuning
 		TotalSearchTuner();
 		~TotalSearchTuner();
 
+	private:
+		int filtersCount;
+		int signalsCount;
 	} ;
 }
 

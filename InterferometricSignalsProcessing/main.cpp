@@ -12,6 +12,7 @@
 #include "SignalMaker.h"
 #include "ExtendedKalmanFilterIS1D.h"
 #include "StatePrinter.h"
+#include "SignalAnalysis.h"
 
 const int N = 1000;
 const double delta_z = 1;
@@ -43,19 +44,19 @@ int main(int argc, char **argv)
 		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
 		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
 		double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-		double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen) ;
+		double *amplitude = SignalMaker::randomGaussianAmplitude(N, E_max, 100, sigma, 6, gen) ;
 
-		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z) ;
-	
+		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N) ;
+
 		delete[] phase;
 		delete[] noise;
 		delete[] amplitude;
 	}
 
-	double *amplitude = SignalMaker::randomGaussianAmplitude(N, 50, 100, sigma, 6, gen);
+	double *amplitude = SignalMaker::randomGaussianAmplitude(N, 20, 70, sigma, 6, gen);
 	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
 	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N, delta_z);
+	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
 
 	StatePrinter::print_signal("out.txt", signal, N) ;
 

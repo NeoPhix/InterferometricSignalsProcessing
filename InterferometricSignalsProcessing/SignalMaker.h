@@ -3,7 +3,7 @@
 
 namespace SignalMaker
 {
-	double* createSignal1D(double *background, double *amplitude, double *phase, double *noise, const int N, const double delta_z);
+	double* createSignal1D(double *background, double *amplitude, double *phase, double *noise, const int N);
 	double* normalDistribution(double mean, double sigma, const int N, std::default_random_engine &gen);
 	double gaussianAmplitude(double x, double mean, double sigma);
 	double* phaseFromFrequency(const double *frequency, double startPhase, int N, double delta_z);

@@ -27,10 +27,10 @@ private:
 	Eigen::Matrix4d Rw;
 	double Rn;
 	
-	double h(Eigen::Vector4d state);
-	Eigen::Vector4d f(Eigen::Vector4d state);
-	Eigen::Matrix4d Ft(Eigen::Vector4d state);
-	Eigen::RowVector4d Ht(Eigen::Vector4d state);
+	double h(Eigen::Vector4d st);
+	Eigen::Vector4d f(Eigen::Vector4d st);
+	Eigen::Matrix4d Ft(Eigen::Vector4d st);
+	Eigen::RowVector4d Ht(Eigen::Vector4d st);
 };
 
 #endif

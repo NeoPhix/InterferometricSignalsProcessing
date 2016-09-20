@@ -16,19 +16,18 @@ Eigen::Vector4d ExtendedKalmanFilterIS1D::getState()
 	return state ;
 }
 
-double ExtendedKalmanFilterIS1D::h(Eigen::Vector4d state)
+double ExtendedKalmanFilterIS1D::h(Eigen::Vector4d st)
 {
-	return state(0) + state(1)*cos(state(3));
+	return st(0) + st(1)*cos(st(3));
 }
 
-Eigen::Vector4d ExtendedKalmanFilterIS1D::f(Eigen::Vector4d state)
+Eigen::Vector4d ExtendedKalmanFilterIS1D::f(Eigen::Vector4d st)
 {
-	return state + Eigen::Vector4d(0, 0, 0, 2 * M_PI*state(2));
+	return st + Eigen::Vector4d(0, 0, 0, 2 * M_PI*st(2));
 }
 
-Eigen::Matrix4d ExtendedKalmanFilterIS1D::Ft(Eigen::Vector4d state)
+Eigen::Matrix4d ExtendedKalmanFilterIS1D::Ft(Eigen::Vector4d st)
 {
-//	double F[] = { 
 	Eigen::Matrix4d F;
 	F << 1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -37,9 +36,9 @@ Eigen::Matrix4d ExtendedKalmanFilterIS1D::Ft(Eigen::Vector4d state)
 	return F;
 }
 
-Eigen::RowVector4d ExtendedKalmanFilterIS1D::Ht(Eigen::Vector4d state)
+Eigen::RowVector4d ExtendedKalmanFilterIS1D::Ht(Eigen::Vector4d st)
 {
-	return Eigen::RowVector4d(1, cos(state(3)), 0, -state(1)*sin(state(3)));
+	return Eigen::RowVector4d(1, cos(st(3)), 0, -st(1)*sin(st(3)));
 }
 
 void ExtendedKalmanFilterIS1D::estimate(double obs)

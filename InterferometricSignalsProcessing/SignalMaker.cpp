@@ -5,7 +5,7 @@
 
 #include "SignalMaker.h"
 
-double* SignalMaker::createSignal1D(double *background, double *amplitude, double *phase, double *noise, const int N, const double delta_z)
+double* SignalMaker::createSignal1D(double *background, double *amplitude, double *phase, double *noise, const int N)
 {
 	double *signal = new double[N];
 	signal[0] = background[0] + amplitude[0] * cos(phase[0]) + noise[0];
