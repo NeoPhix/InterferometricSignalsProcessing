@@ -34,8 +34,8 @@ double SignalAnalysis::var(const double *s, int N)
 
 double SignalAnalysis::max(const double *s, int N)
 {
-	double res = -10000000000;
-	for (int i = 0; i < N; i++)
+	double res = s[0];
+	for (int i = 1; i < N; i++)
 	{
 		if (s[i] > res)
 		{
@@ -47,8 +47,8 @@ double SignalAnalysis::max(const double *s, int N)
 
 double SignalAnalysis::min(const double *s, int N)
 {
-	double res = 10000000000;
-	for (int i = 0; i < N; i++)
+	double res = s[0];
+	for (int i = 1; i < N; i++)
 	{
 		if (s[i] < res)
 		{
@@ -57,3 +57,42 @@ double SignalAnalysis::min(const double *s, int N)
 	}
 	return res;
 }
+
+int SignalAnalysis::max_index(const double *s, int N)
+{
+	double res = s[0];
+	int index = 0 ;
+	for (int i = 1; i < N; i++)
+	{
+		if (s[i] > res)
+		{
+			res = s[i];
+			index = i;
+		}
+	}
+	return index;
+}
+
+int SignalAnalysis::min_index(const double *s, int N)
+{
+	double res = s[0];
+	int index = 0;
+	for (int i = 1; i < N; i++)
+	{
+		if (s[i] < res)
+		{
+			res = s[i];
+			index = i;
+		}
+	}
+	return index;
+}
+
+void SignalAnalysis::diff(const double *s1, const double *s2, double *target, int N)
+{
+	for (int i = 0; i < N; i++)
+	{
+		target[i] = s1[i] - s2[i] ;
+	}
+}
+

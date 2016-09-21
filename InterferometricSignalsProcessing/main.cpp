@@ -13,6 +13,7 @@
 #include "ExtendedKalmanFilterIS1D.h"
 #include "StatePrinter.h"
 #include "SignalAnalysis.h"
+#include "TotalSearchTuner.h"
 
 const int N = 1000;
 const double delta_z = 1;
@@ -59,6 +60,10 @@ int main(int argc, char **argv)
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
 
 	StatePrinter::print_signal("out.txt", signal, N) ;
+
+	ExtendedKalmanFilterIS1DState tmp ;
+	FilterTuning::TotalSearchTuner tuner(signals, sigCount, 100, gen, tmp, tmp) ;
+
 
 	// Creation of EKF
 	Eigen::Vector4d beginState(100, 70, 0.05, 1);
