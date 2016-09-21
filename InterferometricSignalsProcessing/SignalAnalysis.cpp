@@ -95,4 +95,3 @@ void SignalAnalysis::diff(const double *s1, const double *s2, double *target, in
 		target[i] = s1[i] - s2[i] ;
 	}
 }
-

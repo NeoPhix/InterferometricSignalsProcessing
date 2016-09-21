@@ -14,6 +14,7 @@
 #include "StatePrinter.h"
 #include "SignalAnalysis.h"
 #include "TotalSearchTuner.h"
+#include "GradientTuner.h"
 
 const int N = 1000;
 const double delta_z = 1;
@@ -72,31 +73,62 @@ int main(int argc, char **argv)
 	//double Rn = 5;
 	//ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
-	//Creation of tuned EKF
-	ExtendedKalmanFilterIS1DState minimal;
-	ExtendedKalmanFilterIS1DState maximal;
+	////Creation of EKF tuned by TotalSearch
+	//ExtendedKalmanFilterIS1DState minimal;
+	//ExtendedKalmanFilterIS1DState maximal;
 
-	minimal.state = Eigen::Vector4d(0, 30, 0.00, 0);
-	minimal.Rw << 
+	//minimal.state = Eigen::Vector4d(0, 0, 0.00, 0);
+	//minimal.Rw << 
+	//	0.1, 0, 0, 0,
+	//	0, 0.15, 0, 0,
+	//	0, 0, 0.001, 0,
+	//	0, 0, 0, 0.002;
+	//minimal.R = minimal.Rw;
+	//minimal.Rn = 0.1 ;
+
+	//maximal.state = Eigen::Vector4d(255, 140, 0.158, 2*M_PI);
+	//maximal.Rw <<
+	//	0.1, 0, 0, 0,
+	//	0, 0.15, 0, 0,
+	//	0, 0, 0.001, 0,
+	//	0, 0, 0, 0.002;
+	//maximal.R = maximal.Rw;
+	//maximal.Rn = 10;
+
+	//StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState());
+	//std::cin >> sigma ;
+
+	//FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
+	//tuner.createStates();
+	//ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune() ;
+	//StatePrinter::console_print_full_Kalman_state(tunedParameters);
+	//ExtendedKalmanFilterIS1D EKF(tunedParameters);
+
+	//Creation of EKF tuned by GradientDescent
+	ExtendedKalmanFilterIS1DState begin;
+	ExtendedKalmanFilterIS1DState step;
+
+	begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
+	begin.Rw <<
 		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
 		0, 0, 0.001, 0,
 		0, 0, 0, 0.002;
-	minimal.R = minimal.Rw;
-	minimal.Rn = 1 ;
+	begin.R = begin.Rw;
+	begin.Rn = 5;
 
-	maximal.state = Eigen::Vector4d(255, 140, 0.15, 2*M_PI);
-	maximal.Rw <<
-		0.1, 0, 0, 0,
-		0, 0.15, 0, 0,
-		0, 0, 0.001, 0,
-		0, 0, 0, 0.002;
-	maximal.R = maximal.Rw;
-	maximal.Rn = 10;
+	step.state = Eigen::Vector4d(1, 1, 0.001, 0.1);
+	step.Rw <<
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0;
+	step.R = step.Rw;
+	step.Rn = 0.1;
 
-	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 1000, gen, minimal, maximal);
-	tuner.createStates();
-	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune() ;
+	FilterTuning::GradientTuner tuner(signals, N, sigCount, 100, begin, step) ;
+	tuner.makeStep();
+	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
 	StatePrinter::console_print_full_Kalman_state(tunedParameters);
 	ExtendedKalmanFilterIS1D EKF(tunedParameters);
 

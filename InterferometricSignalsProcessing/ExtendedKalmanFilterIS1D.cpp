@@ -64,3 +64,77 @@ double ExtendedKalmanFilterIS1D::evaluateSignalValue()
 {
 	return h(state) ;
 }
+
+//State methods
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedKalmanFilterIS1DState s)
+{
+	ExtendedKalmanFilterIS1DState res;
+	res.state = state + s.state;
+	res.Rw = Rw + s.Rw;
+	res.R = R + s.R;
+	res.Rn = Rn + s.Rn;
+	return res;
+}
+
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator-(ExtendedKalmanFilterIS1DState s)
+{
+	ExtendedKalmanFilterIS1DState res;
+	res.state = state - s.state;
+	res.Rw = Rw - s.Rw;
+	res.R = R - s.R;
+	res.Rn = Rn - s.Rn;
+	return res;
+}
+
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator*(ExtendedKalmanFilterIS1DState s)
+{
+	ExtendedKalmanFilterIS1DState res;
+	for (int i = 0; i < 4; i++)		//state
+	{
+		res.state(i) = state(i) * s.state(i) ;
+	}
+	for (int i = 0; i < 4; i++)		//Rw
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			res.Rw(i, j) = Rw(i, j) * s.Rw(i, j);
+			res.R(i, j) = R(i, j) * s.R(i, j);
+		}
+	}
+	res.Rn = Rn * s.Rn;	//Rn
+	return res;
+}
+
+void ExtendedKalmanFilterIS1DState::operator+=(ExtendedKalmanFilterIS1DState s)
+{
+	state += s.state;
+	Rw += s.Rw;
+	R += s.R;
+	Rn += s.Rn;
+}
+
+void ExtendedKalmanFilterIS1DState::operator-=(ExtendedKalmanFilterIS1DState s)
+{
+	state -= s.state;
+	Rw -= s.Rw;
+	R -= s.R;
+	Rn -= s.Rn;
+}
+
+void ExtendedKalmanFilterIS1DState::operator*=(ExtendedKalmanFilterIS1DState s)
+{
+	for (int i = 0; i < 4; i++)		//state
+	{
+		state(i) *= s.state(i);
+	}
+	for (int i = 0; i < 4; i++)		//Rw
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			Rw(i, j) *= s.Rw(i, j);
+			R(i, j) *= s.R(i, j);
+		}
+	}
+	Rn *= s.Rn;	//Rn
+}
+

@@ -3,12 +3,20 @@
 
 #include <Eigen\Dense>
 
-struct ExtendedKalmanFilterIS1DState
+class ExtendedKalmanFilterIS1DState
 {
+public:
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;
 	Eigen::Matrix4d Rw;
 	double Rn;
+
+	ExtendedKalmanFilterIS1DState operator+(ExtendedKalmanFilterIS1DState s);
+	ExtendedKalmanFilterIS1DState operator-(ExtendedKalmanFilterIS1DState s);
+	ExtendedKalmanFilterIS1DState operator*(ExtendedKalmanFilterIS1DState s);
+	void operator+=(ExtendedKalmanFilterIS1DState s);
+	void operator-=(ExtendedKalmanFilterIS1DState s);
+	void operator*=(ExtendedKalmanFilterIS1DState s);
 };
 
 class ExtendedKalmanFilterIS1D

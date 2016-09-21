@@ -1,10 +1,11 @@
+#include "TotalSearchTuner.h"
+
 #include <cmath>
 #include <iostream>
 #include <Eigen/Dense>
 
 #include "SignalAnalysis.h"
 #include "StatePrinter.h"
-#include "TotalSearchTuner.h"
 
 
 FilterTuning::TotalSearchTuner::TotalSearchTuner(double **inputSignals_, int signalSize_, int signalsCount_, int filtersCount_,
@@ -27,22 +28,15 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::createRandomState(
 	{
 		randomState.state(i) = getRandom(minimal.state(i), maximal.state(i));
 	}
-	for (int i = 0; i < 4; i++)		//Rw
+	for (int i = 0; i < 4; i++)		//Rw and R
 	{
 		for (int j = 0; j < 4; j++)
 		{
 			randomState.Rw(i, j) = getRandom(minimal.Rw(i, j), maximal.Rw(i, j));
-		}
-	}
-	for (int i = 0; i < 4; i++)		//R
-	{
-		for (int j = 0; j < 4; j++)
-		{
 			randomState.R(i, j) = getRandom(minimal.R(i, j), maximal.R(i, j));
 		}
 	}
 	randomState.Rn = getRandom(minimal.Rn, maximal.Rn) ;	//Rn
-	
 	return randomState;
 }
 void FilterTuning::TotalSearchTuner::createStates()
@@ -72,7 +66,8 @@ double FilterTuning::TotalSearchTuner::getRandom(double min, double max)
 	return ((double)(gen() % 100000000)) / double(100000000) * (max - min) + min;
 }
 
-ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
+//TODO rewrite simpler!!!
+ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune() 
 {
 	//Creation of filters
 	if (filterStates == NULL)
@@ -111,24 +106,24 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
 	std::cout << std::endl;
 
 	//Best filter search
-	double *variations = new double[filtersCount];
+	double *vars = new double[filtersCount];
 	double *difference = new double[signalSize] ;
 	for (int j = 0; j < filtersCount; j++)
 	{
-		variations[j] = 0;
+		vars[j] = 0;
 		for (int i = 0; i < signalsCount; i++)
 		{
 			SignalAnalysis::diff(inputSignals[i], recSignals[i][j], difference, signalSize);
-			variations[j] += SignalAnalysis::var(difference, signalSize);
+			vars[j] += SignalAnalysis::var(difference, signalSize);
 			std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((double)j*signalsCount + i + 1) / (signalsCount*filtersCount) * 100 << "%";
 		}
 	}
 	std::cout << std::endl;
 
-	int best_index = SignalAnalysis::min_index(variations, filtersCount);
+	int best_index = SignalAnalysis::min_index(vars, filtersCount);
 
 	//Memoryy release
-	delete[] variations;
+	delete[] vars;
 	delete[] difference;
 	for (int i = 0; i < signalsCount; i++)
 	{
@@ -146,5 +141,4 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
 
 	return filterStates[best_index];
 }
-
 

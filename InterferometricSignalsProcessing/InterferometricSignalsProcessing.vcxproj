@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ExtendedKalmanFilterIS1D.cpp" />
+    <ClCompile Include="FilterTuning.cpp" />
     <ClCompile Include="GradientTuner.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
     <ClCompile Include="TotalSearchTuner.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExtendedKalmanFilterIS1D.h" />
+    <ClInclude Include="FilterTuning.h" />
     <ClInclude Include="GradientTuner.h" />
     <ClInclude Include="SignalAnalysis.h" />
     <ClInclude Include="TotalSearchTuner.h" />

@@ -39,6 +39,9 @@
     <ClCompile Include="GradientTuner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilterTuning.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExtendedKalmanFilterIS1D.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GradientTuner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterTuning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
