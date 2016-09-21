@@ -61,21 +61,44 @@ int main(int argc, char **argv)
 
 	StatePrinter::print_signal("out.txt", signal, N) ;
 
-	ExtendedKalmanFilterIS1DState tmp ;
-	FilterTuning::TotalSearchTuner tuner(signals, sigCount, 100, gen, tmp, tmp) ;
+	////Creation of EKF
+	//Eigen::Vector4d beginState(100, 70, 0.05, 1);
+	//Eigen::Matrix4d Rw;
+	//Rw << 0.1, 0, 0, 0,
+	//	0, 0.15, 0, 0,
+	//	0, 0, 0.001, 0,
+	//	0, 0, 0, 0.002 ;
+	//Eigen::Matrix4d Rw_start(Rw);
+	//double Rn = 5;
+	//ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
+	//Creation of tuned EKF
+	ExtendedKalmanFilterIS1DState minimal;
+	ExtendedKalmanFilterIS1DState maximal;
 
-	// Creation of EKF
-	Eigen::Vector4d beginState(100, 70, 0.05, 1);
-	Eigen::Matrix4d Rw;
-	Rw << 0.1, 0, 0, 0,
+	minimal.state = Eigen::Vector4d(0, 30, 0.00, 0);
+	minimal.Rw << 
+		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
 		0, 0, 0.001, 0,
-		0, 0, 0, 0.002 ;
-	Eigen::Matrix4d Rw_start(Rw);
-	double Rn = 5;
+		0, 0, 0, 0.002;
+	minimal.R = minimal.Rw;
+	minimal.Rn = 1 ;
 
-	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
+	maximal.state = Eigen::Vector4d(255, 140, 0.15, 2*M_PI);
+	maximal.Rw <<
+		0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.001, 0,
+		0, 0, 0, 0.002;
+	maximal.R = maximal.Rw;
+	maximal.Rn = 10;
+
+	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 1000, gen, minimal, maximal);
+	tuner.createStates();
+	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune() ;
+	StatePrinter::console_print_full_Kalman_state(tunedParameters);
+	ExtendedKalmanFilterIS1D EKF(tunedParameters);
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
@@ -84,7 +107,6 @@ int main(int argc, char **argv)
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
 	}
-
 
 	//Output to file
 	StatePrinter::print_states("EKFdata.txt", states, N);
