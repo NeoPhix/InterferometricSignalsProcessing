@@ -54,6 +54,18 @@ void ExtendedKalmanFilterIS1D::estimate(double obs)
 	R = (Eigen::Matrix4d::Identity()-P*H)*Rpr;
 }
 
+void ExtendedKalmanFilterIS1D::estimate(double obs, double ph)		//new idea with known phase shift!
+{
+	Eigen::Vector4d predict = f(state);
+	predict(3) = ph;
+	Eigen::Matrix4d F = Ft(state);
+	Eigen::Matrix4d Rpr = F*(R*F.transpose()) + Rw*Rw.transpose();
+	Eigen::RowVector4d H = Ht(predict);
+	Eigen::Vector4d P = Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
+	state = predict + P*(obs - h(predict));
+	R = (Eigen::Matrix4d::Identity() - P*H)*Rpr;
+}
+
 ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1D::getFullState()
 {
 	ExtendedKalmanFilterIS1DState st = { state, R, Rw, Rn };

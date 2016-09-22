@@ -27,7 +27,7 @@ void FilterTuning::GradientTuner::makeStep()
 	//Non adaptive step!
 	//Classic variant
 	//Step of descent, which is influenced by variations of difference between estimation results and original signals
-	ExtendedKalmanFilterIS1DState coef = {} ;
+	ExtendedKalmanFilterIS1DState coef = ExtendedKalmanFilterIS1DState();
 	ExtendedKalmanFilterIS1D filter; 
 	double *recSignal = new double[signalSize];
 	double *difference = new double[signalSize];
@@ -40,7 +40,7 @@ void FilterTuning::GradientTuner::makeStep()
 	{
 		if (abs(step.state(i)) > 0.000000001)
 		{
-			ExtendedKalmanFilterIS1DState tmp = {};
+			ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 			tmp.state(i) += step.state(i);
 			double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
 			coef.state(i) = current_variance - variance ;

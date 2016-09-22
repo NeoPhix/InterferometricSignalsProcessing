@@ -5,7 +5,7 @@
 
 namespace FilterTuning
 {
-	double fitness(double **inputSignals, int signalsCount, int signalSize, ExtendedKalmanFilterIS1D filterState);
+	double fitness(double **inputSignals, int signalsCount, int signalSize, ExtendedKalmanFilterIS1DState filterState);
 }
 
 #endif

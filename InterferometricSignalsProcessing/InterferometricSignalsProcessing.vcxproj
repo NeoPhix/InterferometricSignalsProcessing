@@ -158,7 +158,9 @@
     <ClCompile Include="ExtendedKalmanFilterIS1D.cpp" />
     <ClCompile Include="FilterTuning.cpp" />
     <ClCompile Include="GradientTuner.cpp" />
+    <ClCompile Include="ImageOpenCV.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
+    <ClCompile Include="SymbolicTree.cpp" />
     <ClCompile Include="TotalSearchTuner.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleFilterIS1D.cpp" />
@@ -169,7 +171,9 @@
     <ClInclude Include="ExtendedKalmanFilterIS1D.h" />
     <ClInclude Include="FilterTuning.h" />
     <ClInclude Include="GradientTuner.h" />
+    <ClInclude Include="ImageOpenCV.h" />
     <ClInclude Include="SignalAnalysis.h" />
+    <ClInclude Include="SymbolicTree.h" />
     <ClInclude Include="TotalSearchTuner.h" />
     <ClInclude Include="ParticleFilterIS1D.h" />
     <ClInclude Include="SignalMaker.h" />
