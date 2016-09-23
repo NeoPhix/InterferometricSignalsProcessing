@@ -12,6 +12,7 @@ namespace FilterTuning
 		mul,
 		div,
 		digree,
+		sqrt,
 		exp,
 		log,
 		value,
@@ -26,6 +27,7 @@ namespace FilterTuning
 
 		void mutate();
 		void cross(SymbolicTree *tree);
+		double parse(double x);
 	private:
 		LeafType leafType;
 		SymbolicTree *right;

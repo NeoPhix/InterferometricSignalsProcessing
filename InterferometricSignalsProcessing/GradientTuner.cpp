@@ -79,11 +79,15 @@ void FilterTuning::GradientTuner::makeStep()
 
 	StatePrinter::console_print_full_Kalman_state(coef) ;
 
+	currentState += coef*step;
+
 	delete[] difference;
 	delete[] recSignal;
 }
 
 ExtendedKalmanFilterIS1DState FilterTuning::GradientTuner::tune()
 {
-	return ExtendedKalmanFilterIS1DState();
+	for (int i = 0; i < iterationsCount; i++)
+		makeStep() ;
+	return currentState;
 }

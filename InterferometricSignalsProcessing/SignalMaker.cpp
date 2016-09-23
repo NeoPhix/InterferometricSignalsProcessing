@@ -66,7 +66,7 @@ double* SignalMaker::randomGaussianAmplitude(const int N, double minValue, doubl
 	int *z = new int[edgesCount];	//Edges 
 	for (int j = 0; j < edgesCount; j++)
 	{
-		z[j] = (gen() % 20) * 50;	//Now it is edge!
+		z[j] = (gen() % (N/50)) * (N/20);	//Now it is edge!
 	}
 	for (int i = 0; i < N; i++)
 	{

@@ -48,6 +48,9 @@
     <ClCompile Include="ImageOpenCV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SymbolicRegression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExtendedKalmanFilterIS1D.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImageOpenCV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolicRegression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

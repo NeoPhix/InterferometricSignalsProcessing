@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "StatePrinter.h"
+#include "SignalAnalysis.h"
 
 void StatePrinter::print_states(char *filename, Eigen::Vector4d *states, int N)
 {
@@ -59,4 +60,61 @@ void StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState
 		std::cout << state.Rw(1, 0) << " " << state.Rw(1, 1) << " " << state.Rw(1, 2) << " " << state.Rw(1, 3) << std::endl;
 		std::cout << state.Rw(2, 0) << " " << state.Rw(2, 1) << " " << state.Rw(2, 2) << " " << state.Rw(2, 3) << std::endl;
 		std::cout << state.Rw(3, 0) << " " << state.Rw(3, 1) << " " << state.Rw(3, 2) << " " << state.Rw(3, 3) << std::endl << std::endl;
+}
+
+void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *background, double *amplitude, double *frequency, double *phase, int N)
+{
+	std::ofstream out(filename);
+	double *tmp = new double[N];
+	
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[0](i) - background[i];
+	}
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[1](i) - amplitude[i];
+	}
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[2](i) - frequency[i];
+	}
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[3](i) - phase[i];
+	}
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+
+	delete[] tmp;
+	out.close();
+}
+
+void StatePrinter::console_print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *background, double *amplitude, double *frequency, double *phase, int N)
+{
+	double *tmp = new double[N];
+	std::cout << "Standard deviations:" << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[0](i) - background[i];
+	}
+	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[1](i) - amplitude[i];
+	}
+	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[2](i) - frequency[i];
+	}
+	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	for (int i = 0; i < N; i++)
+	{
+		tmp[i] = states[3](i) - phase[i];
+	}
+	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	delete[] tmp;
 }

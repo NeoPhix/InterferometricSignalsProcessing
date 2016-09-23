@@ -160,6 +160,7 @@
     <ClCompile Include="GradientTuner.cpp" />
     <ClCompile Include="ImageOpenCV.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
+    <ClCompile Include="SymbolicRegression.cpp" />
     <ClCompile Include="SymbolicTree.cpp" />
     <ClCompile Include="TotalSearchTuner.cpp" />
     <ClCompile Include="main.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="GradientTuner.h" />
     <ClInclude Include="ImageOpenCV.h" />
     <ClInclude Include="SignalAnalysis.h" />
+    <ClInclude Include="SymbolicRegression.h" />
     <ClInclude Include="SymbolicTree.h" />
     <ClInclude Include="TotalSearchTuner.h" />
     <ClInclude Include="ParticleFilterIS1D.h" />

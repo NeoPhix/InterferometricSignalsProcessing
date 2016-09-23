@@ -1,7 +1,7 @@
 %Graphics
 data = importdata('data.txt');
 EKFdata = importdata('EKFdata.txt');
-N = 1000
+N = 250
 %%%
 
 hFig = figure(1);
