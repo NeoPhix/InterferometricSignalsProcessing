@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 		frequency[N - i - 1] = 0.03 + 0.00015*i;
 	}
 
+	std::cout << frequency[0] << std::endl; 
 	//Learning signals
 	std::default_random_engine gen((unsigned int)time(NULL));
 	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N, gen);
