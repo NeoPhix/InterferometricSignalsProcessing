@@ -16,7 +16,7 @@
 #include "TotalSearchTuner.h"
 #include "GradientTuner.h"
 
-double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N);
+double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen);
 
 ExtendedKalmanFilterIS1D getTunedKalman_Gradient(double **signals, const int N, int sigCount);
 ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(double **signals, const int N, int sigCount, std::default_random_engine &gen);
@@ -41,7 +41,8 @@ int main(int argc, char **argv)
 	}
 
 	//Learning signals
-	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N);
+	std::default_random_engine gen((unsigned int)time(NULL));
+	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N, gen);
 
 	//Estimated signal
 	int edges[3] = { 150, 250, 750 };
@@ -164,10 +165,9 @@ ExtendedKalmanFilterIS1D getTunedKalman_Gradient(double **signals, const int N, 
 	return ExtendedKalmanFilterIS1D(tunedParameters);
 }
 
-double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N)
+double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 {
 	double **signals = new double*[sigCount];
-	std::default_random_engine gen((unsigned int)time(NULL));
 	for (int k = 0; k < sigCount; k++)
 	{
 		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
@@ -181,5 +181,6 @@ double** getLearningSignals(int sigCount, double *background, double *frequency,
 		delete[] noise;
 		delete[] amplitude;
 	}
+	return signals;
 }
 
