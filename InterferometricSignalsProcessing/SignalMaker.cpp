@@ -59,6 +59,21 @@ double SignalMaker::gaussianAmplitude(double x, double mean, double sigma)
 	return exp(-((x - mean)*(x - mean)) / (sigma*sigma));
 }
 
+double* SignalMaker::fixedGaussianAmplitude(const int N, double minValue, double maxValue, double sigma, int *edges, int gaussiansCount)
+{
+	double *amplitude = new double[N];
+	for (int i = 0; i < N; i++)
+	{
+		amplitude[i] = minValue;
+		for (int j = 0; j < 3; j++)
+		{
+			amplitude[i] += (maxValue - minValue)*SignalMaker::gaussianAmplitude(i, edges[j], sigma);
+		}
+
+	}
+	return amplitude;
+}
+
 double* SignalMaker::randomGaussianAmplitude(const int N, double minValue, double maxValue, double sigma, int maxGaussiansCount, std::default_random_engine &gen)
 {
 	double *amplitude = new double[N];

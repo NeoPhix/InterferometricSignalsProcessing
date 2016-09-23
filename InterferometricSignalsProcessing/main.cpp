@@ -16,94 +16,125 @@
 #include "TotalSearchTuner.h"
 #include "GradientTuner.h"
 
-const int N = 1000;
-const double delta_z = 1;
+double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N);
+
+ExtendedKalmanFilterIS1D getTunedKalman_Gradient(double **signals, const int N, int sigCount);
+ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(double **signals, const int N, int sigCount, std::default_random_engine &gen);
 
 int main(int argc, char **argv)
 {
-	std::cout << argc << std::endl;
-	for (int i = 0; i < argc; i++)
-		std::cout << argv[i] << std::endl;
+	//Signals parameters
+	const int N = 1000;
+	const double delta_z = 1;
 
-	//Signals
-	int sigCount = 10;
-	double E_max = 50;
+	int sigCount = 20;	//learning signals count
+	double E_min = 50;	//Max amplitude
+	double E_max = 100;	//Max amplitude
 	double sigma = 50;
 	
-	double background[N] = { 0 };
-	double frequency[N] = { 0 };
-	
+	double background[N];
+	double frequency[N];
 	for (int i = 0; i < N; i++)
 	{
 		background[i] = 100;
 		frequency[N - i - 1] = 0.03 + 0.00015*i;
 	}
 
-	double **signals = new double*[sigCount];
-	std::default_random_engine gen((unsigned int)time(NULL));
-	for (int k = 0; k < sigCount; k++)
-	{
-		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
-		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
-		double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-		double *amplitude = SignalMaker::randomGaussianAmplitude(N, E_max, 100, sigma, 6, gen) ;
+	//Learning signals
+	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N);
 
-		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N) ;
-
-		delete[] phase;
-		delete[] noise;
-		delete[] amplitude;
-	}
-
-	double *amplitude = SignalMaker::randomGaussianAmplitude(N, 20, 70, sigma, 6, gen);
+	//Estimated signal
+	int edges[3] = { 150, 250, 750 };
+	double *amplitude = SignalMaker::fixedGaussianAmplitude(N, E_min, E_max, sigma, edges, 3);
 	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
 	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
-
 	StatePrinter::print_signal("out.txt", signal, N) ;
 
-	////Creation of EKF
-	//Eigen::Vector4d beginState(100, 70, 0.05, 1);
-	//Eigen::Matrix4d Rw;
-	//Rw << 0.1, 0, 0, 0,
-	//	0, 0.15, 0, 0,
-	//	0, 0, 0.001, 0,
-	//	0, 0, 0, 0.002 ;
-	//Eigen::Matrix4d Rw_start(Rw);
-	//double Rn = 5;
-	//ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
+	////Getting filter
+	//ExtendedKalmanFilterIS1D EKF = getTunedKalman_Gradient(signals, N, sigCount) ;
+	
+	//Creation of EKF
+	Eigen::Vector4d beginState(100, 70, 0.05, 1);
+	Eigen::Matrix4d Rw;
+	Rw << 0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.001, 0,
+		0, 0, 0, 0.002;
+	Eigen::Matrix4d Rw_start(Rw);
+	double Rn = 5;
+	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
-	////Creation of EKF tuned by TotalSearch
-	//ExtendedKalmanFilterIS1DState minimal;
-	//ExtendedKalmanFilterIS1DState maximal;
+	//Estimation
+	Eigen::Vector4d *states = new Eigen::Vector4d[N];
+	Eigen::Vector4d *real_states = new Eigen::Vector4d[N];
+	for (int i = 0; i < N; i++)
+	{
+		EKF.estimate(signal[i]);
+		states[i] = EKF.getState();
 
-	//minimal.state = Eigen::Vector4d(0, 0, 0.00, 0);
-	//minimal.Rw << 
-	//	0.1, 0, 0, 0,
-	//	0, 0.15, 0, 0,
-	//	0, 0, 0.001, 0,
-	//	0, 0, 0, 0.002;
-	//minimal.R = minimal.Rw;
-	//minimal.Rn = 0.1 ;
+		real_states[i](0) = 100;
+		real_states[i](1) = amplitude[i];
+		real_states[i](2) = frequency[i];
+		real_states[i](3) = phase[i];
+	}
+	StatePrinter::print_states("EKFdata.txt", states, N);
+	StatePrinter::print_states("data.txt", real_states, N);
 
-	//maximal.state = Eigen::Vector4d(255, 140, 0.158, 2*M_PI);
-	//maximal.Rw <<
-	//	0.1, 0, 0, 0,
-	//	0, 0.15, 0, 0,
-	//	0, 0, 0.001, 0,
-	//	0, 0, 0, 0.002;
-	//maximal.R = maximal.Rw;
-	//maximal.Rn = 10;
+	//Memory release
+	for (int i = 0; i < sigCount; i++)
+	{
+		delete[] signals[i];
+	}
+	delete[] signals;
 
-	//StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState());
-	//std::cin >> sigma ;
+	//Signal parameters
+	delete[] amplitude;
+	delete[] noise;
+	delete[] phase;
+	delete[] signal;
 
-	//FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
-	//tuner.createStates();
-	//ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune() ;
-	//StatePrinter::console_print_full_Kalman_state(tunedParameters);
-	//ExtendedKalmanFilterIS1D EKF(tunedParameters);
+	//States
+	delete[] states;
+	delete[] real_states;
 
+	return 0;
+}
+
+ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(double **signals, const int N, int sigCount, std::default_random_engine &gen)
+{
+	//Creation of EKF tuned by TotalSearch
+	ExtendedKalmanFilterIS1DState minimal;
+	ExtendedKalmanFilterIS1DState maximal;
+
+	minimal.state = Eigen::Vector4d(0, 0, 0.00, 0);
+	minimal.Rw << 
+		0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.001, 0,
+		0, 0, 0, 0.002;
+	minimal.R = minimal.Rw;
+	minimal.Rn = 0.1 ;
+
+	maximal.state = Eigen::Vector4d(255, 140, 0.158, 2*M_PI);
+	maximal.Rw <<
+		0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.001, 0,
+		0, 0, 0, 0.002;
+	maximal.R = maximal.Rw;
+	maximal.Rn = 10;
+
+	StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState());
+	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
+	tuner.createStates();
+	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune() ;
+	StatePrinter::console_print_full_Kalman_state(tunedParameters);
+	return ExtendedKalmanFilterIS1D(tunedParameters);
+}
+
+ExtendedKalmanFilterIS1D getTunedKalman_Gradient(double **signals, const int N, int sigCount)
+{
 	//Creation of EKF tuned by GradientDescent
 	ExtendedKalmanFilterIS1DState begin;
 	ExtendedKalmanFilterIS1DState step;
@@ -126,49 +157,29 @@ int main(int argc, char **argv)
 	step.R = step.Rw;
 	step.Rn = 0.1;
 
-	FilterTuning::GradientTuner tuner(signals, N, sigCount, 100, begin, step) ;
+	FilterTuning::GradientTuner tuner(signals, N, sigCount, 100, begin, step);
 	tuner.makeStep();
 	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
 	StatePrinter::console_print_full_Kalman_state(tunedParameters);
-	ExtendedKalmanFilterIS1D EKF(tunedParameters);
+	return ExtendedKalmanFilterIS1D(tunedParameters);
+}
 
-	//Estimation
-	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	for (int i = 0; i < N; i++)
+double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N)
+{
+	double **signals = new double*[sigCount];
+	std::default_random_engine gen((unsigned int)time(NULL));
+	for (int k = 0; k < sigCount; k++)
 	{
-		EKF.estimate(signal[i]);
-		states[i] = EKF.getState();
+		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
+		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
+		double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
+		double *amplitude = SignalMaker::randomGaussianAmplitude(N, E_min, E_max, sigma, 6, gen);
+
+		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
+
+		delete[] phase;
+		delete[] noise;
+		delete[] amplitude;
 	}
-
-	//Output to file
-	StatePrinter::print_states("EKFdata.txt", states, N);
-
-	Eigen::Vector4d *real_states = new Eigen::Vector4d[N];
-	for (int i = 0; i < N; i++)
-	{	
-		real_states[i](0) = 100;
-		real_states[i](1) = amplitude[i];
-		real_states[i](2) = frequency[i];
-		real_states[i](3) = phase[i];
-	}
-	StatePrinter::print_states("data.txt", real_states, N);
-
-	//Memory release
-	for (int i = 0; i < sigCount; i++)
-	{
-		delete[] signals[i];
-	}
-	delete[] signals;
-
-	//
-	delete[] noise;
-	delete[] phase;
-	delete[] signal;
-
-	//States
-	delete[] states;
-	delete[] real_states;
-
-	return 0;
 }
 
