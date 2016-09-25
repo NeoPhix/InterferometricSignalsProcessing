@@ -8,6 +8,7 @@ namespace SignalAnalysis
 	double var(const double *s, int N);
 	double max(const double *s, int N);
 	double min(const double *s, int N);
+	double snr(const double *s, const double *noise, int N);
 	int max_index(const double *s, int N);
 	int min_index(const double *s, int N);
 	void diff(const double *s1, const double *s2, double *target, int N);

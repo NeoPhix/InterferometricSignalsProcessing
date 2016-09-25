@@ -88,6 +88,11 @@ int SignalAnalysis::min_index(const double *s, int N)
 	return index;
 }
 
+double SignalAnalysis::snr(const double *s, const double *noise, int N)	//Signal-to-noise ratio
+{
+	return sqrt(10 * log10(SignalAnalysis::var(s, N) / SignalAnalysis::var(noise, N)));
+}
+
 void SignalAnalysis::diff(const double *s1, const double *s2, double *target, int N)
 {
 	for (int i = 0; i < N; i++)

@@ -15,6 +15,8 @@
 #include "SignalAnalysis.h"
 #include "TotalSearchTuner.h"
 #include "GradientTuner.h"
+#include "SymbolicTree.h"
+#include "SymbolicRegression.h"
 
 double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen);
 
@@ -69,19 +71,12 @@ int main(int argc, char **argv)
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	Eigen::Vector4d *real_states = new Eigen::Vector4d[N];
 	for (int i = 0; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
-
-		real_states[i](0) = 100;
-		real_states[i](1) = amplitude[i];
-		real_states[i](2) = frequency[i];
-		real_states[i](3) = phase[i];
 	}
 	StatePrinter::print_states("EKFdata.txt", states, N);
-	StatePrinter::print_states("data.txt", real_states, N);
 
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
@@ -98,7 +93,6 @@ int main(int argc, char **argv)
 
 	//States
 	delete[] states;
-	delete[] real_states;
 
 	return 0;
 }

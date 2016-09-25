@@ -62,7 +62,8 @@ void StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState
 		std::cout << state.Rw(3, 0) << " " << state.Rw(3, 1) << " " << state.Rw(3, 2) << " " << state.Rw(3, 3) << std::endl << std::endl;
 }
 
-void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *background, double *amplitude, double *frequency, double *phase, int N)
+void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *signal, double *noise, 
+	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
 {
 	std::ofstream out(filename);
 	double *tmp = new double[N];
@@ -88,11 +89,15 @@ void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, d
 	}
 	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 
+	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
+	out << SignalAnalysis::snr(signal, tmp, N) << std::endl;
+	
 	delete[] tmp;
 	out.close();
 }
 
-void StatePrinter::console_print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *background, double *amplitude, double *frequency, double *phase, int N)
+void StatePrinter::console_print_Kalman_stdev(Eigen::Vector4d *states, double *signal, double *noise,
+	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
 {
 	double *tmp = new double[N];
 	std::cout << "Standard deviations:" << std::endl;
@@ -116,5 +121,9 @@ void StatePrinter::console_print_Kalman_stdev(char *filename, Eigen::Vector4d *s
 		tmp[i] = states[3](i) - phase[i];
 	}
 	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+
+	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
+	std::cout << SignalAnalysis::snr(signal, tmp, N) << std::endl;
+	
 	delete[] tmp;
 }
