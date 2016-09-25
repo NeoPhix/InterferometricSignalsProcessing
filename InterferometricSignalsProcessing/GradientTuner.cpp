@@ -52,7 +52,7 @@ void FilterTuning::GradientTuner::makeStep()
 		{
 			if (abs(step.Rw(i, j)) > 0.000000001)
 			{
-				ExtendedKalmanFilterIS1DState tmp = {};
+				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.Rw(i, j) += step.Rw(i, j);
 				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
 				coef.Rw(i, j) = current_variance - variance;
@@ -65,14 +65,14 @@ void FilterTuning::GradientTuner::makeStep()
 		{
 			if (abs(step.R(i, j)) > 0.000000001)
 			{
-				ExtendedKalmanFilterIS1DState tmp = {};
+				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.R(i, j) += step.R(i, j);
 				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
 				coef.R(i, j) = current_variance - variance;
 			}
 		}
 	}
-	ExtendedKalmanFilterIS1DState tmp = {};
+	ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 	tmp.Rn += step.Rn;
 	double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
 	coef.Rn = current_variance - variance;

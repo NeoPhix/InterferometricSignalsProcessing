@@ -13,6 +13,16 @@ void StatePrinter::print_states(char *filename, Eigen::Vector4d *states, int N)
 	out.close();
 }
 
+void StatePrinter::print_states(char *filename, double *background, double *amplitude, double *frequency, double *phase, int N)
+{
+	std::ofstream out(filename);
+	for (int i = 0; i < N; i++)
+	{
+		out << background[i] << "\t" << amplitude[i] << "\t" << frequency[i] << "\t" << phase[i] << std::endl;
+	}
+	out.close();
+}
+
 void StatePrinter::print_signal(char *filename, double *signal, int N)
 {
 	std::ofstream out(filename);
@@ -72,25 +82,25 @@ void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, d
 	{
 		tmp[i] = states[i](0) - background[i];
 	}
-	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << "Background error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](1) - amplitude[i];
 	}
-	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << "Amplitude error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](2) - frequency[i];
 	}
-	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << "Frequency error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](3) - phase[i];
 	}
-	out << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << "Phase error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 
 	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
-	out << SignalAnalysis::snr(signal, tmp, N) << std::endl;
+	out << "Signal-to-noise ratio:\t" << SignalAnalysis::snr(signal, tmp, N) << std::endl;
 	
 	delete[] tmp;
 	out.close();
@@ -105,25 +115,25 @@ void StatePrinter::console_print_Kalman_stdev(Eigen::Vector4d *states, double *s
 	{
 		tmp[i] = states[i](0) - background[i];
 	}
-	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	std::cout << "Background error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](1) - amplitude[i];
 	}
-	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	std::cout << "Amplitude error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](2) - frequency[i];
 	}
-	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	std::cout << "Frequency error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](3) - phase[i];
 	}
-	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
+	std::cout << "Phase error:\t\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
 
 	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
-	std::cout << SignalAnalysis::snr(signal, tmp, N) << std::endl;
+	std::cout << "Signal-to-noise ratio:\t" << SignalAnalysis::snr(signal, tmp, N) << std::endl;
 	
 	delete[] tmp;
 }
