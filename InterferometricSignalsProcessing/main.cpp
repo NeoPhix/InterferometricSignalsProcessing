@@ -116,10 +116,9 @@ int main(int argc, char **argv)
 	for (int i = 0; i < N; i++)
 	{
 		background[i] = 100;
-		frequency[N - i - 1] = 0.03 + 0.00015*i;
+		frequency[i] = 0.17985 - 0.00015*i;
 	}
 
-	std::cout << frequency[0] << std::endl;
 	//Learning signals
 	std::default_random_engine gen((unsigned int)time(NULL));
 	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N, gen);
@@ -151,7 +150,7 @@ int main(int argc, char **argv)
 	double *restoredSignal = new double[N];
 	for (int i = 0; i < N; i++)
 	{
-		EKF.estimate(signal[i], phase[i]);
+		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
 		restoredSignal[i] = EKF.evaluateSignalValue();
 	}
