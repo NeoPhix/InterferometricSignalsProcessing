@@ -70,22 +70,22 @@ void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, d
 	
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[0](i) - background[i];
+		tmp[i] = states[i](0) - background[i];
 	}
 	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[1](i) - amplitude[i];
+		tmp[i] = states[i](1) - amplitude[i];
 	}
 	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[2](i) - frequency[i];
+		tmp[i] = states[i](2) - frequency[i];
 	}
 	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[3](i) - phase[i];
+		tmp[i] = states[i](3) - phase[i];
 	}
 	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 
@@ -103,22 +103,22 @@ void StatePrinter::console_print_Kalman_stdev(Eigen::Vector4d *states, double *s
 	std::cout << "Standard deviations:" << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[0](i) - background[i];
+		tmp[i] = states[i](0) - background[i];
 	}
 	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[1](i) - amplitude[i];
+		tmp[i] = states[i](1) - amplitude[i];
 	}
 	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[2](i) - frequency[i];
+		tmp[i] = states[i](2) - frequency[i];
 	}
 	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
-		tmp[i] = states[3](i) - phase[i];
+		tmp[i] = states[i](3) - phase[i];
 	}
 	std::cout << SignalAnalysis::stdev(tmp, N) << std::endl;
 
