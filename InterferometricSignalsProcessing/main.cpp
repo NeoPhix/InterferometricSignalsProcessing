@@ -114,10 +114,17 @@ int main(int argc, char **argv)
 
 	double background[N];
 	double frequency[N];
+
+	double *phase3 = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
+	double *phase6 = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
+
 	for (int i = 0; i < N; i++)
 	{
 		background[i] = 130;
 		frequency[i] = 0.17985 - 0.0002*i;
+
+		phase3[i] = 2.82743*i - 0.00043*i*i - i / (0.007 + 0.00988*i);
+		phase6[i] = 0.91551*i*i / (0.034 + 1.25*i*i) + 1.18942*i - 0.00097*i*i;
 	}
 
 	//Learning signals
@@ -132,11 +139,11 @@ int main(int argc, char **argv)
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
 	StatePrinter::print_signal("out.txt", signal, N);
 
-	//Getting filter
-	ExtendedKalmanFilterIS1D EKF = getTunedKalman_Gradient(signals, N, sigCount) ;
+	////Getting filter
+	//ExtendedKalmanFilterIS1D EKF = getTunedKalman_Gradient(signals, N, sigCount) ;
 
 	//Creation of EKF
-	Eigen::Vector4d beginState(125, 0, 0.05, 0);
+	Eigen::Vector4d beginState(45, 10, 0.05, 0);
 	Eigen::Matrix4d Rw;
 	Rw << 0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
@@ -144,7 +151,7 @@ int main(int argc, char **argv)
 		0, 0, 0, 0.002;
 	Eigen::Matrix4d Rw_start(Rw);
 	double Rn = 0.5;
-	//ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
+	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
 	//Estimation
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
@@ -183,15 +190,3 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-//Mb it will be interesting in the next brainfuck with symbolic regression. Why we do not write it? Cause it is BIG FAIL! :)
-//EKF = ExtendedKalmanFilterIS1D(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
-//for (int i = 0; i < N; i++)
-//{
-//	EKF.estimate(signal[i], phase[i]);
-//	states[i] = EKF.getState();
-//	restoredSignal[i] = EKF.evaluateSignalValue();
-//}
-//StatePrinter::print_states("EKFdata_phase.txt", states, N);
-//StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
-//StatePrinter::print_Kalman_stdev("EKFdeviations_phase.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);

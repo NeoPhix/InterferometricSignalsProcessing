@@ -15,7 +15,7 @@ namespace FilterTuning
 		sqrt,
 		exp,
 		log,
-		value,
+		constant,
 		variable
 	};
 

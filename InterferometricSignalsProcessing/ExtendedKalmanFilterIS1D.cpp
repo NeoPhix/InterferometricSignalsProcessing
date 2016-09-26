@@ -45,7 +45,6 @@ Eigen::RowVector4d ExtendedKalmanFilterIS1D::Ht(Eigen::Vector4d st)
 
 void ExtendedKalmanFilterIS1D::estimate(double obs)
 {
-	double startPhase = state(3);
 	Eigen::Vector4d predict = f(state);
 	Eigen::Matrix4d F = Ft(state);
 	Eigen::Matrix4d Rpr = F*(R*F.transpose()) + Rw*Rw.transpose();
@@ -53,21 +52,18 @@ void ExtendedKalmanFilterIS1D::estimate(double obs)
 	Eigen::Vector4d P =  Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
 	state = predict + P*(obs - h(predict));
 	R = (Eigen::Matrix4d::Identity()-P*H)*Rpr;
-	//state(2) = (state(3) - startPhase) / (2 * M_PI );	//New frequency from phase!
 }
 
 void ExtendedKalmanFilterIS1D::estimate(double obs, double ph)		//new idea with known phase shift!
 {
-	double startPhase = state(3);
 	Eigen::Vector4d predict = f(state);
-	predict(3) = ph;
+	//predict(3) = ph;
 	Eigen::Matrix4d F = Ft(state);
 	Eigen::Matrix4d Rpr = F*(R*F.transpose()) + Rw*Rw.transpose();
 	Eigen::RowVector4d H = Ht(predict);
 	Eigen::Vector4d P = Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
 	state = predict + P*(obs - h(predict));
 	R = (Eigen::Matrix4d::Identity() - P*H)*Rpr;
-	state(2) = (state(3) - startPhase) / (2 * M_PI );	//New frequency from phase!
 }
 
 ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1D::getFullState()
