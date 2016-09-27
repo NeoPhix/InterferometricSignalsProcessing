@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <ctime>
 #include <random>
 
@@ -212,7 +213,7 @@ int main(int argc, char **argv)
 		estimate(EKF, signal, states, restoredSignal, N);
 		deviations[k] = SignalAnalysis::get_deviations(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 		
-		std::stringstream str(128);
+		std::stringstream str;
 		str << "GD_1_" << i << ".txt\0";
 		StatePrinter::print_states(str.str().c_str(), states, N);
 	}
@@ -251,7 +252,7 @@ int main(int argc, char **argv)
 		estimate(EKF, signal, states, restoredSignal, N);
 		deviations[k] = SignalAnalysis::get_deviations(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
-		std::stringstream str(128);
+		std::stringstream str;
 		str << "GD_2_" << i << ".txt\0";
 		StatePrinter::print_states(str.str().c_str(), states, N);
 	}
