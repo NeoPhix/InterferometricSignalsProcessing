@@ -181,11 +181,6 @@ int main(int argc, char **argv)
 	StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 	StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
-	//Standard deviations and SNR
-	StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
-	StatePrinter::print_Kalman_stdev("EKFdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
 	{
