@@ -173,7 +173,8 @@ int main(int argc, char **argv)
 		0, 0, 0, 0;
 	step.R = step.Rw;
 	step.Rn = 0.1;
-	EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 100);
+	EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
+	StatePrinter::console_print_full_Kalman_state(EKF.getFullState());
 	estimate(EKF, signal, states, restoredSignal, N);
 
 	//StatePrinter::print_states("GDdata.txt", states, N);
