@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 	begin.R = begin.Rw;
 	begin.Rn = 5;
 
-	step.state = Eigen::Vector4d(1, 1, 0.0005, 0.1);
+	step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
 	step.Rw <<
 		0, 0, 0, 0,
 		0, 0, 0, 0,
