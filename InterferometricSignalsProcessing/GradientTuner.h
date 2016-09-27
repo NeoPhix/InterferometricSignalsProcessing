@@ -16,14 +16,14 @@ namespace FilterTuning
 		ExtendedKalmanFilterIS1DState tune();
 		void makeStep();
 	private:
-
-
 		double **inputSignals;
 		int signalSize;
 		int signalsCount;
 		int iterationsCount;
 		ExtendedKalmanFilterIS1DState currentState;
 		ExtendedKalmanFilterIS1DState step;
+
+		int gradSign(double s, double interval = 30.);
 	};
 }
 

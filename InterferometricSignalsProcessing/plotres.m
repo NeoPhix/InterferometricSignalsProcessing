@@ -1,44 +1,49 @@
+%%%
+'LOVE ANECHKA!!!'
+'WILL BACK AND GET "NA RUCHKI"!!!'
+%%%
+
 %Graphics
 data = importdata('data.txt');
 EKFdata = importdata('EKFdata.txt');
+GDdata = importdata('EKFdata.txt');
 [N w] = size(data);
-%%%
 
 hFig = figure(1);
 set(hFig, 'Position', [100 100 1100 800]);
 
 subplot(2,2,1)
-plot(1:N, data(1:N, 2), 1:N, EKFdata(1:N, 2));
+plot(1:N, data(1:N, 2), 1:N, EKFdata(1:N, 2), 1:N, GDdata(1:N, 2));
 grid on;
 title('Amplitude');
 xlabel('Discrete sample number');
 ylabel('Amplitude value');
-legend('Real amplitude','Particle filter estimation','EKPF estimation','Kalman estimation') ;
+legend('Real amplitude','EKF estimation','EKF after gradient descent') ;
 
 subplot(2,2,2)
-plot(1:N, data(1:N, 3), 1:N, EKFdata(1:N, 3));
+plot(1:N, data(1:N, 3), 1:N, EKFdata(1:N, 3),  1:N, GDdata(1:N, 3));
 grid on;
 title('Frequency');
 xlabel('Discrete sample number');
 ylabel('Frequency value');
-legend('Real Frequency','Particle filter estimation','EKPF estimation','Kalman estimation') ;
+legend('Real frequency','EKF estimation','EKF after gradient descent') ;
 
 subplot(2,2,3)
-plot(1:N, data(1:N, 4), 1:N, EKFdata(1:N, 4));
+plot(1:N, data(1:N, 4), 1:N, EKFdata(1:N, 4),  1:N, GDdata(1:N, 4));
 grid on;
 title('Phase');
 xlabel('Discrete sample number');
 ylabel('Phase value, rad');
-legend('Real phase','Particle filter estimation','EKPF estimation','Kalman estimation') ;
+legend('Real phase','EKF estimation','EKF after gradient descent') ;
 
 zrs = 0.01*sin(1:N) ; %Заплатка, чтобы правильно цвета и подписи нарисовались на четвертом графике
 subplot(2,2,4) 
-plot(1:N, zrs, 1:N, data(1:N, 4) - EKFdata(1:N, 4));
+plot(1:N, zrs, 1:N, data(1:N, 4) - EKFdata(1:N, 4),  1:N, data(1:N, 4) - GDdata(1:N, 4));
 grid on;
 title('Phase fail');
 xlabel('Discrete sample number');
 ylabel('Phase fail, rad');
-legend('No Error','Particle filter estimation','EKPF estimation','Kalman estimation') ;
+legend('Real phase error','EKF estimation','EKF after gradient descent') ;
 
 %Background
 % figure, plot(1:N, background, 1:N, outParticle(1, 1:N), 1:N, outParticleKalman(1, 1:N), 1:N, outKalman(1, 1:N));
