@@ -3,7 +3,7 @@
 #include "StatePrinter.h"
 #include "SignalAnalysis.h"
 
-void StatePrinter::print_states(char *filename, Eigen::Vector4d *states, int N)
+void StatePrinter::print_states(const char *filename, Eigen::Vector4d *states, int N)
 {
 	std::ofstream out(filename);
 	for (int i = 0; i < N; i++)
@@ -13,7 +13,7 @@ void StatePrinter::print_states(char *filename, Eigen::Vector4d *states, int N)
 	out.close();
 }
 
-void StatePrinter::print_states(char *filename, double *background, double *amplitude, double *frequency, double *phase, int N)
+void StatePrinter::print_states(const char *filename, double *background, double *amplitude, double *frequency, double *phase, int N)
 {
 	std::ofstream out(filename);
 	for (int i = 0; i < N; i++)
@@ -23,7 +23,7 @@ void StatePrinter::print_states(char *filename, double *background, double *ampl
 	out.close();
 }
 
-void StatePrinter::print_signal(char *filename, double *signal, int N)
+void StatePrinter::print_signal(const char *filename, double *signal, int N)
 {
 	std::ofstream out(filename);
 	for (int i = 0; i < N; i++)
@@ -33,7 +33,7 @@ void StatePrinter::print_signal(char *filename, double *signal, int N)
 	out.close();
 }
 
-void StatePrinter::print_full_Kalman_states(char *filename, ExtendedKalmanFilterIS1DState *states, int N)
+void StatePrinter::print_full_Kalman_states(const char *filename, ExtendedKalmanFilterIS1DState *states, int N)
 {
 	std::ofstream out(filename);
 	for (int i = 0; i < N; i++)
@@ -72,7 +72,7 @@ void StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState
 		std::cout << state.Rw(3, 0) << " " << state.Rw(3, 1) << " " << state.Rw(3, 2) << " " << state.Rw(3, 3) << std::endl << std::endl;
 }
 
-void StatePrinter::print_Kalman_stdev(char *filename, Eigen::Vector4d *states, double *signal, double *noise, 
+void StatePrinter::print_Kalman_stdev(const char *filename, Eigen::Vector4d *states, double *signal, double *noise, 
 	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
 {
 	std::ofstream out(filename);

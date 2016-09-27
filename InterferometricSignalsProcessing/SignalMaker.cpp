@@ -96,3 +96,4 @@ double* SignalMaker::randomGaussianAmplitude(const int N, double minValue, doubl
 
 	return amplitude;
 }
+
