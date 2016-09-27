@@ -77,7 +77,7 @@ void FilterTuning::GradientTuner::makeStep()
 	double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
 	coef.Rn = gradSign(current_variance - variance);
 
-	StatePrinter::console_print_full_Kalman_state(coef) ;
+	//StatePrinter::console_print_full_Kalman_state(coef) ;
 
 	currentState += coef*step;
 
