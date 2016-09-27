@@ -141,7 +141,6 @@ int main(int argc, char **argv)
 		0, 0.15, 0, 0,
 		0, 0, 0.005, 0,
 		0, 0, 0, 0.002;
-	Eigen::Matrix4d Rw_start = Eigen::Matrix4d::Identity();
 	double Rn = 0.5;
 	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
@@ -162,7 +161,7 @@ int main(int argc, char **argv)
 		0, 0.15, 0, 0,
 		0, 0, 0.005, 0,
 		0, 0, 0, 0.002;
-	begin.R = begin.Rw;
+	begin.R = Eigen::Matrix4d::Identity();
 	begin.Rn = 5;
 
 	step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
@@ -177,10 +176,10 @@ int main(int argc, char **argv)
 	StatePrinter::console_print_full_Kalman_state(EKF.getFullState());
 	estimate(EKF, signal, states, restoredSignal, N);
 
-	//StatePrinter::print_states("GDdata.txt", states, N);
-	//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
-	//StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-	//StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	StatePrinter::print_states("GDdata.txt", states, N);
+	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
+	StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
