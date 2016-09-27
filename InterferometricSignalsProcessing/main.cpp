@@ -176,10 +176,10 @@ int main(int argc, char **argv)
 	EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 100);
 	estimate(EKF, signal, states, restoredSignal, N);
 
-	StatePrinter::print_states("GDdata.txt", states, N);
-	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
-	StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-	StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	//StatePrinter::print_states("GDdata.txt", states, N);
+	//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;	//SNR of original signal
+	//StatePrinter::console_print_Kalman_stdev(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	//StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
