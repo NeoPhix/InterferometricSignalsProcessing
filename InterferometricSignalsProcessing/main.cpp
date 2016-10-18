@@ -220,46 +220,6 @@ int main(int argc, char **argv)
 	StatePrinter::print_states("GD_1_deviations.txt", deviations, 100);
 	StatePrinter::print_states("GD_1_starts.txt", starts, 100);
 
-	//GD 2
-	begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
-	begin.Rw <<
-		0.1, 0, 0, 0,
-		0, 0.15, 0, 0,
-		0, 0, 0.005, 0,
-		0, 0, 0, 0.002;
-	begin.R = Eigen::Matrix4d::Identity();
-	begin.Rn = 5;
-
-	step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
-	step.Rw <<
-		0.001, 0, 0, 0,
-		0, 0.001, 0, 0,
-		0, 0, 0.00001, 0,
-		0, 0, 0, 0.0001;
-	step.R <<
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0;
-	step.Rn = 0.1;
-
-	for (int i = 5; i < 505; i += 5)
-	{
-		int k = i / 5 - 1;
-		EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
-		begin = EKF.getFullState();
-		starts[k] = begin.state;
-		estimate(EKF, signal, states, restoredSignal, N);
-		deviations[k] = SignalAnalysis::get_deviations(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-
-		std::stringstream str;
-		str << "GD_2_" << i << ".txt\0";
-		StatePrinter::print_states(str.str().c_str(), states, N);
-	}
-	StatePrinter::print_states("GD_2_deviations.txt", deviations, 100);
-	StatePrinter::print_states("GD_2_starts.txt", starts, 100);
-
-
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
 	{
@@ -280,3 +240,41 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+////GD 2
+//begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
+//begin.Rw <<
+//0.1, 0, 0, 0,
+//0, 0.15, 0, 0,
+//0, 0, 0.005, 0,
+//0, 0, 0, 0.002;
+//begin.R = Eigen::Matrix4d::Identity();
+//begin.Rn = 5;
+//
+//step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
+//step.Rw <<
+//0.001, 0, 0, 0,
+//0, 0.001, 0, 0,
+//0, 0, 0.00001, 0,
+//0, 0, 0, 0.0001;
+//step.R <<
+//0, 0, 0, 0,
+//0, 0, 0, 0,
+//0, 0, 0, 0,
+//0, 0, 0, 0;
+//step.Rn = 0.1;
+//
+//for (int i = 5; i < 505; i += 5)
+//{
+//	int k = i / 5 - 1;
+//	EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
+//	begin = EKF.getFullState();
+//	starts[k] = begin.state;
+//	estimate(EKF, signal, states, restoredSignal, N);
+//	deviations[k] = SignalAnalysis::get_deviations(states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+//
+//	std::stringstream str;
+//	str << "GD_2_" << i << ".txt\0";
+//	StatePrinter::print_states(str.str().c_str(), states, N);
+//}
+//StatePrinter::print_states("GD_2_deviations.txt", deviations, 100);
+//StatePrinter::print_states("GD_2_starts.txt", starts, 100);
