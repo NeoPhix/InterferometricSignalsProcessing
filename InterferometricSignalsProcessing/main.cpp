@@ -106,16 +106,10 @@ int main(int argc, char **argv)
 	double background[N];
 	double frequency[N];
 
-	double *phase3 = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
-	double *phase6 = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
-
 	for (int i = 0; i < N; i++)
 	{
 		background[i] = 130;
 		frequency[i] = 0.17985 - 0.0002*i;
-
-		phase3[i] = 2.82743*i - 0.00043*i*i - i / (0.007 + 0.00988*i);
-		phase6[i] = 0.91551*i*i / (0.034 + 1.25*i*i) + 1.18942*i - 0.00097*i*i;
 	}
 
 	//Learning signals
