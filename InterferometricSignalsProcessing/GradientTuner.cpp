@@ -42,8 +42,9 @@ void FilterTuning::GradientTuner::makeStep()
 		{
 			ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 			tmp.state(i) += step.state(i);
-			double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-			coef.state(i) = gradSign(current_variance - variance);
+			double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+			double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+			coef.state(i) = var_plus - var_minus;
 		}
 	}
 	for (int i = 0; i < 4; i++)		//Rw
@@ -54,8 +55,9 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.Rw(i, j) += step.Rw(i, j);
-				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-				coef.Rw(i, j) = gradSign(current_variance - variance);
+				double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+				double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+				coef.Rw(i) = var_plus - var_minus;
 			}
 		}
 	}
@@ -67,17 +69,28 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.R(i, j) += step.R(i, j);
-				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-				coef.R(i, j) = gradSign(current_variance - variance);
+				double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+				double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+				coef.R(i) = var_plus - var_minus;
 			}
 		}
 	}
 	ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 	tmp.Rn += step.Rn;
-	double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-	coef.Rn = gradSign(current_variance - variance);
+	double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+	double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+	coef.Rn = var_plus - var_minus;
 
 	currentState += coef*step;
+
+
+	//Debug
+	StatePrinter::console_print_full_Kalman_state(coef);
+	std::cout << "------------------" << std::endl;
+	StatePrinter::console_print_full_Kalman_state(currentState);
+
+	std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl ;
+
 
 	//StatePrinter::console_print_full_Kalman_state(coef);
 	//StatePrinter::console_print_full_Kalman_state(currentState);

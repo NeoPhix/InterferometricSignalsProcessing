@@ -19,6 +19,7 @@
 #include "GradientTuner.h"
 #include "SymbolicTree.h"
 #include "SymbolicRegression.h"
+#include "FilterTuning.h"
 
 double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 {
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 	const int N = 500;
 	const double delta_z = 1;
 
-	int sigCount = 20;	//learning signals count
+	int sigCount = 5;	//learning signals count
 	double E_min = 50;	//Max amplitude
 	double E_max = 100;	//Max amplitude
 	double sigma = 50;
@@ -124,6 +125,7 @@ int main(int argc, char **argv)
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
 	StatePrinter::print_signal("out.txt", signal, N);
 	StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
+	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl ;
 
 	//test arrays
 	Eigen::Vector4d *states = new Eigen::Vector4d[N];
@@ -131,11 +133,11 @@ int main(int argc, char **argv)
 
 	//Without GD
 	//Creation of EKF
-	Eigen::Vector4d beginState(100, 70, 0.05, 0);
+	Eigen::Vector4d beginState(130, 70, 0.17985, 0);
 	Eigen::Matrix4d Rw;
 	Rw << 0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
-		0, 0, 0.005, 0,
+		0, 0, 0.0005, 0,
 		0, 0, 0, 0.002;
 	double Rn = 0.5;
 	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
@@ -144,48 +146,59 @@ int main(int argc, char **argv)
 	StatePrinter::print_states("EKFdata.txt", states, N);
 	StatePrinter::print_Kalman_stdev("EKFdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
+
 	//With GD
 	ExtendedKalmanFilterIS1DState begin;
 	ExtendedKalmanFilterIS1DState step;
 
-	begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
-	begin.Rw <<
-		0.1, 0, 0, 0,
-		0, 0.15, 0, 0,
-		0, 0, 0.005, 0,
-		0, 0, 0, 0.002;
-	begin.R = Eigen::Matrix4d::Identity();
-	begin.Rn = 5;
 
-	step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
-	step.Rw <<
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0;
-	step.R = step.Rw;
-	step.Rn = 0.1;
-	EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
-	estimate(EKF, signal, states, restoredSignal, N);
+	double **result = new double*[200];
+	
+	for (int x = 0; x < 200; x++)
+	{
+		result[x] = new double[200];
+		for (int y = 0; y < 200; y++)
+		{
+			begin.state = Eigen::Vector4d(x, y, 0.17985, 0);
+			begin.Rw <<
+				0.1, 0, 0, 0,
+				0, 0.15, 0, 0,
+				0, 0, 0.005, 0,
+				0, 0, 0, 0.002;
+			begin.R = Eigen::Matrix4d::Identity();
+			begin.Rn = 0.5;
+			FilterTuning::fitness(signals, sigCount, N, begin);
+		}
+	}
 
-	StatePrinter::print_states("GDdata.txt", states, N);
-	StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	std::ofstream out("fitness.txt");
+	for (int x = 0; x < 200; x++)
+	{
+		for (int y = 0; y < 200; y++)
+		{
+			out << result[x][y] << " ";
+		}
+		out << std::endl;
+	}
+	out.close();
+
+
 
 	//Super tests
 	//1 only vector
 	Eigen::Vector4d *deviations = new Eigen::Vector4d[100];
 	Eigen::Vector4d *starts = new Eigen::Vector4d[100];
 
-	begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
+	begin.state = Eigen::Vector4d(150, 21, 0.05, 0);
 	begin.Rw <<
 		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
 		0, 0, 0.005, 0,
 		0, 0, 0, 0.002;
 	begin.R = Eigen::Matrix4d::Identity();
-	begin.Rn = 5;
+	begin.Rn = 0.5;
 
-	step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
+	step.state = Eigen::Vector4d(1, 1, 0.0005, 0.1)*0.1;
 	step.Rw <<
 		0, 0, 0, 0,
 		0, 0, 0, 0,
@@ -196,7 +209,7 @@ int main(int argc, char **argv)
 		0, 0, 0, 0,
 		0, 0, 0, 0,
 		0, 0, 0, 0;
-	step.Rn = 0.1;
+	step.Rn = 0;
 
 	for (int i = 5; i < 505; i+=5)
 	{
@@ -232,7 +245,32 @@ int main(int argc, char **argv)
 	delete[] states;
 
 	return 0;
-}
+}//main
+
+//begin.state = Eigen::Vector4d(100, 70, 0.05, 1);
+//begin.Rw <<
+//0.1, 0, 0, 0,
+//0, 0.15, 0, 0,
+//0, 0, 0.005, 0,
+//0, 0, 0, 0.002;
+//begin.R = Eigen::Matrix4d::Identity();
+//begin.Rn = 5;
+//
+//step.state = Eigen::Vector4d(1, 1, 0.0001, 0.05);
+//step.Rw <<
+//0, 0, 0, 0,
+//0, 0, 0, 0,
+//0, 0, 0, 0,
+//0, 0, 0, 0;
+//step.R = step.Rw;
+//step.Rn = 0;
+//EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
+//estimate(EKF, signal, states, restoredSignal, N);
+//
+//StatePrinter::print_states("GDdata.txt", states, N);
+//StatePrinter::print_Kalman_stdev("GDdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+
+
 
 ////GD 2
 //begin.state = Eigen::Vector4d(100, 70, 0.05, 1);

@@ -82,25 +82,25 @@ void StatePrinter::print_Kalman_stdev(const char *filename, Eigen::Vector4d *sta
 	{
 		tmp[i] = states[i](0) - background[i];
 	}
-	out << "Background error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](1) - amplitude[i];
 	}
-	out << "Amplitude error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](2) - frequency[i];
 	}
-	out << "Frequency error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 	for (int i = 0; i < N; i++)
 	{
 		tmp[i] = states[i](3) - phase[i];
 	}
-	out << "Phase error:\t" << SignalAnalysis::stdev(tmp, N) << std::endl;
+	out << SignalAnalysis::stdev(tmp, N) << std::endl;
 
 	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
-	out << "Signal-to-noise ratio:\t" << SignalAnalysis::snr(signal, tmp, N) << std::endl;
+	out << SignalAnalysis::snr(signal, tmp, N) << std::endl;
 	
 	delete[] tmp;
 	out.close();
