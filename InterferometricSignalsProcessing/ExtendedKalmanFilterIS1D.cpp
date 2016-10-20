@@ -150,3 +150,25 @@ void ExtendedKalmanFilterIS1DState::operator*=(ExtendedKalmanFilterIS1DState s)
 	Rn *= s.Rn;	//Rn
 }
 
+ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState()
+{
+	state = Eigen::Vector4d(0,0,0,0);
+	Rw <<
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0;
+	R <<
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0;
+	Rn = 0;
+}
+
+ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
+	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
+
+ExtendedKalmanFilterIS1DState::~ExtendedKalmanFilterIS1DState()
+{
+}

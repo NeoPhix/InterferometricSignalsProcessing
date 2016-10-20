@@ -16,7 +16,7 @@ double FilterTuning::fitness(double **inputSignals, int signalsCount, int signal
 		for (int k = 0; k < signalSize; k++)
 		{
 			filter.estimate(inputSignals[i][k]);
-			reconstructed[i] = filter.evaluateSignalValue();
+			reconstructed[k] = filter.evaluateSignalValue();
 		}
 		SignalAnalysis::diff(inputSignals[i], reconstructed, difference, signalSize);
 		sum += SignalAnalysis::var(difference, signalSize);

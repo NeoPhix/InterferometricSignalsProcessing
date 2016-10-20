@@ -6,7 +6,7 @@ clear
 %Graphics
 data = importdata('data.txt');
 EKFdata = importdata('EKFdata.txt');
-GDdata = importdata('GD_1_25.txt'); %!!!!
+GDdata = importdata('GD_1_150.txt'); %!!!!
 [N w] = size(data);
 
 hFig = figure(1);

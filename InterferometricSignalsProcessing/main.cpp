@@ -64,7 +64,6 @@ ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(double **signals, const int 
 	maximal.R = maximal.Rw;
 	maximal.Rn = 10;
 
-	StatePrinter::console_print_full_Kalman_state(ExtendedKalmanFilterIS1DState());
 	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
 	tuner.createStates();
 	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
@@ -99,7 +98,7 @@ int main(int argc, char **argv)
 	const int N = 500;
 	const double delta_z = 1;
 
-	int sigCount = 5;	//learning signals count
+	int sigCount = 9;	//learning signals count
 	double E_min = 50;	//Max amplitude
 	double E_max = 100;	//Max amplitude
 	double sigma = 50;
@@ -133,7 +132,7 @@ int main(int argc, char **argv)
 
 	//Without GD
 	//Creation of EKF
-	Eigen::Vector4d beginState(130, 70, 0.17985, 0);
+	Eigen::Vector4d beginState(100, 70, 0.17985, 0);
 	Eigen::Matrix4d Rw;
 	Rw << 0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
@@ -142,63 +141,33 @@ int main(int argc, char **argv)
 	double Rn = 0.5;
 	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
+	StatePrinter::console_print_full_Kalman_state(EKF.getFullState());
+
 	estimate(EKF, signal, states, restoredSignal, N);
 	StatePrinter::print_states("EKFdata.txt", states, N);
 	StatePrinter::print_Kalman_stdev("EKFdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-
 
 	//With GD
 	ExtendedKalmanFilterIS1DState begin;
 	ExtendedKalmanFilterIS1DState step;
 
 
-	double **result = new double*[200];
-	
-	for (int x = 0; x < 200; x++)
-	{
-		result[x] = new double[200];
-		for (int y = 0; y < 200; y++)
-		{
-			begin.state = Eigen::Vector4d(x, y, 0.17985, 0);
-			begin.Rw <<
-				0.1, 0, 0, 0,
-				0, 0.15, 0, 0,
-				0, 0, 0.005, 0,
-				0, 0, 0, 0.002;
-			begin.R = Eigen::Matrix4d::Identity();
-			begin.Rn = 0.5;
-			FilterTuning::fitness(signals, sigCount, N, begin);
-		}
-	}
-
-	std::ofstream out("fitness.txt");
-	for (int x = 0; x < 200; x++)
-	{
-		for (int y = 0; y < 200; y++)
-		{
-			out << result[x][y] << " ";
-		}
-		out << std::endl;
-	}
-	out.close();
-
-
 
 	//Super tests
 	//1 only vector
-	Eigen::Vector4d *deviations = new Eigen::Vector4d[100];
-	Eigen::Vector4d *starts = new Eigen::Vector4d[100];
+	Eigen::Vector4d *deviations = new Eigen::Vector4d[1000];
+	Eigen::Vector4d *starts = new Eigen::Vector4d[1000];
 
 	begin.state = Eigen::Vector4d(150, 21, 0.05, 0);
 	begin.Rw <<
 		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
-		0, 0, 0.005, 0,
+		0, 0, 0.0005, 0,
 		0, 0, 0, 0.002;
 	begin.R = Eigen::Matrix4d::Identity();
 	begin.Rn = 0.5;
 
-	step.state = Eigen::Vector4d(1, 1, 0.0005, 0.1)*0.1;
+	step.state = Eigen::Vector4d(1, 1, 0.005, 0.1)*0.001;
 	step.Rw <<
 		0, 0, 0, 0,
 		0, 0, 0, 0,
@@ -211,7 +180,7 @@ int main(int argc, char **argv)
 		0, 0, 0, 0;
 	step.Rn = 0;
 
-	for (int i = 5; i < 505; i+=5)
+	for (int i = 5; i < 5005; i+=5)
 	{
 		int k = i / 5 - 1;
 		EKF = getTunedKalman_Gradient(begin, step, signals, N, sigCount, 5);
@@ -224,8 +193,8 @@ int main(int argc, char **argv)
 		str << "GD_1_" << i << ".txt\0";
 		StatePrinter::print_states(str.str().c_str(), states, N);
 	}
-	StatePrinter::print_states("GD_1_deviations.txt", deviations, 100);
-	StatePrinter::print_states("GD_1_starts.txt", starts, 100);
+	StatePrinter::print_states("GD_1_deviations.txt", deviations, 1000);
+	StatePrinter::print_states("GD_1_starts.txt", starts, 1000);
 
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
@@ -310,3 +279,37 @@ int main(int argc, char **argv)
 //}
 //StatePrinter::print_states("GD_2_deviations.txt", deviations, 100);
 //StatePrinter::print_states("GD_2_starts.txt", starts, 100);
+
+//////////////////////////////////////////////////////////////
+/////////////
+//int K = 40;
+//double **result = new double*[K];
+
+//for (int x = 0; x < K; x++)
+//{
+//	result[x] = new double[K];
+//	for (int y = 0; y < K; y++)
+//	{
+//		begin.state = Eigen::Vector4d(100, 70, x*0.17985*2/double(K), y*6.28/double(K));
+//		begin.Rw <<
+//			0.1, 0, 0, 0,
+//			0, 0.15, 0, 0,
+//			0, 0, 0.0005, 0,
+//			0, 0, 0, 0.002;
+//		begin.R = Eigen::Matrix4d::Identity();
+//		begin.Rn = 0.5;
+//		result[x][y] = FilterTuning::fitness(signals, sigCount, N, begin);
+//	}
+//}
+
+//std::ofstream out("fitness.txt");
+//for (int x = 0; x < K; x++)
+//{
+//	for (int y = 0; y < K; y++)
+//	{
+//		out << result[x][y] << " ";
+//	}
+//	out << std::endl;
+//}
+//out.close();
+////////////////////
