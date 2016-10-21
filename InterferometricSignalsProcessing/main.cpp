@@ -151,14 +151,46 @@ int main(int argc, char **argv)
 	ExtendedKalmanFilterIS1DState begin;
 	ExtendedKalmanFilterIS1DState step;
 
+	///////////
+	int K = 400;
+	double **result = new double*[K];
 
+	for (int x = 0; x < K; x++)
+	{
+		result[x] = new double[K];
+		for (int y = 0; y < K; y++)
+		{
+			begin.state = Eigen::Vector4d(100, x*400/double(K)-200, 0.17985, y*6.28/double(K));
+			begin.Rw <<
+				0.1, 0, 0, 0,
+				0, 0.15, 0, 0,
+				0, 0, 0.0005, 0,
+				0, 0, 0, 0.002;
+			begin.R = Eigen::Matrix4d::Identity();
+			begin.Rn = 0.5;
+			result[x][y] = FilterTuning::fitness(signals, sigCount, N, begin);
+		}
+	}
+
+	std::ofstream out("fitness.txt");
+	for (int x = 0; x < K; x++)
+	{
+		for (int y = 0; y < K; y++)
+		{
+			out << result[x][y] << " ";
+		}
+		out << std::endl;
+	}
+	out.close();
+	//////////////////
 
 	//Super tests
 	//1 only vector
-	Eigen::Vector4d *deviations = new Eigen::Vector4d[1000];
-	Eigen::Vector4d *starts = new Eigen::Vector4d[1000];
+	int M = 1000;
+	Eigen::Vector4d *deviations = new Eigen::Vector4d[M];
+	Eigen::Vector4d *starts = new Eigen::Vector4d[M];
 
-	begin.state = Eigen::Vector4d(150, 21, 0.05, 0);
+	begin.state = Eigen::Vector4d(150, 21, 0.05, 3);
 	begin.Rw <<
 		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
@@ -167,7 +199,7 @@ int main(int argc, char **argv)
 	begin.R = Eigen::Matrix4d::Identity();
 	begin.Rn = 0.5;
 
-	step.state = Eigen::Vector4d(1, 1, 0.005, 0.1)*0.001;
+	step.state = Eigen::Vector4d(1, 1, 0.005, 0.1)*0.002;
 	step.Rw <<
 		0, 0, 0, 0,
 		0, 0, 0, 0,
@@ -192,9 +224,11 @@ int main(int argc, char **argv)
 		std::stringstream str;
 		str << "GD_1_" << i << ".txt\0";
 		StatePrinter::print_states(str.str().c_str(), states, N);
+
+		std::cout << i << std::endl;
 	}
-	StatePrinter::print_states("GD_1_deviations.txt", deviations, 1000);
-	StatePrinter::print_states("GD_1_starts.txt", starts, 1000);
+	StatePrinter::print_states("GD_1_deviations.txt", deviations, M);
+	StatePrinter::print_states("GD_1_starts.txt", starts, M);
 
 	//Memory release
 	for (int i = 0; i < sigCount; i++)
