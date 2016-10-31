@@ -93,7 +93,6 @@ ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState b
 
 int main(int argc, char **argv)
 {
-
 	//Signals modeling
 	const int N = 500;
 	const double delta_z = 1;
