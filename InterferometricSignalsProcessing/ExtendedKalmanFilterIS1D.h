@@ -6,6 +6,10 @@
 class ExtendedKalmanFilterIS1DState
 {
 public:
+	ExtendedKalmanFilterIS1DState();
+	ExtendedKalmanFilterIS1DState(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
+	~ExtendedKalmanFilterIS1DState();
+
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;
 	Eigen::Matrix4d Rw;

@@ -33,7 +33,7 @@ void FilterTuning::GradientTuner::makeStep()
 	double *difference = new double[signalSize];
 
 	//Estimate current variance
-	double current_variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState);
+//	double current_variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState);
 
 	//Estimate varriances with0 descenc
 	for (int i = 0; i < 4; i++)		//state
@@ -42,8 +42,21 @@ void FilterTuning::GradientTuner::makeStep()
 		{
 			ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 			tmp.state(i) += step.state(i);
-			double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-			coef.state(i) = gradSign(current_variance - variance);
+
+			//std::cout << "tmp:" <<std::endl;
+			//StatePrinter::console_print_full_Kalman_state(tmp);
+			//std::cout << "step:" << std::endl;
+			//StatePrinter::console_print_full_Kalman_state(step);
+			//std::cout << "---------------------------------------------" << std::endl;
+
+			double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+			double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+			coef.state(i) = (var_plus - var_minus);
+
+			//std::cout << "plus:" << std::endl;
+			//std::cout << var_plus << std::endl;
+			//std::cout << "minus:" << std::endl;
+			//std::cout << var_minus << std::endl;
 		}
 	}
 	for (int i = 0; i < 4; i++)		//Rw
@@ -54,8 +67,9 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.Rw(i, j) += step.Rw(i, j);
-				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-				coef.Rw(i, j) = gradSign(current_variance - variance);
+				double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+				double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+				coef.Rw(i) = gradSign(var_plus - var_minus);
 			}
 		}
 	}
@@ -67,17 +81,32 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 				tmp.R(i, j) += step.R(i, j);
-				double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-				coef.R(i, j) = gradSign(current_variance - variance);
+				double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+				double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+				coef.R(i) = gradSign(var_plus - var_minus);
 			}
 		}
 	}
 	ExtendedKalmanFilterIS1DState tmp = ExtendedKalmanFilterIS1DState();
 	tmp.Rn += step.Rn;
-	double variance = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
-	coef.Rn = gradSign(current_variance - variance);
+	double var_plus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState + tmp);
+	double var_minus = FilterTuning::fitness(inputSignals, signalsCount, signalSize, currentState - tmp);
+	coef.Rn = gradSign(var_plus - var_minus);
 
 	currentState += coef*step;
+
+	//std::cout << "coef:" << std::endl;
+	//StatePrinter::console_print_full_Kalman_state(coef);
+	//std::cout << "step:" << std::endl;
+	//StatePrinter::console_print_full_Kalman_state(step);
+
+	////Debug
+	//StatePrinter::console_print_full_Kalman_state(coef);
+	//std::cout << "------------------" << std::endl;
+	//StatePrinter::console_print_full_Kalman_state(currentState);
+
+	//std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl ;
+
 
 	//StatePrinter::console_print_full_Kalman_state(coef);
 	//StatePrinter::console_print_full_Kalman_state(currentState);

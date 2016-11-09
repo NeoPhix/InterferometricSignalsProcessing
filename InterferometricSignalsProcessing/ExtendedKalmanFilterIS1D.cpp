@@ -63,6 +63,12 @@ void ExtendedKalmanFilterIS1D::estimate(double obs, double ph)		//new idea with 
 	Eigen::RowVector4d H = Ht(predict);
 	Eigen::Vector4d P = Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
 	state = predict + P*(obs - h(predict));
+
+	///
+	//state(1) = abs(state(1));
+	//state(2) = abs(state(2) - abs((int)state(2)));
+	///
+
 	R = (Eigen::Matrix4d::Identity() - P*H)*Rpr;
 }
 
@@ -150,3 +156,25 @@ void ExtendedKalmanFilterIS1DState::operator*=(ExtendedKalmanFilterIS1DState s)
 	Rn *= s.Rn;	//Rn
 }
 
+ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState()
+{
+	state = Eigen::Vector4d(0,0,0,0);
+	Rw <<
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0;
+	R <<
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0;
+	Rn = 0;
+}
+
+ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
+	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
+
+ExtendedKalmanFilterIS1DState::~ExtendedKalmanFilterIS1DState()
+{
+}

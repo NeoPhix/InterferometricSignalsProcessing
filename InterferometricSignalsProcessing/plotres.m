@@ -1,12 +1,12 @@
 %%%
-'LOVE ANECHKA!!!'
-'WILL BACK AND GET "NA RUCHKI"!!!'
+%'LOVE ANECHKA!!!'
+%'WILL BACK AND GET "NA RUCHKI"!!!'
 %%%
-
+clear 
 %Graphics
 data = importdata('data.txt');
 EKFdata = importdata('EKFdata.txt');
-GDdata = importdata('GDdata.txt');
+GDdata = importdata('GD_1_200.txt'); %!!!!
 [N w] = size(data);
 
 hFig = figure(1);

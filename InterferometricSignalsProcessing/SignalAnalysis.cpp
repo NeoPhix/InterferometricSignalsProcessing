@@ -128,8 +128,8 @@ Eigen::Vector4d SignalAnalysis::get_deviations(Eigen::Vector4d *states, double *
 		tmp[i] = states[i](3) - phase[i];
 	}
 	result(3) = SignalAnalysis::stdev(tmp, N);
-	SignalAnalysis::diff(signal, restoredSignal, tmp, N);
-	result(0) = SignalAnalysis::stdev(tmp, N);
+	//SignalAnalysis::diff(signal, restoredSignal, tmp, N);
+	//result(0) = SignalAnalysis::stdev(tmp, N);
 
 	delete[] tmp;
 	return result;

@@ -23,7 +23,7 @@ namespace FilterTuning
 		ExtendedKalmanFilterIS1DState currentState;
 		ExtendedKalmanFilterIS1DState step;
 
-		int gradSign(double s, double interval = 100.);
+		int gradSign(double s, double interval = 1.);
 	};
 }
 
