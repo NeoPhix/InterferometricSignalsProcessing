@@ -6,7 +6,7 @@
 class GradientDescentFilter1D
 {
 public:
-	//GradientDescentFilter1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
+	GradientDescentFilter1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_);
 	GradientDescentFilter1D();
 	~GradientDescentFilter1D();
 
@@ -16,11 +16,10 @@ public:
 private:
 	Eigen::Vector4d state;
 	Eigen::Vector4d step;
-	double Rn;
+	int iterNumber;
 
 	double h(Eigen::Vector4d st);
 	Eigen::Vector4d f(Eigen::Vector4d st);
-	//Eigen::RowVector4d Ht(Eigen::Vector4d st);
 };
 
 #endif

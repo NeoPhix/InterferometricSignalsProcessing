@@ -1,13 +1,11 @@
 #include "GradientDescentFilter1D.h"
 
-GradientDescentFilter1D::GradientDescentFilter1D()
-{
-}
+GradientDescentFilter1D::GradientDescentFilter1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_)
+	: state(state_), step(step_), iterNumber(iterNumber_) {}
 
+GradientDescentFilter1D::GradientDescentFilter1D() {}
 
-GradientDescentFilter1D::~GradientDescentFilter1D()
-{
-}
+GradientDescentFilter1D::~GradientDescentFilter1D() {}
 
 Eigen::Vector4d GradientDescentFilter1D::getState()
 {

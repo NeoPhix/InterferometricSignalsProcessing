@@ -9,9 +9,7 @@ ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState
 
 ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D() {}
 
-ExtendedKalmanFilterIS1D::~ExtendedKalmanFilterIS1D()
-{
-}
+ExtendedKalmanFilterIS1D::~ExtendedKalmanFilterIS1D() {}
 
 Eigen::Vector4d ExtendedKalmanFilterIS1D::getState()
 {
