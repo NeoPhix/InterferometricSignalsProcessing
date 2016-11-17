@@ -1,14 +1,14 @@
-#ifndef GRADIENT_DESCENT_FILTER_1D_H
-#define GRADIENT_DESCENT_FILTER_1D_H
+#ifndef GradientDescentFilterIS1D_H
+#define GradientDescentFilterIS1D_H
 
 #include <Eigen\Dense>
 
-class GradientDescentFilter1D
+class GradientDescentFilterIS1D
 {
 public:
-	GradientDescentFilter1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_);
-	GradientDescentFilter1D();
-	~GradientDescentFilter1D();
+	GradientDescentFilterIS1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_);
+	GradientDescentFilterIS1D();
+	~GradientDescentFilterIS1D();
 
 	Eigen::Vector4d getState();
 	void estimate(double obs);

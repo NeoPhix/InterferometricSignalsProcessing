@@ -51,7 +51,7 @@
     <ClCompile Include="SymbolicRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GradientDescentFilter1D.cpp">
+    <ClCompile Include="GradientDescentFilterIS1D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="SymbolicRegression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GradientDescentFilter1D.h">
+    <ClInclude Include="GradientDescentFilterIS1D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,23 +1,23 @@
-#include "GradientDescentFilter1D.h"
+#include "GradientDescentFilterIS1D.h"
 
-GradientDescentFilter1D::GradientDescentFilter1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_)
+GradientDescentFilterIS1D::GradientDescentFilterIS1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_)
 	: state(state_), step(step_), iterNumber(iterNumber_) {}
 
-GradientDescentFilter1D::GradientDescentFilter1D() {}
+GradientDescentFilterIS1D::GradientDescentFilterIS1D() {}
 
-GradientDescentFilter1D::~GradientDescentFilter1D() {}
+GradientDescentFilterIS1D::~GradientDescentFilterIS1D() {}
 
-Eigen::Vector4d GradientDescentFilter1D::getState()
+Eigen::Vector4d GradientDescentFilterIS1D::getState()
 {
 	return state;
 }
 
-double GradientDescentFilter1D::h(Eigen::Vector4d st)
+double GradientDescentFilterIS1D::h(Eigen::Vector4d st)
 {
 	return st(0) + st(1)*cos(st(3));
 }
 
-Eigen::Vector4d GradientDescentFilter1D::f(Eigen::Vector4d st)
+Eigen::Vector4d GradientDescentFilterIS1D::f(Eigen::Vector4d st)
 {
 	return st + Eigen::Vector4d(0, 0, 0, 2 * M_PI*st(2));
 }
@@ -27,7 +27,7 @@ Eigen::Vector4d GradientDescentFilter1D::f(Eigen::Vector4d st)
 //	return Eigen::RowVector4d(1, cos(st(3)), 0, -st(1)*sin(st(3)));
 //}
 
-void GradientDescentFilter1D::estimate(double obs)
+void GradientDescentFilterIS1D::estimate(double obs)
 {
 	//TODO
 	//Eigen::Vector4d predict = f(state);
@@ -39,7 +39,7 @@ void GradientDescentFilter1D::estimate(double obs)
 	//R = (Eigen::Matrix4d::Identity() - P*H)*Rpr;
 }
 
-double GradientDescentFilter1D::evaluateSignalValue()
+double GradientDescentFilterIS1D::evaluateSignalValue()
 {
 	return h(state);
 }

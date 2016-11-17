@@ -163,7 +163,7 @@
   <ItemGroup>
     <ClCompile Include="ExtendedKalmanFilterIS1D.cpp" />
     <ClCompile Include="FilterTuning.cpp" />
-    <ClCompile Include="GradientDescentFilter1D.cpp" />
+    <ClCompile Include="GradientDescentFilterIS1D.cpp" />
     <ClCompile Include="GradientTuner.cpp" />
     <ClCompile Include="ImageOpenCV.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
@@ -178,7 +178,7 @@
   <ItemGroup>
     <ClInclude Include="ExtendedKalmanFilterIS1D.h" />
     <ClInclude Include="FilterTuning.h" />
-    <ClInclude Include="GradientDescentFilter1D.h" />
+    <ClInclude Include="GradientDescentFilterIS1D.h" />
     <ClInclude Include="GradientTuner.h" />
     <ClInclude Include="ImageOpenCV.h" />
     <ClInclude Include="SignalAnalysis.h" />
