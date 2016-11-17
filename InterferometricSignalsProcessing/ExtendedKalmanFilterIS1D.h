@@ -32,8 +32,8 @@ public:
 	~ExtendedKalmanFilterIS1D();
 
 	Eigen::Vector4d getState();
+	void setState(Eigen::Vector4d st);
 	void estimate(double obs);
-	void estimate(double obs, double ph);		//new idea with known phase shift!
 	ExtendedKalmanFilterIS1DState getFullState() ;
 	double evaluateSignalValue() ;
 private:

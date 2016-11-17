@@ -11,6 +11,7 @@ public:
 	~GradientDescentFilterIS1D();
 
 	Eigen::Vector4d getState();
+	void setState(Eigen::Vector4d st);
 	void estimate(double obs);
 	double evaluateSignalValue();
 private:

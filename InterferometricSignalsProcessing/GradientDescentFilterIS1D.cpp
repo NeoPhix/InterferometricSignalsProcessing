@@ -12,6 +12,11 @@ Eigen::Vector4d GradientDescentFilterIS1D::getState()
 	return state;
 }
 
+void GradientDescentFilterIS1D::setState(Eigen::Vector4d st)
+{
+	state = st;
+}
+
 double GradientDescentFilterIS1D::h(Eigen::Vector4d st)
 {
 	return st(0) + st(1)*cos(st(3));

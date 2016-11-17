@@ -147,26 +147,27 @@ int main(int argc, char **argv)
 	StatePrinter::print_Kalman_stdev("EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//GD
+	Eigen::Vector4d step(1, 1, 0, 0.1);
+	GradientDescentFilterIS1D GDF(beginState, step, 150) ;
+	for (int i = 0; i < N; i++)
+	{
+		GDF.estimate(signal[i]);
+		states[i] = GDF.getState();
+		restoredSignal[i] = GDF.evaluateSignalValue();
+	}
+	StatePrinter::print_states("GD_data.txt", states, N);
+	StatePrinter::print_Kalman_stdev("GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
+	//GD+EKF
+	EKF = ExtendedKalmanFilterIS1D(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 	for (int i = 0; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
 		states[i] = EKF.getState();
 		restoredSignal[i] = EKF.evaluateSignalValue();
 	}
-	StatePrinter::print_states("GD_data.txt", states, N);
-	StatePrinter::print_Kalman_stdev("GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
-
-	////GD+EKF
-	//EKF = ExtendedKalmanFilterIS1D(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
-	//for (int i = 0; i < N; i++)
-	//{
-	//	EKF.estimate(signal[i]);
-	//	states[i] = EKF.getState();
-	//	restoredSignal[i] = EKF.evaluateSignalValue();
-	//}
-	//StatePrinter::print_states("EKF_GD_data.txt", states, N);
-	//StatePrinter::print_Kalman_stdev("EKF_GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	StatePrinter::print_states("EKF_GD_data.txt", states, N);
+	StatePrinter::print_Kalman_stdev("EKF_GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
