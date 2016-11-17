@@ -13,12 +13,12 @@ ExtendedKalmanFilterIS1D::~ExtendedKalmanFilterIS1D() {}
 
 Eigen::Vector4d ExtendedKalmanFilterIS1D::getState()
 {
-	return state ;
+	return state;
 }
 
 void ExtendedKalmanFilterIS1D::setState(Eigen::Vector4d st)
 {
-	state = st ;
+	state = st;
 }
 
 double ExtendedKalmanFilterIS1D::h(Eigen::Vector4d st)

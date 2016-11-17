@@ -163,8 +163,11 @@ int main(int argc, char **argv)
 	for (int i = 0; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
-		states[i] = EKF.getState();
-		restoredSignal[i] = EKF.evaluateSignalValue();
+		GDF.setState(EKF.getState());
+		GDF.estimate(signal[i], false);
+		states[i] = GDF.getState();
+		restoredSignal[i] = GDF.evaluateSignalValue();
+		EKF.setState(states[i]);
 	}
 	StatePrinter::print_states("EKF_GD_data.txt", states, N);
 	StatePrinter::print_Kalman_stdev("EKF_GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);

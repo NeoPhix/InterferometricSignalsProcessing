@@ -12,7 +12,7 @@ public:
 
 	Eigen::Vector4d getState();
 	void setState(Eigen::Vector4d st);
-	void estimate(double obs);
+	void estimate(double obs, bool doPrediction = true);
 	double evaluateSignalValue();
 private:
 	Eigen::Vector4d state;
@@ -20,7 +20,9 @@ private:
 	int iterNumber;
 
 	double h(Eigen::Vector4d st);
+	int sign(double s);
 	Eigen::Vector4d f(Eigen::Vector4d st);
+	Eigen::Vector4d gradient(Eigen::Vector4d st);
 };
 
 #endif

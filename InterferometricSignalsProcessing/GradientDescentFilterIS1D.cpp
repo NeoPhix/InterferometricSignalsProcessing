@@ -27,24 +27,35 @@ Eigen::Vector4d GradientDescentFilterIS1D::f(Eigen::Vector4d st)
 	return st + Eigen::Vector4d(0, 0, 0, 2 * M_PI*st(2));
 }
 
-//Eigen::RowVector4d GradientDescentFilter1D::Ht(Eigen::Vector4d st)
-//{
-//	return Eigen::RowVector4d(1, cos(st(3)), 0, -st(1)*sin(st(3)));
-//}
-
-void GradientDescentFilterIS1D::estimate(double obs)
+Eigen::Vector4d GradientDescentFilterIS1D::gradient(Eigen::Vector4d st)
 {
-	//TODO
-	//Eigen::Vector4d predict = f(state);
-	//Eigen::Matrix4d F = Ft(state);
-	//Eigen::Matrix4d Rpr = F*(R*F.transpose()) + Rw*Rw.transpose();
-	//Eigen::RowVector4d H = Ht(predict);
-	//Eigen::Vector4d P = Rpr*H.transpose() / (H*Rpr*H.transpose() + Rn);
-	//state = predict + P*(obs - h(predict));
-	//R = (Eigen::Matrix4d::Identity() - P*H)*Rpr;
+	return Eigen::Vector4d(1, cos(st(3)), 0, -st(1)*sin(st(3)));
+}
+
+void GradientDescentFilterIS1D::estimate(double obs, bool doPrediction)
+{
+	if (doPrediction)
+		state = f(state);
+	for (int i = 0; i < iterNumber; ++i)
+	{
+		Eigen::Vector4d grad = gradient(state);
+		for (int k = 0; k < 4; ++k)
+			grad(k) = sign(grad(k))*step(k);
+		state += grad;
+	}
 }
 
 double GradientDescentFilterIS1D::evaluateSignalValue()
 {
 	return h(state);
+}
+
+int GradientDescentFilterIS1D::sign(double s)
+{
+	if (s > 0.00000000001)
+		return 1;
+	else if (s < -0.00000000001)
+		return -1;
+	else
+		return 0;
 }

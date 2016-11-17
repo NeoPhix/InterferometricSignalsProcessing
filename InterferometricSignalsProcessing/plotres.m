@@ -7,7 +7,7 @@ clear
 data = importdata('data.txt');
 EKFdata = importdata('EKF_data.txt');
 GDdata = importdata('GD_data.txt'); 
-EKFGDdata = importdata('GD_EKF_data.txt'); 
+EKFGDdata = importdata('EKF_GD_data.txt'); 
 [N w] = size(data);
 
 hFig = figure(1);
