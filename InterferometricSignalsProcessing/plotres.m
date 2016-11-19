@@ -1,9 +1,7 @@
-%%%
-%'LOVE ANECHKA!!!'
-%'WILL BACK AND GET "NA RUCHKI"!!!'
-%%%
+
 clear 
 %Graphics
+signal = importdata('out.txt');
 data = importdata('data.txt');
 EKFdata = importdata('EKF_data.txt');
 GDdata = importdata('GD_data.txt'); 
@@ -11,25 +9,18 @@ EKFGDdata = importdata('EKF_GD_data.txt');
 [N w] = size(data);
 
 hFig = figure(1);
-set(hFig, 'Position', [100 100 1100 800]);
+set(hFig, 'Position', [100 100 1600 800]);
 
-subplot(2,2,1)
-plot(1:N, data(1:N, 2), 1:N, EKFdata(1:N, 2), 1:N, GDdata(1:N, 2), 1:N, EKFGDdata(1:N, 2));
+%signal
+subplot(2,3,1)
+plot(1:N, signal(1:N));
 grid on;
-title('Amplitude');
+title('Phase');
 xlabel('Discrete sample number');
-ylabel('Amplitude value');
-legend('Real amplitude','EKF estimation','GD estimation', 'EKF + GD estimation') ;
+ylabel('Phase value, rad');
+legend('Signal') ;
 
-subplot(2,2,2)
-plot(1:N, data(1:N, 3), 1:N, EKFdata(1:N, 3), 1:N, GDdata(1:N, 3), 1:N, EKFGDdata(1:N, 3));
-grid on;
-title('Frequency');
-xlabel('Discrete sample number');
-ylabel('Frequency value');
-legend('Real amplitude','EKF estimation','GD estimation', 'EKF + GD estimation') ;
-
-subplot(2,2,3)
+subplot(2,3,2)
 plot(1:N, data(1:N, 4), 1:N, EKFdata(1:N, 4), 1:N, GDdata(1:N, 4), 1:N, EKFGDdata(1:N, 4));
 grid on;
 title('Phase');
@@ -37,22 +28,38 @@ xlabel('Discrete sample number');
 ylabel('Phase value, rad');
 legend('Real amplitude','EKF estimation','GD estimation', 'EKF + GD estimation') ;
 
+subplot(2,3,3)
+plot(1:N, data(1:N, 2), 1:N, EKFdata(1:N, 2), 1:N, GDdata(1:N, 2), 1:N, EKFGDdata(1:N, 2));
+grid on;
+title('Amplitude');
+xlabel('Discrete sample number');
+ylabel('Amplitude value');
+legend('Real amplitude','EKF estimation','GD estimation', 'EKF + GD estimation') ;
+
+subplot(2,3,4)
+plot(1:N, data(1:N, 3), 1:N, EKFdata(1:N, 3), 1:N, GDdata(1:N, 3), 1:N, EKFGDdata(1:N, 3));
+grid on;
+title('Frequency');
+xlabel('Discrete sample number');
+ylabel('Frequency value');
+legend('Real frequency','EKF estimation','GD estimation', 'EKF + GD estimation') ;
+
+subplot(2,3,5)
+plot(1:N, data(1:N, 4), 1:N, EKFdata(1:N, 4), 1:N, GDdata(1:N, 4), 1:N, EKFGDdata(1:N, 4));
+grid on;
+title('Phase');
+xlabel('Discrete sample number');
+ylabel('Phase value, rad');
+legend('Real phase','EKF estimation','GD estimation', 'EKF + GD estimation') ;
+
 zrs = 0.01*sin(1:N) ; %Заплатка, чтобы правильно цвета и подписи нарисовались на четвертом графике
-subplot(2,2,4) 
+subplot(2,3,6) 
 plot(1:N, zrs, 1:N, data(1:N, 4) - EKFdata(1:N, 4),  1:N, data(1:N, 4) - GDdata(1:N, 4), 1:N, data(1:N, 4) - EKFGDdata(1:N, 4));
 grid on;
 title('Phase fail');
 xlabel('Discrete sample number');
 ylabel('Phase fail, rad');
-legend('Real amplitude','EKF estimation','GD estimation', 'EKF + GD estimation') ;
-
-%Background
-% figure, plot(1:N, background, 1:N, outParticle(1, 1:N), 1:N, outParticleKalman(1, 1:N), 1:N, outKalman(1, 1:N));
-% grid on;
-% title('Background');
-% xlabel('Discrete sample number');
-% ylabel('Background value');
-% legend('Real Background','Particle filter estimation','EKPF estimation','Kalman estimation') ;
+legend('Real phase fail','EKF estimation','GD estimation', 'EKF + GD estimation') ;
 
 std(EKFdata(1:N, 1) - data(1:N, 1));
 

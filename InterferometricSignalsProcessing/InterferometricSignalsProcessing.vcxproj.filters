@@ -1,96 +1,106 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Source">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Source\FilterTuning">
+      <UniqueIdentifier>{2f4776aa-d3f4-4057-b114-beead49a91d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\FilterTuning\SymbolicRegression">
+      <UniqueIdentifier>{a6151cda-66a1-4b23-a748-2dd32e8c93c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Filters">
+      <UniqueIdentifier>{6c71b7ed-dc48-4772-86a1-e5f2bee4fd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\StatePrinter">
+      <UniqueIdentifier>{64ad9302-f5d1-4628-96d7-061950932813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SignalProcessingOld">
+      <UniqueIdentifier>{9745571f-44cb-4ae9-9a62-392cc8d83c8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SignalProcessing">
+      <UniqueIdentifier>{50942757-5e91-4a99-8dcf-da8b5a05234d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExtendedKalmanFilterIS1D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleFilterIS1D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StatePrinter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SignalMaker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TotalSearchTuner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SignalAnalysis.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FilterTuning.cpp">
+      <Filter>Source\FilterTuning</Filter>
     </ClCompile>
     <ClCompile Include="GradientTuner.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source\FilterTuning</Filter>
     </ClCompile>
-    <ClCompile Include="FilterTuning.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SymbolicTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageOpenCV.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="TotalSearchTuner.cpp">
+      <Filter>Source\FilterTuning</Filter>
     </ClCompile>
     <ClCompile Include="SymbolicRegression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolicTree.cpp">
+      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
+    </ClCompile>
+    <ClCompile Include="ExtendedKalmanFilterIS1D.cpp">
+      <Filter>Source\Filters</Filter>
     </ClCompile>
     <ClCompile Include="GradientDescentFilterIS1D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleFilterIS1D.cpp">
+      <Filter>Source\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalAnalysis.cpp">
+      <Filter>Source\SignalProcessingOld</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalMaker.cpp">
+      <Filter>Source\SignalProcessingOld</Filter>
+    </ClCompile>
+    <ClCompile Include="StatePrinter.cpp">
+      <Filter>Source\StatePrinter</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="InterferometricSignal.cpp">
+      <Filter>Source\SignalProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExtendedKalmanFilterIS1D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleFilterIS1D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StatePrinter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SignalMaker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TotalSearchTuner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SignalAnalysis.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FilterTuning.h">
+      <Filter>Source\FilterTuning</Filter>
     </ClInclude>
     <ClInclude Include="GradientTuner.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source\FilterTuning</Filter>
     </ClInclude>
-    <ClInclude Include="FilterTuning.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SymbolicTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageOpenCV.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="TotalSearchTuner.h">
+      <Filter>Source\FilterTuning</Filter>
     </ClInclude>
     <ClInclude Include="SymbolicRegression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolicTree.h">
+      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendedKalmanFilterIS1D.h">
+      <Filter>Source\Filters</Filter>
     </ClInclude>
     <ClInclude Include="GradientDescentFilterIS1D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleFilterIS1D.h">
+      <Filter>Source\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalAnalysis.h">
+      <Filter>Source\SignalProcessingOld</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalMaker.h">
+      <Filter>Source\SignalProcessingOld</Filter>
+    </ClInclude>
+    <ClInclude Include="StatePrinter.h">
+      <Filter>Source\StatePrinter</Filter>
+    </ClInclude>
+    <ClInclude Include="InterferometricSignal.h">
+      <Filter>Source\SignalProcessing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

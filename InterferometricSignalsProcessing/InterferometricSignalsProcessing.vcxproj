@@ -165,7 +165,7 @@
     <ClCompile Include="FilterTuning.cpp" />
     <ClCompile Include="GradientDescentFilterIS1D.cpp" />
     <ClCompile Include="GradientTuner.cpp" />
-    <ClCompile Include="ImageOpenCV.cpp" />
+    <ClCompile Include="InterferometricSignal.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
     <ClCompile Include="SymbolicRegression.cpp" />
     <ClCompile Include="SymbolicTree.cpp" />
@@ -180,7 +180,7 @@
     <ClInclude Include="FilterTuning.h" />
     <ClInclude Include="GradientDescentFilterIS1D.h" />
     <ClInclude Include="GradientTuner.h" />
-    <ClInclude Include="ImageOpenCV.h" />
+    <ClInclude Include="InterferometricSignal.h" />
     <ClInclude Include="SignalAnalysis.h" />
     <ClInclude Include="SymbolicRegression.h" />
     <ClInclude Include="SymbolicTree.h" />

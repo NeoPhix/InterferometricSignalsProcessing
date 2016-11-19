@@ -21,6 +21,7 @@
 #include "SymbolicTree.h"
 #include "SymbolicRegression.h"
 #include "FilterTuning.h"
+#include "InterferometricSignal.h"
 
 double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 {
@@ -94,6 +95,10 @@ ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState b
 
 int main(int argc, char **argv)
 {
+	//InterferometricSignal Tests!
+	InterferometricSignal mySignal("g:\\data\\", ".bmp");
+
+
 	//Signals modeling
 	const int N = 500;
 	const double delta_z = 1;

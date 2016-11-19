@@ -3,6 +3,7 @@
 *.lib
 *.dll
 *.txt
+*.rar
 !todo.txt
 
 
