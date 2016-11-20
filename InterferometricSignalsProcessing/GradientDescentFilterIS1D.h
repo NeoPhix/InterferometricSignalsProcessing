@@ -3,6 +3,8 @@
 
 #include <Eigen\Dense>
 
+enum class StopCriterion {FixedIterationsCount, AdaptiveStep};
+
 class GradientDescentFilterIS1D
 {
 public:
@@ -11,8 +13,10 @@ public:
 	~GradientDescentFilterIS1D();
 
 	Eigen::Vector4d getState();
+	Eigen::Vector4d getStep();
 	void setState(Eigen::Vector4d st);
-	void estimate(double obs, bool doPrediction = true);
+	void setStep(Eigen::Vector4d step_);
+	void estimate(double obs, StopCriterion criterion = StopCriterion::AdaptiveStep, bool doPrediction = true);
 	double evaluateSignalValue();
 private:
 	Eigen::Vector4d state;
@@ -22,7 +26,7 @@ private:
 	double h(Eigen::Vector4d st);
 	int sign(double s);
 	Eigen::Vector4d f(Eigen::Vector4d st);
-	Eigen::Vector4d gradient(Eigen::Vector4d st);
+	Eigen::Vector4d gradient(double obs, Eigen::Vector4d st);
 };
 
 #endif

@@ -92,34 +92,33 @@ ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState b
 	return ExtendedKalmanFilterIS1D(tunedParameters);
 }
 
+//InterferometricSignal Tests!
+//InterferometricSignal mySignal("g:\\data\\after_proc\\", ".bmp");
 
 int main(int argc, char **argv)
 {
-	//InterferometricSignal Tests!
-	InterferometricSignal mySignal("g:\\data\\", ".bmp");
-
-
 	//Signals modeling
 	const int N = 500;
 	const double delta_z = 1;
 
-	double E_min = 50;	//Max amplitude
-	double E_max = 100;	//Max amplitude
-	double sigma = 50;
+	double E_min = 0;	//Max amplitude
+	double E_max = 200;	//Max amplitude
+	double sigma = 200;
 	std::default_random_engine gen((unsigned int)time(NULL));
 
+	double *amplitude = new double[N];
 	double *background = new double[N];
 	double *frequency = new double[N];
 
 	for (int i = 0; i < N; i++)
 	{
-		background[i] = 130;
-		frequency[i] = 0.17985 - 0.0002*i;
+		background[i] = 100;
+		amplitude[i] = 50 - SignalMaker::gaussianAmplitude(i, 250, sigma);
+		frequency[i] = 0.105 - 0.00015*i;
 	}
 
 	//Estimated signal
-	int edges[3] = { 100, 200, 425 };
-	double *amplitude = SignalMaker::fixedGaussianAmplitude(N, E_min, E_max, sigma, edges, 3);
+
 	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
 	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
 	double *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
@@ -132,7 +131,7 @@ int main(int argc, char **argv)
 	double *restoredSignal = new double[N];
 
 	//Creation of EKF
-	Eigen::Vector4d beginState(100, 70, 0.17985, 0);
+	Eigen::Vector4d beginState(100, 40, 0.17985, 0);
 	Eigen::Matrix4d Rw;
 	Rw << 0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
@@ -152,11 +151,11 @@ int main(int argc, char **argv)
 	StatePrinter::print_Kalman_stdev("EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//GD
-	Eigen::Vector4d step(1, 1, 0, 0.1);
-	GradientDescentFilterIS1D GDF(beginState, step, 150) ;
+	Eigen::Vector4d step(0.02, 0.009, 0, 0.0005);
+	GradientDescentFilterIS1D GDF(beginState, step, 1000) ;
 	for (int i = 0; i < N; i++)
 	{
-		GDF.estimate(signal[i]);
+		GDF.estimate(signal[i], StopCriterion::AdaptiveStep, true);
 		states[i] = GDF.getState();
 		restoredSignal[i] = GDF.evaluateSignalValue();
 	}
@@ -164,12 +163,13 @@ int main(int argc, char **argv)
 	StatePrinter::print_Kalman_stdev("GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//GD+EKF
+	GDF = GradientDescentFilterIS1D(beginState, step, 50);
 	EKF = ExtendedKalmanFilterIS1D(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 	for (int i = 0; i < N; i++)
 	{
 		EKF.estimate(signal[i]);
 		GDF.setState(EKF.getState());
-		GDF.estimate(signal[i], false);
+		GDF.estimate(signal[i], StopCriterion::AdaptiveStep, false);
 		states[i] = GDF.getState();
 		restoredSignal[i] = GDF.evaluateSignalValue();
 		EKF.setState(states[i]);
