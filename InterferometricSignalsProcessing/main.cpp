@@ -94,8 +94,71 @@ ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState b
 
 //InterferometricSignal Tests!
 //InterferometricSignal mySignal("g:\\data\\after_proc\\", ".bmp");
+//#include <tracking.hpp>
 
-int main(int argc, char **argv)
+using namespace cv;
+
+
+void main()
+{
+	// Kalman filter initialization
+	int start_num = 5;
+	KalmanFilter KF(15, 3, 0);
+	// Transition matrix - identity
+	setIdentity(KF.transitionMatrix);
+	// y_i = [0, 0, m'1*m4]
+	Mat_<float> measurement(3, 1); measurement.setTo(Scalar(0));
+	measurement.at<float>(0, 2) = target_points[start_num][0] * source_points[start_num][3];
+	// KF.statePre = P0
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 0; x < 4; x++) {
+			if ((y == 3) && (x == 3))
+				break;
+			KF.statePre.at<float>(y * 4 + x) = P0[x][y];
+		}
+	}
+	// Measurement matrix = M
+	for (int j = 0; j < 4; j++)
+		KF.measurementMatrix.at<float>(0, j) = source_points[start_num][j] * target_points[start_num][1];
+	for (int j = 0; j < 4; j++)
+		KF.measurementMatrix.at<float>(0, j + 4) = source_points[start_num][j] * (-1) * target_points[start_num][0];
+	for (int j = 0; j < 4; j++)
+		KF.measurementMatrix.at<float>(1, j) = source_points[start_num][j] * target_points[start_num][2];
+	for (int j = 0; j < 4; j++)
+		KF.measurementMatrix.at<float>(1, j + 8) = source_points[start_num][j] * (-1) * target_points[start_num][0];
+	for (int j = 0; j < 4; j++)
+		KF.measurementMatrix.at<float>(2, j) = source_points[start_num][j] * target_points[start_num][3];
+	for (int j = 0; j < 3; j++)
+		KF.measurementMatrix.at<float>(2, j + 12) = source_points[start_num][j] * (-1) * target_points[start_num][0];
+	cout << KF.measurementMatrix << endl;
+
+	// measurementNoiseCov = W
+	glm::vec4 v = P0 * source_points[start_num];
+	cv::Mat Covariance = cv::Mat::eye(cvSize(4, 4), CV_64F);
+	cv::Mat Jacobian1 = cv::Mat::zeros(cvSize(4, 3), CV_64F);
+	for (int y = 0; y < Jacobian1.rows; y++) {
+		for (int x = 0; x < Jacobian1.cols; x++) {
+			Jacobian1.at<double>(y, x) = target_points[start_num][y + 1] * P0[x][0] - target_points[start_num][0] * P0[x][y + 1];
+		}
+	}
+	cv::Mat Jacobian2 = cv::Mat::zeros(cvSize(4, 3), CV_64F);
+	Jacobian2.at<double>(0, 1) = Jacobian2.at<double>(1, 2) = Jacobian2.at<double>(2, 3) = v[0];
+	for (int y = 0; y < 3; y++)
+		Jacobian2.at<double>(y, 0) = -v[y + 1];
+	KF.measurementNoiseCov = Jacobian1 * Covariance * Jacobian1.t() + Jacobian2 * Covariance * Jacobian2.t();
+	cout << KF.measurementNoiseCov << endl;
+
+	// Set example values for two rest covariation matrices
+	setIdentity(KF.processNoiseCov, Scalar::all(1e-4));
+	setIdentity(KF.errorCovPost, Scalar::all(.1));
+
+	cv::Mat prediction = KF.predict();
+	cout << prediction << endl;
+
+}
+
+int main1(int argc, char **argv)
 {
 	//Signals modeling
 	const int N = 500;
