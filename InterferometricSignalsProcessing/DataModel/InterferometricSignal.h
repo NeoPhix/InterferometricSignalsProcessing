@@ -3,21 +3,33 @@
 
 #include <vector>
 
-typedef std::vector<std::vector<std::vector<double>>> vector3d;
-typedef std::vector<std::vector<double>> vector2d;
-typedef std::vector<double> vector1d;
+typedef std::vector<std::vector<std::vector<float>>> vector3d;
+typedef std::vector<std::vector<float>> vector2d;
+typedef std::vector<float> vector1d;
 
 class InterferometricSignal
 {
 public:
+	InterferometricSignal();
 	InterferometricSignal(const char *path, const char *type);
 	~InterferometricSignal();
 
+	void readSignal1D();
+	void readSignal2D();
+	void 
+
 	vector1d getSignal1D();
-	//vector2d get
+	vector2d getSignal2D();
+
 
 private:
+	int w;
+	int h;
+	int d;
+
 	vector3d data;
+
+
 };
 
 #endif
