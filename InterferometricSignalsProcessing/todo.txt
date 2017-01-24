@@ -1,14 +1,11 @@
-1. Particle filter
+0. Particle filter
 	//to be or not to be with multivariate normal distribution? :)
-2. Kalman filter test/approximate
-3. full search
-4. Gradient descent for kalman parameters (it can be used and for particle filter too)
-6. OpenCV image stack load and processing
-7. OpenCV functions of input/output image stacks 
-8. Symbolic regression
-9. Autoregression models?
-10. Neural networks for filter creation
+1. OpenCV image stack load and processing
+2. OpenCV functions of input/output image stacks 
+3. Symbolic regression
+4. Autoregression models?
+5. Neural networks for filter creation
 ~~Time tests? 
-12. Qt interface
+6. Qt interface
 
 
