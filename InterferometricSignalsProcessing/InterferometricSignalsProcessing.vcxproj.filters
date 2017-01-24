@@ -17,78 +17,78 @@
     <Filter Include="Source\DataModel">
       <UniqueIdentifier>{50942757-5e91-4a99-8dcf-da8b5a05234d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\SignalProcessing">
+    <Filter Include="Source\SignalAnalysis">
       <UniqueIdentifier>{9745571f-44cb-4ae9-9a62-392cc8d83c8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FilterTuning.cpp">
-      <Filter>Source\FilterTuning</Filter>
-    </ClCompile>
-    <ClCompile Include="GradientTuner.cpp">
-      <Filter>Source\FilterTuning</Filter>
-    </ClCompile>
-    <ClCompile Include="TotalSearchTuner.cpp">
-      <Filter>Source\FilterTuning</Filter>
-    </ClCompile>
-    <ClCompile Include="ExtendedKalmanFilterIS1D.cpp">
-      <Filter>Source\Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="GradientDescentFilterIS1D.cpp">
-      <Filter>Source\Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleFilterIS1D.cpp">
-      <Filter>Source\Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="SignalAnalysis.cpp">
-      <Filter>Source\SignalProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="SignalMaker.cpp">
-      <Filter>Source\SignalProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="StatePrinter.cpp">
-      <Filter>Source\StatePrinter</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="InterferometricSignal.cpp">
+    <ClCompile Include="DataModel\InterferometricSignal.cpp">
       <Filter>Source\DataModel</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterTuning\FilterTuning.cpp">
+      <Filter>Source\FilterTuning</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterTuning\GradientTuner.cpp">
+      <Filter>Source\FilterTuning</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterTuning\TotalSearchTuner.cpp">
+      <Filter>Source\FilterTuning</Filter>
+    </ClCompile>
+    <ClCompile Include="Filters\ExtendedKalmanFilterIS1D.cpp">
+      <Filter>Source\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="Filters\GradientDescentFilterIS1D.cpp">
+      <Filter>Source\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="Filters\ParticleFilterIS1D.cpp">
+      <Filter>Source\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="StatePrinter\StatePrinter.cpp">
+      <Filter>Source\StatePrinter</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalAnalysis\SignalAnalysis.cpp">
+      <Filter>Source\SignalAnalysis</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalAnalysis\SignalMaker.cpp">
+      <Filter>Source\SignalAnalysis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FilterTuning.h">
-      <Filter>Source\FilterTuning</Filter>
-    </ClInclude>
-    <ClInclude Include="GradientTuner.h">
-      <Filter>Source\FilterTuning</Filter>
-    </ClInclude>
-    <ClInclude Include="TotalSearchTuner.h">
-      <Filter>Source\FilterTuning</Filter>
-    </ClInclude>
-    <ClInclude Include="ExtendedKalmanFilterIS1D.h">
-      <Filter>Source\Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="GradientDescentFilterIS1D.h">
-      <Filter>Source\Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleFilterIS1D.h">
-      <Filter>Source\Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="SignalAnalysis.h">
-      <Filter>Source\SignalProcessing</Filter>
-    </ClInclude>
-    <ClInclude Include="SignalMaker.h">
-      <Filter>Source\SignalProcessing</Filter>
-    </ClInclude>
-    <ClInclude Include="StatePrinter.h">
-      <Filter>Source\StatePrinter</Filter>
-    </ClInclude>
-    <ClInclude Include="InterferometricSignal.h">
-      <Filter>Source\DataModel</Filter>
-    </ClInclude>
+    <Text Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="todo.txt" />
+    <ClInclude Include="DataModel\InterferometricSignal.h">
+      <Filter>Source\DataModel</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterTuning\FilterTuning.h">
+      <Filter>Source\FilterTuning</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterTuning\GradientTuner.h">
+      <Filter>Source\FilterTuning</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterTuning\TotalSearchTuner.h">
+      <Filter>Source\FilterTuning</Filter>
+    </ClInclude>
+    <ClInclude Include="Filters\ExtendedKalmanFilterIS1D.h">
+      <Filter>Source\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Filters\GradientDescentFilterIS1D.h">
+      <Filter>Source\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Filters\ParticleFilterIS1D.h">
+      <Filter>Source\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="StatePrinter\StatePrinter.h">
+      <Filter>Source\StatePrinter</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalAnalysis\SignalAnalysis.h">
+      <Filter>Source\SignalAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalAnalysis\SignalMaker.h">
+      <Filter>Source\SignalAnalysis</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,20 +8,20 @@
 #include <random>
 
 #include <Eigen/Dense>
-//#include <opencv/cv.h>
-//#include <opencv/highgui.h>
 
-#include "SignalMaker.h"
-#include "ExtendedKalmanFilterIS1D.h"
-#include "GradientDescentFilterIS1D.h"
-#include "StatePrinter.h"
-#include "SignalAnalysis.h"
-#include "TotalSearchTuner.h"
-#include "GradientTuner.h"
-#include "SymbolicTree.h"
-#include "SymbolicRegression.h"
-#include "FilterTuning.h"
-#include "InterferometricSignal.h"
+#include "SignalAnalysis/SignalMaker.h"
+#include "SignalAnalysis/SignalAnalysis.h"
+
+#include "StatePrinter/StatePrinter.h"
+
+#include "Filters/ExtendedKalmanFilterIS1D.h"
+#include "Filters/GradientDescentFilterIS1D.h"
+
+#include "FilterTuning/TotalSearchTuner.h"
+#include "FilterTuning/GradientTuner.h"
+#include "FilterTuning/FilterTuning.h"
+
+#include "DataModel/InterferometricSignal.h"
 
 double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 {

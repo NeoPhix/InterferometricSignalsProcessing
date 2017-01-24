@@ -161,32 +161,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ExtendedKalmanFilterIS1D.cpp" />
-    <ClCompile Include="FilterTuning.cpp" />
-    <ClCompile Include="GradientDescentFilterIS1D.cpp" />
-    <ClCompile Include="GradientTuner.cpp" />
-    <ClCompile Include="InterferometricSignal.cpp" />
-    <ClCompile Include="SignalAnalysis.cpp" />
-    <ClCompile Include="TotalSearchTuner.cpp" />
+    <ClCompile Include="DataModel\InterferometricSignal.cpp" />
+    <ClCompile Include="Filters\ExtendedKalmanFilterIS1D.cpp" />
+    <ClCompile Include="Filters\GradientDescentFilterIS1D.cpp" />
+    <ClCompile Include="Filters\ParticleFilterIS1D.cpp" />
+    <ClCompile Include="FilterTuning\FilterTuning.cpp" />
+    <ClCompile Include="FilterTuning\GradientTuner.cpp" />
+    <ClCompile Include="FilterTuning\TotalSearchTuner.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ParticleFilterIS1D.cpp" />
-    <ClCompile Include="SignalMaker.cpp" />
-    <ClCompile Include="StatePrinter.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ExtendedKalmanFilterIS1D.h" />
-    <ClInclude Include="FilterTuning.h" />
-    <ClInclude Include="GradientDescentFilterIS1D.h" />
-    <ClInclude Include="GradientTuner.h" />
-    <ClInclude Include="InterferometricSignal.h" />
-    <ClInclude Include="SignalAnalysis.h" />
-    <ClInclude Include="TotalSearchTuner.h" />
-    <ClInclude Include="ParticleFilterIS1D.h" />
-    <ClInclude Include="SignalMaker.h" />
-    <ClInclude Include="StatePrinter.h" />
+    <ClCompile Include="SignalAnalysis\SignalAnalysis.cpp" />
+    <ClCompile Include="SignalAnalysis\SignalMaker.cpp" />
+    <ClCompile Include="StatePrinter\StatePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataModel\InterferometricSignal.h" />
+    <ClInclude Include="Filters\ExtendedKalmanFilterIS1D.h" />
+    <ClInclude Include="Filters\GradientDescentFilterIS1D.h" />
+    <ClInclude Include="Filters\ParticleFilterIS1D.h" />
+    <ClInclude Include="FilterTuning\FilterTuning.h" />
+    <ClInclude Include="FilterTuning\GradientTuner.h" />
+    <ClInclude Include="FilterTuning\TotalSearchTuner.h" />
+    <ClInclude Include="SignalAnalysis\SignalAnalysis.h" />
+    <ClInclude Include="SignalAnalysis\SignalMaker.h" />
+    <ClInclude Include="StatePrinter\StatePrinter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
