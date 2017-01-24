@@ -8,20 +8,17 @@
     <Filter Include="Source\FilterTuning">
       <UniqueIdentifier>{2f4776aa-d3f4-4057-b114-beead49a91d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\FilterTuning\SymbolicRegression">
-      <UniqueIdentifier>{a6151cda-66a1-4b23-a748-2dd32e8c93c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Filters">
       <UniqueIdentifier>{6c71b7ed-dc48-4772-86a1-e5f2bee4fd61}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\StatePrinter">
       <UniqueIdentifier>{64ad9302-f5d1-4628-96d7-061950932813}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\SignalProcessingOld">
-      <UniqueIdentifier>{9745571f-44cb-4ae9-9a62-392cc8d83c8f}</UniqueIdentifier>
+    <Filter Include="Source\DataModel">
+      <UniqueIdentifier>{50942757-5e91-4a99-8dcf-da8b5a05234d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\SignalProcessing">
-      <UniqueIdentifier>{50942757-5e91-4a99-8dcf-da8b5a05234d}</UniqueIdentifier>
+      <UniqueIdentifier>{9745571f-44cb-4ae9-9a62-392cc8d83c8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,12 +31,6 @@
     <ClCompile Include="TotalSearchTuner.cpp">
       <Filter>Source\FilterTuning</Filter>
     </ClCompile>
-    <ClCompile Include="SymbolicRegression.cpp">
-      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
-    </ClCompile>
-    <ClCompile Include="SymbolicTree.cpp">
-      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
-    </ClCompile>
     <ClCompile Include="ExtendedKalmanFilterIS1D.cpp">
       <Filter>Source\Filters</Filter>
     </ClCompile>
@@ -50,10 +41,10 @@
       <Filter>Source\Filters</Filter>
     </ClCompile>
     <ClCompile Include="SignalAnalysis.cpp">
-      <Filter>Source\SignalProcessingOld</Filter>
+      <Filter>Source\SignalProcessing</Filter>
     </ClCompile>
     <ClCompile Include="SignalMaker.cpp">
-      <Filter>Source\SignalProcessingOld</Filter>
+      <Filter>Source\SignalProcessing</Filter>
     </ClCompile>
     <ClCompile Include="StatePrinter.cpp">
       <Filter>Source\StatePrinter</Filter>
@@ -62,7 +53,7 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="InterferometricSignal.cpp">
-      <Filter>Source\SignalProcessing</Filter>
+      <Filter>Source\DataModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,12 +66,6 @@
     <ClInclude Include="TotalSearchTuner.h">
       <Filter>Source\FilterTuning</Filter>
     </ClInclude>
-    <ClInclude Include="SymbolicRegression.h">
-      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
-    </ClInclude>
-    <ClInclude Include="SymbolicTree.h">
-      <Filter>Source\FilterTuning\SymbolicRegression</Filter>
-    </ClInclude>
     <ClInclude Include="ExtendedKalmanFilterIS1D.h">
       <Filter>Source\Filters</Filter>
     </ClInclude>
@@ -91,16 +76,16 @@
       <Filter>Source\Filters</Filter>
     </ClInclude>
     <ClInclude Include="SignalAnalysis.h">
-      <Filter>Source\SignalProcessingOld</Filter>
+      <Filter>Source\SignalProcessing</Filter>
     </ClInclude>
     <ClInclude Include="SignalMaker.h">
-      <Filter>Source\SignalProcessingOld</Filter>
+      <Filter>Source\SignalProcessing</Filter>
     </ClInclude>
     <ClInclude Include="StatePrinter.h">
       <Filter>Source\StatePrinter</Filter>
     </ClInclude>
     <ClInclude Include="InterferometricSignal.h">
-      <Filter>Source\SignalProcessing</Filter>
+      <Filter>Source\DataModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

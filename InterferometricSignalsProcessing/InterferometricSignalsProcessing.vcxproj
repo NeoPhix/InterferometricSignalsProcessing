@@ -167,8 +167,6 @@
     <ClCompile Include="GradientTuner.cpp" />
     <ClCompile Include="InterferometricSignal.cpp" />
     <ClCompile Include="SignalAnalysis.cpp" />
-    <ClCompile Include="SymbolicRegression.cpp" />
-    <ClCompile Include="SymbolicTree.cpp" />
     <ClCompile Include="TotalSearchTuner.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleFilterIS1D.cpp" />
@@ -182,8 +180,6 @@
     <ClInclude Include="GradientTuner.h" />
     <ClInclude Include="InterferometricSignal.h" />
     <ClInclude Include="SignalAnalysis.h" />
-    <ClInclude Include="SymbolicRegression.h" />
-    <ClInclude Include="SymbolicTree.h" />
     <ClInclude Include="TotalSearchTuner.h" />
     <ClInclude Include="ParticleFilterIS1D.h" />
     <ClInclude Include="SignalMaker.h" />
