@@ -25,9 +25,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="DataModel\InterferometricSignal.cpp">
-      <Filter>Source\DataModel</Filter>
-    </ClCompile>
     <ClCompile Include="FilterTuning\FilterTuning.cpp">
       <Filter>Source\FilterTuning</Filter>
     </ClCompile>
@@ -55,14 +52,14 @@
     <ClCompile Include="SignalAnalysis\SignalMaker.cpp">
       <Filter>Source\SignalAnalysis</Filter>
     </ClCompile>
+    <ClCompile Include="DataModel\Signal3D.cpp">
+      <Filter>Source\DataModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataModel\InterferometricSignal.h">
-      <Filter>Source\DataModel</Filter>
-    </ClInclude>
     <ClInclude Include="FilterTuning\FilterTuning.h">
       <Filter>Source\FilterTuning</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="SignalAnalysis\SignalMaker.h">
       <Filter>Source\SignalAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModel\Signal3D.h">
+      <Filter>Source\DataModel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

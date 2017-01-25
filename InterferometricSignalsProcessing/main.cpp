@@ -21,7 +21,7 @@
 #include "FilterTuning/GradientTuner.h"
 #include "FilterTuning/FilterTuning.h"
 
-#include "DataModel/InterferometricSignal.h"
+#include "DataModel/Signal3D.h"
 
 double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 {
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 	delete[] states;
 
 	return 0;
-} //main
+}
 
 
 //Main with GD larning for BPO backup

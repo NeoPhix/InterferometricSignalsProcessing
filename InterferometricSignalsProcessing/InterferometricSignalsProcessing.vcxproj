@@ -161,7 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataModel\InterferometricSignal.cpp" />
+    <ClCompile Include="DataModel\Signal3D.cpp" />
     <ClCompile Include="Filters\ExtendedKalmanFilterIS1D.cpp" />
     <ClCompile Include="Filters\GradientDescentFilterIS1D.cpp" />
     <ClCompile Include="Filters\ParticleFilterIS1D.cpp" />
@@ -177,7 +177,7 @@
     <Text Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataModel\InterferometricSignal.h" />
+    <ClInclude Include="DataModel\Signal3D.h" />
     <ClInclude Include="Filters\ExtendedKalmanFilterIS1D.h" />
     <ClInclude Include="Filters\GradientDescentFilterIS1D.h" />
     <ClInclude Include="Filters\ParticleFilterIS1D.h" />
