@@ -7,23 +7,25 @@ typedef std::vector<std::vector<std::vector<float>>> vector3d;
 typedef std::vector<std::vector<float>> vector2d;
 typedef std::vector<float> vector1d;
 
-enum Axis {X, Y, Z};	//For 1D signals getting
-enum Plane {XY, XZ};	//For 2D signals getting
+enum Axis {X, Y, Z};		//For 1D signals getting
+enum Plane  {XZ, XY, YZ};	//For 2D signals getting
 
 class Signal3D
 {
 public:
 	Signal3D();
-	Signal3D(const char *path, const char *type);
+	Signal3D(int w_, int h_, int d_);
+	Signal3D(const char *path, const char *type, int count);
+
 
 	~Signal3D();
 
-	void readSignal1D();
-	void readSignal2D();
-	void readSignal3D();
+	void readSignal1D(int n, int m, Axis asix = Axis::Z);		//X, Y, Z
+	void readSignal2D(int n, Plane plane = Plane::XZ);			//XZ = y number,  
+	void readSignal3D();	
 
-	vector1d getSignal1D();
-	vector2d getSignal2D();
+	vector1d getSignal1D(int n, int m, Axis asix = Axis::Z);	//X, Y, Z
+	vector2d getSignal2D(int n, Plane plane = Plane::XZ);		//XZ = y number,  
 	vector3d getSignal3D();
 
 private:

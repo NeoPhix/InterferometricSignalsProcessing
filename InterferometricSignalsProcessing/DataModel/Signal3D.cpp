@@ -9,8 +9,8 @@ Signal3D::Signal3D()
 	: w(0), h(0), d(0)
 {}
 
-Signal3D::Signal3D(const char *path, const char *type)
-	: w(0), h(0), d(0)
+Signal3D::Signal3D(const char *path, const char *type, int count)
+	: w(0), h(0), d(count)
 {
 
 	//for (d = 1; ; ++d)
