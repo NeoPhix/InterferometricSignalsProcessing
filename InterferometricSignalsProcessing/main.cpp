@@ -115,31 +115,35 @@ int main(int argc, char **argv)
 
 	//Tests
 
+	//Estimated signal
+
+	dmod::signal1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
+	dmod::signal1d noise = dmod::normalDistribution(0, 10, N, gen);
+	dmod::signal1d signal = dmod::createSignal1D(background, amplitude, phase, noise, N);
+	
+	StatePrinter::print_signal("out.txt", signal, N);
+	StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
+	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
+
+	//test arrays
+	Eigen::Vector4d *states = new Eigen::Vector4d[N];
+	float *restoredSignal = new float[N];
+
+	//Creation of EKF
+	Eigen::Vector4d beginState(100, 40, 0.17985, 0);
+	Eigen::Matrix4d Rw;
+	Rw << 0.1, 0, 0, 0,
+		0, 0.15, 0, 0,
+		0, 0, 0.0005, 0,
+		0, 0, 0, 0.002;
+	float Rn = 0.5;
+
+	std::cin >> E_min;
 
 
 
 
-	////Estimated signal
-
-	//float *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
-	//float *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-	//float *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
-	//StatePrinter::print_signal("out.txt", signal, N);
-	//StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
-	//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl ;
-
-	////test arrays
-	//Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	//float *restoredSignal = new float[N];
-
-	////Creation of EKF
-	//Eigen::Vector4d beginState(100, 40, 0.17985, 0);
-	//Eigen::Matrix4d Rw;
-	//Rw << 0.1, 0, 0, 0,
-	//	0, 0.15, 0, 0,
-	//	0, 0, 0.0005, 0,
-	//	0, 0, 0, 0.002;
-	//float Rn = 0.5;
+	
 	//
 	////EKF
 	//ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
