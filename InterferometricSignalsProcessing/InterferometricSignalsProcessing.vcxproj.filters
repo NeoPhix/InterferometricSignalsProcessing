@@ -17,9 +17,6 @@
     <Filter Include="Source\DataModel">
       <UniqueIdentifier>{50942757-5e91-4a99-8dcf-da8b5a05234d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\SignalAnalysis">
-      <UniqueIdentifier>{9745571f-44cb-4ae9-9a62-392cc8d83c8f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -46,13 +43,13 @@
     <ClCompile Include="StatePrinter\StatePrinter.cpp">
       <Filter>Source\StatePrinter</Filter>
     </ClCompile>
-    <ClCompile Include="SignalAnalysis\SignalAnalysis.cpp">
-      <Filter>Source\SignalAnalysis</Filter>
+    <ClCompile Include="DataModel\SignalMaker.cpp">
+      <Filter>Source\DataModel</Filter>
     </ClCompile>
-    <ClCompile Include="SignalAnalysis\SignalMaker.cpp">
-      <Filter>Source\SignalAnalysis</Filter>
+    <ClCompile Include="DataModel\SignalAnalysis.cpp">
+      <Filter>Source\DataModel</Filter>
     </ClCompile>
-    <ClCompile Include="DataModel\Signal3D.cpp">
+    <ClCompile Include="DataModel\Tomogram.cpp">
       <Filter>Source\DataModel</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,13 +78,13 @@
     <ClInclude Include="StatePrinter\StatePrinter.h">
       <Filter>Source\StatePrinter</Filter>
     </ClInclude>
-    <ClInclude Include="SignalAnalysis\SignalAnalysis.h">
-      <Filter>Source\SignalAnalysis</Filter>
+    <ClInclude Include="DataModel\SignalMaker.h">
+      <Filter>Source\DataModel</Filter>
     </ClInclude>
-    <ClInclude Include="SignalAnalysis\SignalMaker.h">
-      <Filter>Source\SignalAnalysis</Filter>
+    <ClInclude Include="DataModel\SignalAnalysis.h">
+      <Filter>Source\DataModel</Filter>
     </ClInclude>
-    <ClInclude Include="DataModel\Signal3D.h">
+    <ClInclude Include="DataModel\Tomogram.h">
       <Filter>Source\DataModel</Filter>
     </ClInclude>
   </ItemGroup>

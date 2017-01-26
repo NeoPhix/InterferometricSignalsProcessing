@@ -161,7 +161,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataModel\Signal3D.cpp" />
+    <ClCompile Include="DataModel\Tomogram.cpp" />
+    <ClCompile Include="DataModel\SignalAnalysis.cpp" />
+    <ClCompile Include="DataModel\SignalMaker.cpp" />
     <ClCompile Include="Filters\ExtendedKalmanFilterIS1D.cpp" />
     <ClCompile Include="Filters\GradientDescentFilterIS1D.cpp" />
     <ClCompile Include="Filters\ParticleFilterIS1D.cpp" />
@@ -169,23 +171,21 @@
     <ClCompile Include="FilterTuning\GradientTuner.cpp" />
     <ClCompile Include="FilterTuning\TotalSearchTuner.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SignalAnalysis\SignalAnalysis.cpp" />
-    <ClCompile Include="SignalAnalysis\SignalMaker.cpp" />
     <ClCompile Include="StatePrinter\StatePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataModel\Signal3D.h" />
+    <ClInclude Include="DataModel\Tomogram.h" />
+    <ClInclude Include="DataModel\SignalAnalysis.h" />
+    <ClInclude Include="DataModel\SignalMaker.h" />
     <ClInclude Include="Filters\ExtendedKalmanFilterIS1D.h" />
     <ClInclude Include="Filters\GradientDescentFilterIS1D.h" />
     <ClInclude Include="Filters\ParticleFilterIS1D.h" />
     <ClInclude Include="FilterTuning\FilterTuning.h" />
     <ClInclude Include="FilterTuning\GradientTuner.h" />
     <ClInclude Include="FilterTuning\TotalSearchTuner.h" />
-    <ClInclude Include="SignalAnalysis\SignalAnalysis.h" />
-    <ClInclude Include="SignalAnalysis\SignalMaker.h" />
     <ClInclude Include="StatePrinter\StatePrinter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
