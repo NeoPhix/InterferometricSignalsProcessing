@@ -1,7 +1,7 @@
 #ifndef GradientDescentFilterIS1D_H
 #define GradientDescentFilterIS1D_H
 
-#include <Eigen\Dense>
+#include <Eigen/Dense>
 
 enum class StopCriterion {FixedIterationsCount, AdaptiveStep};
 

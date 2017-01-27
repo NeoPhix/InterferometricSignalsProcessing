@@ -1,5 +1,6 @@
+#include <iostream>
 #include <cmath>
-#include <Eigen\Dense>
+#include <Eigen/Dense>
 
 #include "SignalAnalysis.h"
 
@@ -13,6 +14,77 @@ array2d dmod::createArray2d(size_t h, size_t w)
 array3d dmod::createArray3d(size_t d, size_t h, size_t w)
 {
 	return array3d(d, createArray2d(h, w));
+}
+
+bool dmod::isEmpty(array1d &s)
+{
+	return s.empty();
+}
+
+bool dmod::isEmpty(array2d &s)
+{
+	if (!s.empty())
+	{
+		return isEmpty(s[0]);
+	}
+	return true;
+}
+
+bool dmod::isEmpty(array3d &s)
+{
+	if (!s.empty())
+	{
+		return isEmpty(s[0]);
+	}
+	return true;
+}
+
+cv::Mat dmod::matFromArray2d(array2d &input)
+{
+	if (isEmpty(input))
+	{
+		std::cout << "Array is empty!" << std::endl;
+		return cv::Mat();
+	}
+
+	size_t height = input.size();
+	size_t width = input[0].size();
+	cv::Mat mat(cv::Size(width, height), CV_8UC1);
+
+	uchar *ptr = mat.ptr();
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			*ptr++ = input[y][x];
+		}
+	}
+
+	return mat;
+}
+
+array2d dmod::array2dFromMat(cv::Mat &mat)
+{
+	if (mat.rows == 0 || mat.cols == 0)
+	{
+		std::cout << "Mat is empty!" << std::endl;
+		return createArray2d(0, 0);
+	}
+	int height = mat.rows;
+	int width = mat.cols;
+
+	array2d res = createArray2d(height, width);
+
+	uchar *ptr = mat.ptr();
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			res[y][x] = *ptr++;
+		}
+	}
+
+	return res;
 }
 
 double dmod::mean(const array1d &s)
@@ -145,36 +217,29 @@ array1d dmod::sum(const array1d &s1, const array1d &s2)
 	return target;
 }
 
-//Eigen::signal4d get_deviations(Eigen::signal4d *states, double *signal, double *noise,
-//	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
-//{
-//	double *tmp = new double[N];
-//	Eigen::signal4d result;
-//
-//	for (int i = 0; i < N; i++)
-//	{
-//		tmp[i] = states[i](0) - background[i];
-//	}
-//	result(0) = stdev(tmp, N);
-//	for (int i = 0; i < N; i++)
-//	{
-//		tmp[i] = states[i](1) - amplitude[i];
-//	}
-//	result(1) = stdev(tmp, N);
-//	for (int i = 0; i < N; i++)
-//	{
-//		tmp[i] = states[i](2) - frequency[i];
-//	}
-//	result(2) = stdev(tmp, N);
-//	for (int i = 0; i < N; i++)
-//	{
-//		tmp[i] = states[i](3) - phase[i];
-//	}
-//	result(3) = stdev(tmp, N);
-//	//diff(signal, restoredSignal, tmp, N);
-//	//result(0) = stdev(tmp, N);
-//
-//	delete[] tmp;
-//	return result;
-//}
+Eigen::Vector4d dmod::get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase)
+{
+	int N = states.size();
+	if (background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N)
+	{
+		std::cout << "Error. Arrays sizes are mismatched." << std::endl;
+		return Eigen::Vector4d();
+	}
 
+	array2d tmp = createArray2d(4, N);
+	for (int i = 0; i < N; ++i)
+	{
+		tmp[0][i] = states[i](0) - background[i];
+		tmp[1][i] = states[i](1) - amplitude[i];
+		tmp[2][i] = states[i](2) - frequency[i];
+		tmp[3][i] = states[i](3) - phase[i];
+	}
+
+	Eigen::Vector4d res;
+	for (int i = 0; i < 4; ++i)
+	{
+		res(i) = stdev(tmp[i]);
+	}
+
+	return res;
+}

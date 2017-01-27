@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <Eigen\Dense>
+#include <Eigen/Dense>
 
 class ParticleFilterIS1D
 {
