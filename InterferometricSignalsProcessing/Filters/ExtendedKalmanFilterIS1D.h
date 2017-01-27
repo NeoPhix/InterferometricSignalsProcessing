@@ -1,6 +1,8 @@
 #ifndef ExtendedKalmanFilterIS1D_H
 #define ExtendedKalmanFilterIS1D_H
 
+#include <vector>
+
 #include <Eigen\Dense>
 
 class ExtendedKalmanFilterIS1DState
@@ -27,15 +29,20 @@ class ExtendedKalmanFilterIS1D
 {
 public:
 	ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_);
-	ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState full_state);
+	ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState &full_state);
 	ExtendedKalmanFilterIS1D();
 	~ExtendedKalmanFilterIS1D();
 
 	Eigen::Vector4d getState();
 	void setState(Eigen::Vector4d st);
 	void estimate(double obs);
-	ExtendedKalmanFilterIS1DState getFullState() ;
-	double evaluateSignalValue() ;
+	ExtendedKalmanFilterIS1DState getFullState();
+	double evaluateSignalValue();
+	double evaluateSignalValue(Eigen::Vector4d &st);
+
+	std::vector<double> getRestoredSignal(std::vector<double> &signal);
+	std::vector<double> getRestoredSignal(std::vector<Eigen::Vector4d> &states);
+	std::vector<Eigen::Vector4d> estimateAll(std::vector<double> &signal);
 private:
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;

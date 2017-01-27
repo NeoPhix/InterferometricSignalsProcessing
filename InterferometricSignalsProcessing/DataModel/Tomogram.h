@@ -12,7 +12,7 @@ namespace dmod
 	{
 	public:
 		Tomogram();
-		Tomogram(int w_, int h_, int d_);
+		Tomogram(int d_, int h_, int w_);
 		Tomogram(const char *path, const char *type, int count);
 
 		~Tomogram();
@@ -26,9 +26,9 @@ namespace dmod
 		array3d getSignal3D();
 
 	private:
-		int w;
-		int h;
 		int d;
+		int h;
+		int w;
 
 		array3d data;
 	};

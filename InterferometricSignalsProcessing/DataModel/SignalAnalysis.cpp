@@ -5,6 +5,16 @@
 
 using namespace dmod;
 
+array2d dmod::createArray2d(size_t h, size_t w)
+{
+	return array2d(h, array1d(w));
+}
+
+array3d dmod::createArray3d(size_t d, size_t h, size_t w)
+{
+	return array3d(d, createArray2d(h, w));
+}
+
 double dmod::mean(const array1d &s)
 {
 	size_t N = s.size();

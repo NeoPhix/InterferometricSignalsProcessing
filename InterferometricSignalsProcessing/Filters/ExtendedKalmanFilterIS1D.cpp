@@ -5,7 +5,7 @@
 ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
 	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
 
-ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState full_state)
+ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState &full_state)
 	: state(full_state.state), R(full_state.R), Rw(full_state.Rw), Rn(full_state.Rn) {}
 
 ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D() {}
@@ -68,6 +68,42 @@ double ExtendedKalmanFilterIS1D::evaluateSignalValue()
 {
 	return h(state) ;
 }
+
+double ExtendedKalmanFilterIS1D::evaluateSignalValue(Eigen::Vector4d &st)
+{
+	return h(st);
+}
+
+
+std::vector<double> ExtendedKalmanFilterIS1D::getRestoredSignal(std::vector<double> &signal)
+{
+	std::vector<Eigen::Vector4d> states = estimateAll(signal);
+	return getRestoredSignal(states);
+}
+
+std::vector<double> ExtendedKalmanFilterIS1D::getRestoredSignal(std::vector<Eigen::Vector4d> &states)
+{
+	size_t N = states.size();
+	std::vector<double> restoredSignal(N);
+	for (int i = 0; i < N; ++i)
+	{
+		restoredSignal[i] = evaluateSignalValue(states[i]);
+	}
+	return restoredSignal;
+}
+
+std::vector<Eigen::Vector4d> ExtendedKalmanFilterIS1D::estimateAll(std::vector<double> &signal)
+{
+	size_t N = signal.size();
+	std::vector<Eigen::Vector4d> states(N);
+	for (int i = 0; i < N; ++i)
+	{
+		estimate(signal[i]);
+		states[i] = getState();
+	}
+	return states;
+}
+
 
 //State methods
 ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedKalmanFilterIS1DState s)

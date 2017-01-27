@@ -4,20 +4,22 @@
 
 #include "FilterTuning.h"
 
-double FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, ExtendedKalmanFilterIS1DState filterState)
+double FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
 {
-	int signalsCount = inputSignals.size();
+	size_t signalsCount = inputSignals.size();
 	if (signalsCount < 1)
 	{
 		return -1; //Empty signals array
 	}
-	int signalSize = inputSignals[0].size();
+	size_t signalSize = inputSignals[0].size();
 	dmod::array1d reconstructed(signalSize);
 
+
+	//it can be simpler! 
 	double sum = 0;
 	for (int i = 0; i < signalsCount; i++)
 	{
-		ExtendedKalmanFilterIS1D filter(filterState);
+		EKF filter(filterState);
 
 		for (int k = 0; k < signalSize; k++)
 		{
@@ -25,8 +27,8 @@ double FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, ExtendedK
 			reconstructed[k] = filter.evaluateSignalValue();
 		}
 
-//		dmod::array1d difference = dmod::sub(inputSignals[i], reconstructed);
-	//	sum += dmod::var(difference);
+		dmod::array1d diff = dmod::sub(inputSignals[i], reconstructed);
+		sum += dmod::var(diff);
 	}
 	return sum;
 }

@@ -9,3 +9,9 @@
 6. Qt interface
 
 
+ToDo for pps
+
+0. Fix auto tuning to new architecture
+1. Add real 3d data
+2. Add output of this data
+3. Add covariance matrixes analysis

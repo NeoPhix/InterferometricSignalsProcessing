@@ -2,11 +2,15 @@
 #define FILTER_TUNING_H
 
 #include "../Filters/ExtendedKalmanFilterIS1D.h"
+
 #include "../DataModel/SignalAnalysis.h""
 
 namespace FilterTuning
 {
-	double fitness(std::vector<dmod::array1d> &inputSignals, ExtendedKalmanFilterIS1DState filterState);
+	typedef ExtendedKalmanFilterIS1DState EKFState;
+	typedef ExtendedKalmanFilterIS1D EKF;
+
+	double fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState);
 }
 
 #endif

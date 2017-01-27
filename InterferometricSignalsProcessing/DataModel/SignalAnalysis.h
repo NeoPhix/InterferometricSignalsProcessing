@@ -10,6 +10,9 @@ namespace dmod
 	typedef std::vector<array1d> array2d;
 	typedef std::vector<array2d> array3d;
 
+	array2d createArray2d(size_t h, size_t w);
+	array3d createArray3d(size_t d, size_t h, size_t w);
+
 	double max(const array1d &s);
 	double min(const array1d &s);
 
