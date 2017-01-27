@@ -17,9 +17,9 @@ public:
 	Eigen::Matrix4d Rw;
 	double Rn;
 
-	ExtendedKalmanFilterIS1DState operator+(ExtendedKalmanFilterIS1DState s);
-	ExtendedKalmanFilterIS1DState operator-(ExtendedKalmanFilterIS1DState s);
-	ExtendedKalmanFilterIS1DState operator*(ExtendedKalmanFilterIS1DState s);
+	ExtendedKalmanFilterIS1DState operator+(ExtendedKalmanFilterIS1DState &s);
+	ExtendedKalmanFilterIS1DState operator-(ExtendedKalmanFilterIS1DState &s);
+	ExtendedKalmanFilterIS1DState operator*(ExtendedKalmanFilterIS1DState &s);
 	void operator+=(ExtendedKalmanFilterIS1DState s);
 	void operator-=(ExtendedKalmanFilterIS1DState s);
 	void operator*=(ExtendedKalmanFilterIS1DState s);
@@ -40,9 +40,11 @@ public:
 	double evaluateSignalValue();
 	double evaluateSignalValue(Eigen::Vector4d &st);
 
-	std::vector<double> getRestoredSignal(std::vector<double> &signal);
+	std::vector<double> getRestoredSignal(std::vector<double> &signal);				
 	std::vector<double> getRestoredSignal(std::vector<Eigen::Vector4d> &states);
-	std::vector<Eigen::Vector4d> estimateAll(std::vector<double> &signal);
+	std::vector<Eigen::Vector4d> estimateAll(std::vector<double> &signal);	
+	//!!!its important to understand the following moment:
+	//getRestoredSignal(signal) = getRestoredSignal(estimateAll(signal));
 private:
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;

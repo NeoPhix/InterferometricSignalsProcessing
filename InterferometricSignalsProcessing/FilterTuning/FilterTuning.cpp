@@ -6,29 +6,13 @@
 
 double FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
 {
-	size_t signalsCount = inputSignals.size();
-	if (signalsCount < 1)
-	{
-		return -1; //Empty signals array
-	}
-	size_t signalSize = inputSignals[0].size();
-	dmod::array1d reconstructed(signalSize);
-
-
-	//it can be simpler! 
 	double sum = 0;
-	for (int i = 0; i < signalsCount; i++)
+	for (auto iter = inputSignals.begin(); iter != inputSignals.end(); ++iter)
 	{
 		EKF filter(filterState);
-
-		for (int k = 0; k < signalSize; k++)
-		{
-			filter.estimate(inputSignals[i][k]);
-			reconstructed[k] = filter.evaluateSignalValue();
-		}
-
-		dmod::array1d diff = dmod::sub(inputSignals[i], reconstructed);
+		dmod::array1d reconstructedSignal = filter.getRestoredSignal(*iter);
+		dmod::array1d diff = dmod::sub(*iter, reconstructedSignal);
 		sum += dmod::var(diff);
 	}
-	return sum;
+	return sum;		//sum of variations of differences between original and reconstructed by EKF results signals
 }

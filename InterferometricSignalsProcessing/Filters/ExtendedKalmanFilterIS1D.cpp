@@ -106,7 +106,7 @@ std::vector<Eigen::Vector4d> ExtendedKalmanFilterIS1D::estimateAll(std::vector<d
 
 
 //State methods
-ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedKalmanFilterIS1DState s)
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedKalmanFilterIS1DState &s)
 {
 	ExtendedKalmanFilterIS1DState res;
 	res.state = state + s.state;
@@ -116,7 +116,7 @@ ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedK
 	return res;
 }
 
-ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator-(ExtendedKalmanFilterIS1DState s)
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator-(ExtendedKalmanFilterIS1DState &s)
 {
 	ExtendedKalmanFilterIS1DState res;
 	res.state = state - s.state;
@@ -126,7 +126,7 @@ ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator-(ExtendedK
 	return res;
 }
 
-ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator*(ExtendedKalmanFilterIS1DState s)
+ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator*(ExtendedKalmanFilterIS1DState &s)
 {
 	ExtendedKalmanFilterIS1DState res;
 	for (int i = 0; i < 4; i++)		//state

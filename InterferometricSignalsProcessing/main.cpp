@@ -44,11 +44,11 @@ std::vector<dmod::array1d> getLearningSignals(int signalsAmount, dmod::array1d &
 	return signals;
 }
 
-ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, const int N, int sigCount, std::default_random_engine &gen)
+EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, std::default_random_engine &gen)
 {
 	//Creation of EKF tuned by TotalSearch
-	ExtendedKalmanFilterIS1DState minimal;
-	ExtendedKalmanFilterIS1DState maximal;
+	EKFState minimal;
+	EKFState maximal;
 
 	minimal.state = Eigen::Vector4d(0, 0, 0.00, 0);
 	minimal.Rw <<
@@ -68,38 +68,29 @@ ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(std::vector<dmod::array1d> s
 	maximal.R = maximal.Rw;
 	maximal.Rn = 10;
 
-	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
+	FilterTuning::TotalSearchTuner tuner(signals, 10, gen, minimal, maximal);
 	tuner.createStates();
-	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
+	EKFState tunedParameters = tuner.tune();
 	printer::console_print_full_Kalman_state(tunedParameters);
-	return ExtendedKalmanFilterIS1D(tunedParameters);
+	return EKF(tunedParameters);
 }
-//
-//void estimate(ExtendedKalmanFilterIS1D &EKF, double *signal, Eigen::Vector4d *states, double *restoredSignal, int N)
-//{
-//	for (int i = 0; i < N; i++)
-//	{
-//		EKF.estimate(signal[i]);
-//		states[i] = EKF.getState();
-//		restoredSignal[i] = EKF.evaluateSignalValue();
-//	}
-//}
-//
-//ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState begin, ExtendedKalmanFilterIS1DState step, 
-//	double **signals, const int N, int sigCount, int iterationsCount)
-//{
-//	FilterTuning::GradientTuner tuner(signals, N, sigCount, iterationsCount, begin, step);
-//	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
-//	//printer::console_print_full_Kalman_state(tunedParameters);
-//	return ExtendedKalmanFilterIS1D(tunedParameters);
-//}
+
+EKF getTunedKalman_Gradient(EKFState begin, EKFState step, std::vector<dmod::array1d> signals, int iterationsNumber)
+{
+	FilterTuning::GradientTuner tuner(signals, iterationsNumber, begin, step);
+	EKFState tunedParameters = tuner.tune();
+	return EKF(tunedParameters);
+}
 
 int main(int argc, char **argv)
 {
+	//OpenCV tests image loading
+
+
+
 	const int N = 500;				//Signals modeling
 	const double delta_z = 1;		
 
-	double E_min = 0;	//Max amplitude
 	double E_max = 200;	//Max amplitude
 	double sigma = 200;
 	std::default_random_engine gen((unsigned int)time(NULL));
@@ -125,10 +116,6 @@ int main(int argc, char **argv)
 	printer::print_states("MatlabScripts/data.txt", background, amplitude, frequency, phase);
 	std::cout << dmod::snr(signal, noise) << std::endl;
 
-	//test arrays
-	std::vector<Eigen::Vector4d> states(N);
-	dmod::array1d restoredSignal(N);
-
 	//Creation of EKF
 	Eigen::Vector4d beginState(100, 40, 0.17985, 0);
 	Eigen::Matrix4d Rw;
@@ -137,15 +124,11 @@ int main(int argc, char **argv)
 		0, 0, 0.0005, 0,
 		0, 0, 0, 0.002;
 	double Rn = 0.5;
+	EKF filter(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
-	//EKF
-	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
-	for (int i = 0; i < N; i++)
-	{
-		EKF.estimate(signal[i]);
-		states[i] = EKF.getState();
-		restoredSignal[i] = EKF.evaluateSignalValue();
-	}
+	std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
+	dmod::array1d restoredSignal = filter.getRestoredSignal(states);
+
 	printer::print_states("MatlabScripts/EKF_data.txt", states);
 	printer::print_Kalman_stdev("MatlabScripts/EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal);
 

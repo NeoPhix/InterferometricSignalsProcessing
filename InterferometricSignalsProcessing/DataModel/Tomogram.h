@@ -21,7 +21,7 @@ namespace dmod
 		void setSignal2D(int n, Plane plane = Plane::XZ);			//XZ = y number,  
 		void setSignal3D(array3d data_);
 
-		array1d getSignal1D(int n, int m, Axis asix = Axis::Z);	//X, Y, Z
+		array1d getSignal1D(int n, int m, Axis asix = Axis::Z);		//X, Y, Z
 		array2d getSignal2D(int n, Plane plane = Plane::XZ);		//XZ = y number,  
 		array3d getSignal3D();
 

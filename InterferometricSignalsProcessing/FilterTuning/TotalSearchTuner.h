@@ -15,7 +15,7 @@ namespace FilterTuning
 	class TotalSearchTuner
 	{
 	public:
-		TotalSearchTuner(std::vector<dmod::array1d> &inputSignals_, int signalSize_, int signalsAmount_, int filtersAmount_,
+		TotalSearchTuner(std::vector<dmod::array1d> &inputSignals_, int filtersAmount_,
 			std::default_random_engine &gen_, EKFState min_, EKFState max_);
 		~TotalSearchTuner();
 
@@ -23,17 +23,13 @@ namespace FilterTuning
 		void changeSignals(std::vector<dmod::array1d> &inputSignals_);
 
 		EKFState tune();
-		dmod::array3d getReconstructedSignals();
 	private:
 		EKFState createRandomState();
 		double getRandom(double min, double max);
 
 	private:
 		std::vector<dmod::array1d> inputSignals;
-
-		size_t signalSize;
-		size_t signalsAmount;
-		size_t filtersAmount;
+		int filtersAmount;
 
 		std::default_random_engine gen ;
 
