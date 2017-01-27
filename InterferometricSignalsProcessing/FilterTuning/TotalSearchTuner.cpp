@@ -7,7 +7,7 @@
 
 #include "TotalSearchTuner.h"
 
-FilterTuning::TotalSearchTuner::TotalSearchTuner(float **inputSignals_, int signalSize_, int signalsCount_, int filtersCount_,
+FilterTuning::TotalSearchTuner::TotalSearchTuner(double **inputSignals_, int signalSize_, int signalsCount_, int filtersCount_,
 	std::default_random_engine &gen_, ExtendedKalmanFilterIS1DState min_, ExtendedKalmanFilterIS1DState max_)
 	: inputSignals(inputSignals_), signalSize(signalSize_), signalsCount(signalsCount_), 
 	filtersCount(filtersCount_), gen(gen_), minimal(min_), maximal(max_), filterStates (NULL) {}
@@ -47,22 +47,22 @@ void FilterTuning::TotalSearchTuner::createStates()
 	for (int i = 0; i < filtersCount; i++)
 	{
 		filterStates[i] = createRandomState();
-		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((float)i + 1)/filtersCount * 100 << "%";
+		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((double)i + 1)/filtersCount * 100 << "%";
 	}
 	std::cout << std::endl;
 }
 
-void FilterTuning::TotalSearchTuner::changeSignals(float **inputSignals_, int signalsCount_)
+void FilterTuning::TotalSearchTuner::changeSignals(double **inputSignals_, int signalsCount_)
 {
 	inputSignals = inputSignals_;
 	signalsCount = signalsCount_;
 }
 
-float FilterTuning::TotalSearchTuner::getRandom(float min, float max)
+double FilterTuning::TotalSearchTuner::getRandom(double min, double max)
 {
 	if (abs(max - min) < 0.000000001)		// if max == min (max - min == 0)
 		return min;
-	return ((float)(gen() % 100000000)) / float(100000000) * (max - min) + min;
+	return ((double)(gen() % 100000000)) / double(100000000) * (max - min) + min;
 }
 
 //TODO rewrite simpler!!!
@@ -76,16 +76,16 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
 	//	createStates();
 	//}
 	//ExtendedKalmanFilterIS1D *filters = new ExtendedKalmanFilterIS1D[filtersCount];
-	//float ***recSignals = new float**[signalsCount] ;
+	//double ***recSignals = new double**[signalsCount] ;
 	//for (int i = 0; i < signalsCount; i++)
 	//{
-	//	recSignals[i] = new float*[filtersCount];
+	//	recSignals[i] = new double*[filtersCount];
 	//}
 	//for (int i = 0; i < signalsCount; i++)
 	//{
 	//	for (int j = 0; j < filtersCount; j++)
 	//	{
-	//		recSignals[i][j] = new float[signalSize];
+	//		recSignals[i][j] = new double[signalSize];
 	//	}
 	//}
 	////Estimation
@@ -101,14 +101,14 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
 	//		}
 	//		//StatePrinter::console_print_full_Kalman_state(filterStates[j]);
 	//		//StatePrinter::print_signal("out.txt", recSignals[i][j], signalSize) ;
-	//		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((float)i*filtersCount + j + 1) / (signalsCount*filtersCount) * 100 << "%";
+	//		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((double)i*filtersCount + j + 1) / (signalsCount*filtersCount) * 100 << "%";
 	//	}
 	//}
 	//std::cout << std::endl;
 
 	////Best filter search
-	//float *vars = new float[filtersCount];
-	//float *difference = new float[signalSize] ;
+	//double *vars = new double[filtersCount];
+	//double *difference = new double[signalSize] ;
 	//for (int j = 0; j < filtersCount; j++)
 	//{
 	//	vars[j] = 0;
@@ -116,7 +116,7 @@ ExtendedKalmanFilterIS1DState FilterTuning::TotalSearchTuner::tune()
 	//	{
 	//		dmod::sub(inputSignals[i], recSignals[i][j], difference, signalSize);
 	//		vars[j] += dmod::var(difference, signalSize);
-	//		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((float)j*signalsCount + i + 1) / (signalsCount*filtersCount) * 100 << "%";
+	//		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << ((double)j*signalsCount + i + 1) / (signalsCount*filtersCount) * 100 << "%";
 	//	}
 	//}
 	//std::cout << std::endl;

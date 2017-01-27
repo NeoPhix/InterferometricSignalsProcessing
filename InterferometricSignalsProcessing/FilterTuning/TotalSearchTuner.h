@@ -11,24 +11,24 @@ namespace FilterTuning
 	class TotalSearchTuner
 	{
 	public:
-		TotalSearchTuner(float **inputSignals_, int signalSize_, int signalsCount_, int filtersCount_,
+		TotalSearchTuner(double **inputSignals_, int signalSize_, int signalsCount_, int filtersCount_,
 			std::default_random_engine &gen_, ExtendedKalmanFilterIS1DState min_, ExtendedKalmanFilterIS1DState max_);
 		~TotalSearchTuner();
 
 		void createStates();
-		void changeSignals(float **inputSignals_, int signalsCount_);
+		void changeSignals(double **inputSignals_, int signalsCount_);
 
 		ExtendedKalmanFilterIS1DState tune();
 	private:
 		ExtendedKalmanFilterIS1DState createRandomState();
-		float getRandom(float min, float max);
+		double getRandom(double min, double max);
 
 		//todo
-		float **inputSignals;
+		double **inputSignals;
 		ExtendedKalmanFilterIS1DState *filterStates;
 		
 		//new
-		//std::vector<dmod::signal1d> inputSignals;
+		//std::vector<dmod::array1d> inputSignals;
 		//std::vector<ExtendedKalmanFilterIS1DState> filterStates;
 		//
 		int signalsCount;

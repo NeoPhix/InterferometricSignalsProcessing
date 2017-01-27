@@ -2,7 +2,7 @@
 
 #include "ExtendedKalmanFilterIS1D.h"
 
-ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, float Rn_)
+ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
 	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
 
 ExtendedKalmanFilterIS1D::ExtendedKalmanFilterIS1D(ExtendedKalmanFilterIS1DState full_state)
@@ -22,7 +22,7 @@ void ExtendedKalmanFilterIS1D::setState(Eigen::Vector4d st)
 	state = st;
 }
 
-float ExtendedKalmanFilterIS1D::h(Eigen::Vector4d st)
+double ExtendedKalmanFilterIS1D::h(Eigen::Vector4d st)
 {
 	return st(0) + st(1)*cos(st(3));
 }
@@ -47,7 +47,7 @@ Eigen::RowVector4d ExtendedKalmanFilterIS1D::Ht(Eigen::Vector4d st)
 	return Eigen::RowVector4d(1, cos(st(3)), 0, -st(1)*sin(st(3)));
 }
 
-void ExtendedKalmanFilterIS1D::estimate(float obs)
+void ExtendedKalmanFilterIS1D::estimate(double obs)
 {
 	Eigen::Vector4d predict = f(state);
 	Eigen::Matrix4d F = Ft(state);
@@ -64,7 +64,7 @@ ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1D::getFullState()
 	return st ;
 }
 
-float ExtendedKalmanFilterIS1D::evaluateSignalValue()
+double ExtendedKalmanFilterIS1D::evaluateSignalValue()
 {
 	return h(state) ;
 }
@@ -158,7 +158,7 @@ ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState()
 	Rn = 0;
 }
 
-ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, float Rn_)
+ExtendedKalmanFilterIS1DState::ExtendedKalmanFilterIS1DState(Eigen::Vector4d state_, Eigen::Matrix4d R_, Eigen::Matrix4d Rw_, double Rn_)
 	: state(state_), R(R_), Rw(Rw_), Rn(Rn_) {}
 
 ExtendedKalmanFilterIS1DState::~ExtendedKalmanFilterIS1DState()

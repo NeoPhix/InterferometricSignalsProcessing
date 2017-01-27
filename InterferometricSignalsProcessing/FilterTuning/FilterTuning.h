@@ -6,7 +6,7 @@
 
 namespace FilterTuning
 {
-	double fitness(std::vector<dmod::signal1d> &inputSignals, ExtendedKalmanFilterIS1DState filterState);
+	double fitness(std::vector<dmod::array1d> &inputSignals, ExtendedKalmanFilterIS1DState filterState);
 }
 
 #endif

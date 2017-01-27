@@ -23,17 +23,17 @@
 #include "DataModel/SignalAnalysis.h"
 #include "DataModel/Tomogram.h"
 
-//float** getLearningSignals(int sigCount, float *background, float *frequency, float E_min, float E_max, float sigma, float delta_z, const int N, std::default_random_engine &gen)
+//double** getLearningSignals(int sigCount, double *background, double *frequency, double E_min, double E_max, double sigma, double delta_z, const int N, std::default_random_engine &gen)
 //{
-//	float **signals = new float*[sigCount];
+//	double **signals = new double*[sigCount];
 //	for (int k = 0; k < sigCount; k++)
 //	{
-//		float startPhase = (float)(gen() % 100000000) / 100000000 * 2 * M_PI;
-//		float *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
-//		float *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-//		float *amplitude = SignalMaker::randomGaussianAmplitude(N, E_min, E_max, sigma, 6, gen);
+//		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
+//		double *phase = SignalMaker::phaseFromFrequency(frequency, startPhase, N, delta_z);
+//		double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
+//		double *amplitude = SignalMaker::randomGaussianAmplitude(N, E_min, E_max, sigma, 6, gen);
 //
-//		signals[k] = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
+//		signals[k] = SignalMaker::createarray1d(background, amplitude, phase, noise, N);
 //
 //		delete[] phase;
 //		delete[] noise;
@@ -42,7 +42,7 @@
 //	return signals;
 //}
 //
-//ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(float **signals, const int N, int sigCount, std::default_random_engine &gen)
+//ExtendedKalmanFilterIS1D getTunedKalman_TotalSearch(double **signals, const int N, int sigCount, std::default_random_engine &gen)
 //{
 //	//Creation of EKF tuned by TotalSearch
 //	ExtendedKalmanFilterIS1DState minimal;
@@ -73,7 +73,7 @@
 //	return ExtendedKalmanFilterIS1D(tunedParameters);
 //}
 //
-//void estimate(ExtendedKalmanFilterIS1D &EKF, float *signal, Eigen::Vector4d *states, float *restoredSignal, int N)
+//void estimate(ExtendedKalmanFilterIS1D &EKF, double *signal, Eigen::Vector4d *states, double *restoredSignal, int N)
 //{
 //	for (int i = 0; i < N; i++)
 //	{
@@ -84,7 +84,7 @@
 //}
 //
 //ExtendedKalmanFilterIS1D getTunedKalman_Gradient(ExtendedKalmanFilterIS1DState begin, ExtendedKalmanFilterIS1DState step, 
-//	float **signals, const int N, int sigCount, int iterationsCount)
+//	double **signals, const int N, int sigCount, int iterationsCount)
 //{
 //	FilterTuning::GradientTuner tuner(signals, N, sigCount, iterationsCount, begin, step);
 //	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
@@ -95,16 +95,16 @@
 int main(int argc, char **argv)
 {
 	const int N = 500;				//Signals modeling
-	const float delta_z = 1;		
+	const double delta_z = 1;		
 
-	float E_min = 0;	//Max amplitude
-	float E_max = 200;	//Max amplitude
-	float sigma = 200;
+	double E_min = 0;	//Max amplitude
+	double E_max = 200;	//Max amplitude
+	double sigma = 200;
 	std::default_random_engine gen((unsigned int)time(NULL));
 
-	dmod::signal1d background(N);
-	dmod::signal1d amplitude(N);
-	dmod::signal1d frequency(N);
+	dmod::array1d background(N);
+	dmod::array1d amplitude(N);
+	dmod::array1d frequency(N);
 
 	for (int i = 0; i < N; i++)
 	{
@@ -115,30 +115,30 @@ int main(int argc, char **argv)
 
 	//Tests
 
-	//Estimated signal
+	////Estimated signal
 
-	dmod::signal1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
-	dmod::signal1d noise = dmod::normalDistribution(0, 10, N, gen);
-	dmod::signal1d signal = dmod::createSignal1D(background, amplitude, phase, noise, N);
-	
-	StatePrinter::print_signal("out.txt", signal, N);
-	StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
-	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
+	//dmod::array1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
+	//dmod::array1d noise = dmod::normalDistribution(0, 10, N, gen);
+	//dmod::array1d signal = dmod::createarray1d(background, amplitude, phase, noise, N);
+	//
+	//StatePrinter::print_signal("out.txt", signal, N);
+	//StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
+	//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
 
-	//test arrays
-	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-	float *restoredSignal = new float[N];
+	////test arrays
+	//Eigen::Vector4d *states = new Eigen::Vector4d[N];
+	//double *restoredSignal = new double[N];
 
-	//Creation of EKF
-	Eigen::Vector4d beginState(100, 40, 0.17985, 0);
-	Eigen::Matrix4d Rw;
-	Rw << 0.1, 0, 0, 0,
-		0, 0.15, 0, 0,
-		0, 0, 0.0005, 0,
-		0, 0, 0, 0.002;
-	float Rn = 0.5;
+	////Creation of EKF
+	//Eigen::Vector4d beginState(100, 40, 0.17985, 0);
+	//Eigen::Matrix4d Rw;
+	//Rw << 0.1, 0, 0, 0,
+	//	0, 0.15, 0, 0,
+	//	0, 0, 0.0005, 0,
+	//	0, 0, 0, 0.002;
+	//double Rn = 0.5;
 
-	std::cin >> E_min;
+	//std::cin >> E_min;
 
 
 
@@ -193,15 +193,15 @@ int main(int argc, char **argv)
 //{
 //	//Signals modeling
 //	const int N = 500;
-//	const float delta_z = 1;
+//	const double delta_z = 1;
 //
 //	int sigCount = 9;	//learning signals count
-//	float E_min = 50;	//Max amplitude
-//	float E_max = 100;	//Max amplitude
-//	float sigma = 50;
+//	double E_min = 50;	//Max amplitude
+//	double E_max = 100;	//Max amplitude
+//	double sigma = 50;
 //
-//	float background[N];
-//	float frequency[N];
+//	double background[N];
+//	double frequency[N];
 //
 //	for (int i = 0; i < N; i++)
 //	{
@@ -211,21 +211,21 @@ int main(int argc, char **argv)
 //
 //	//Learning signals
 //	std::default_random_engine gen((unsigned int)time(NULL));
-//	float **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N, gen);
+//	double **signals = getLearningSignals(sigCount, background, frequency, E_min, E_max, sigma, delta_z, N, gen);
 //
 //	//Estimated signal
 //	int edges[3] = { 100, 200, 425 };
-//	float *amplitude = SignalMaker::fixedGaussianAmplitude(N, E_min, E_max, sigma, edges, 3);
-//	float *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
-//	float *noise = SignalMaker::normalDistribution(0, 10, N, gen);
-//	float *signal = SignalMaker::createSignal1D(background, amplitude, phase, noise, N);
+//	double *amplitude = SignalMaker::fixedGaussianAmplitude(N, E_min, E_max, sigma, edges, 3);
+//	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
+//	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
+//	double *signal = SignalMaker::createarray1d(background, amplitude, phase, noise, N);
 //	StatePrinter::print_signal("out.txt", signal, N);
 //	StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
 //	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
 //
 //	//test arrays
 //	Eigen::Vector4d *states = new Eigen::Vector4d[N];
-//	float *restoredSignal = new float[N];
+//	double *restoredSignal = new double[N];
 //
 //	//No learning
 //	//Creation of EKF
@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 //		0, 0.15, 0, 0,
 //		0, 0, 0.0005, 0,
 //		0, 0, 0, 0.002;
-//	float Rn = 0.5;
+//	double Rn = 0.5;
 //	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 //
 //	StatePrinter::console_print_full_Kalman_state(EKF.getFullState());
@@ -250,14 +250,14 @@ int main(int argc, char **argv)
 //
 //	///////////
 //	int K = 400;
-//	float **result = new float*[K];
+//	double **result = new double*[K];
 //
 //	for (int x = 0; x < K; x++)
 //	{
-//		result[x] = new float[K];
+//		result[x] = new double[K];
 //		for (int y = 0; y < K; y++)
 //		{
-//			begin.state = Eigen::Vector4d(100, x * 400 / float(K) - 200, 0.17985, y*6.28 / float(K));
+//			begin.state = Eigen::Vector4d(100, x * 400 / double(K) - 200, 0.17985, y*6.28 / double(K));
 //			begin.Rw <<
 //				0.1, 0, 0, 0,
 //				0, 0.15, 0, 0,

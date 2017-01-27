@@ -16,17 +16,17 @@ public:
 	Eigen::Vector4d getStep();
 	void setState(Eigen::Vector4d st);
 	void setStep(Eigen::Vector4d step_);
-	void estimate(float obs, StopCriterion criterion = StopCriterion::AdaptiveStep, bool doPrediction = true);
-	float evaluateSignalValue();
+	void estimate(double obs, StopCriterion criterion = StopCriterion::AdaptiveStep, bool doPrediction = true);
+	double evaluateSignalValue();
 private:
 	Eigen::Vector4d state;
 	Eigen::Vector4d step;
 	int iterNumber;
 
-	float h(Eigen::Vector4d st);
-	int sign(float s);
+	double h(Eigen::Vector4d st);
+	int sign(double s);
 	Eigen::Vector4d f(Eigen::Vector4d st);
-	Eigen::Vector4d gradient(float obs, Eigen::Vector4d st);
+	Eigen::Vector4d gradient(double obs, Eigen::Vector4d st);
 };
 
 #endif

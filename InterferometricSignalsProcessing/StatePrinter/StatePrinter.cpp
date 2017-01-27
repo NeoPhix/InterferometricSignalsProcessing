@@ -13,7 +13,7 @@
 //	out.close();
 //}
 //
-//void StatePrinter::print_states(const char *filename, float *background, float *amplitude, float *frequency, float *phase, int N)
+//void StatePrinter::print_states(const char *filename, double *background, double *amplitude, double *frequency, double *phase, int N)
 //{
 //	std::ofstream out(filename);
 //	for (int i = 0; i < N; i++)
@@ -23,7 +23,7 @@
 //	out.close();
 //}
 //
-//void StatePrinter::print_signal(const char *filename, float *signal, int N)
+//void StatePrinter::print_signal(const char *filename, double *signal, int N)
 //{
 //	std::ofstream out(filename);
 //	for (int i = 0; i < N; i++)
@@ -72,11 +72,11 @@
 //		std::cout << state.Rw(3, 0) << " " << state.Rw(3, 1) << " " << state.Rw(3, 2) << " " << state.Rw(3, 3) << std::endl << std::endl;
 //}
 //
-//void StatePrinter::print_Kalman_stdev(const char *filename, Eigen::Vector4d *states, float *signal, float *noise, 
-//	float *background, float *amplitude, float *frequency, float *phase, float *restoredSignal, int N)
+//void StatePrinter::print_Kalman_stdev(const char *filename, Eigen::Vector4d *states, double *signal, double *noise, 
+//	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
 //{
 //	std::ofstream out(filename);
-//	float *tmp = new float[N];
+//	double *tmp = new double[N];
 //	
 //	for (int i = 0; i < N; i++)
 //	{
@@ -106,10 +106,10 @@
 //	out.close();
 //}
 //
-//void StatePrinter::console_print_Kalman_stdev(Eigen::Vector4d *states, float *signal, float *noise,
-//	float *background, float *amplitude, float *frequency, float *phase, float *restoredSignal, int N)
+//void StatePrinter::console_print_Kalman_stdev(Eigen::Vector4d *states, double *signal, double *noise,
+//	double *background, double *amplitude, double *frequency, double *phase, double *restoredSignal, int N)
 //{
-//	float *tmp = new float[N];
+//	double *tmp = new double[N];
 //	std::cout << "Standard deviations:" << std::endl;
 //	for (int i = 0; i < N; i++)
 //	{
