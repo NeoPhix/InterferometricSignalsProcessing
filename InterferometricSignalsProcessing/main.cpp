@@ -9,7 +9,6 @@
 
 #include <Eigen/Dense>
 
-
 #include "StatePrinter/StatePrinter.h"
 
 #include "Filters/ExtendedKalmanFilterIS1D.h"
@@ -69,7 +68,7 @@
 //	FilterTuning::TotalSearchTuner tuner(signals, N, sigCount, 10, gen, minimal, maximal);
 //	tuner.createStates();
 //	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
-//	StatePrinter::console_print_full_Kalman_state(tunedParameters);
+//	printer::console_print_full_Kalman_state(tunedParameters);
 //	return ExtendedKalmanFilterIS1D(tunedParameters);
 //}
 //
@@ -88,7 +87,7 @@
 //{
 //	FilterTuning::GradientTuner tuner(signals, N, sigCount, iterationsCount, begin, step);
 //	ExtendedKalmanFilterIS1DState tunedParameters = tuner.tune();
-//	//StatePrinter::console_print_full_Kalman_state(tunedParameters);
+//	//printer::console_print_full_Kalman_state(tunedParameters);
 //	return ExtendedKalmanFilterIS1D(tunedParameters);
 //}
 
@@ -121,8 +120,8 @@ int main(int argc, char **argv)
 	//dmod::array1d noise = dmod::normalDistribution(0, 10, N, gen);
 	//dmod::array1d signal = dmod::createarray1d(background, amplitude, phase, noise, N);
 	//
-	//StatePrinter::print_signal("out.txt", signal, N);
-	//StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
+	//printer::print_signal("out.txt", signal, N);
+	//printer::print_states("data.txt", background, amplitude, frequency, phase, N);
 	//std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
 
 	////test arrays
@@ -153,8 +152,8 @@ int main(int argc, char **argv)
 	//	states[i] = EKF.getState();
 	//	restoredSignal[i] = EKF.evaluateSignalValue();
 	//}
-	//StatePrinter::print_states("EKF_data.txt", states, N);
-	//StatePrinter::print_Kalman_stdev("EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	//printer::print_states("EKF_data.txt", states, N);
+	//printer::print_Kalman_stdev("EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	////GD
 	//Eigen::Vector4d step(0.02, 0.009, 0, 0.0005);
@@ -165,8 +164,8 @@ int main(int argc, char **argv)
 	//	states[i] = GDF.getState();
 	//	restoredSignal[i] = GDF.evaluateSignalValue();
 	//}
-	//StatePrinter::print_states("GD_data.txt", states, N);
-	//StatePrinter::print_Kalman_stdev("GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	//printer::print_states("GD_data.txt", states, N);
+	//printer::print_Kalman_stdev("GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	////GD+EKF
 	//GDF = GradientDescentFilterIS1D(beginState, step, 50);
@@ -180,8 +179,8 @@ int main(int argc, char **argv)
 	//	restoredSignal[i] = GDF.evaluateSignalValue();
 	//	EKF.setState(states[i]);
 	//}
-	//StatePrinter::print_states("EKF_GD_data.txt", states, N);
-	//StatePrinter::print_Kalman_stdev("EKF_GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+	//printer::print_states("EKF_GD_data.txt", states, N);
+	//printer::print_Kalman_stdev("EKF_GD_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 
 	//return 0;
 }
@@ -219,8 +218,8 @@ int main(int argc, char **argv)
 //	double *phase = SignalMaker::phaseFromFrequency(frequency, 0, N, delta_z);
 //	double *noise = SignalMaker::normalDistribution(0, 10, N, gen);
 //	double *signal = SignalMaker::createarray1d(background, amplitude, phase, noise, N);
-//	StatePrinter::print_signal("out.txt", signal, N);
-//	StatePrinter::print_states("data.txt", background, amplitude, frequency, phase, N);
+//	printer::print_signal("out.txt", signal, N);
+//	printer::print_states("data.txt", background, amplitude, frequency, phase, N);
 //	std::cout << SignalAnalysis::snr(signal, noise, N) << std::endl;
 //
 //	//test arrays
@@ -238,11 +237,11 @@ int main(int argc, char **argv)
 //	double Rn = 0.5;
 //	ExtendedKalmanFilterIS1D EKF(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 //
-//	StatePrinter::console_print_full_Kalman_state(EKF.getFullState());
+//	printer::console_print_full_Kalman_state(EKF.getFullState());
 //
 //	estimate(EKF, signal, states, restoredSignal, N);
-//	StatePrinter::print_states("EKFdata.txt", states, N);
-//	StatePrinter::print_Kalman_stdev("EKFdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
+//	printer::print_states("EKFdata.txt", states, N);
+//	printer::print_Kalman_stdev("EKFdeviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal, N);
 //
 //	//With GD-learning
 //	ExtendedKalmanFilterIS1DState begin;
@@ -320,12 +319,12 @@ int main(int argc, char **argv)
 //
 //		std::stringstream str;
 //		str << "GD_1_" << i << ".txt\0";
-//		StatePrinter::print_states(str.str().c_str(), states, N);
+//		printer::print_states(str.str().c_str(), states, N);
 //
 //		std::cout << i << std::endl;
 //	}
-//	StatePrinter::print_states("GD_1_deviations.txt", deviations, M);
-//	StatePrinter::print_states("GD_1_starts.txt", starts, M);
+//	printer::print_states("GD_1_deviations.txt", deviations, M);
+//	printer::print_states("GD_1_starts.txt", starts, M);
 //
 //	//Memory release
 //	for (int i = 0; i < sigCount; i++)
