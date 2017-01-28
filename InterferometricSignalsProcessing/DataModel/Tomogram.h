@@ -16,8 +16,9 @@ namespace dmod
 		Tomogram();
 		Tomogram(size_t d_, size_t h_, size_t w_);
 		Tomogram(const char *path, const char *type, size_t number);
-
 		~Tomogram();
+
+		void loadImageSequence(const char *path, const char *type, size_t number, Plane plane = Plane::XY);
 
 		void setSignal1D(size_t x, size_t y, size_t z, array1d &s, Axis axis = Axis::Z);		//X, Y, Z
 		void setSignal2D(size_t n, array2d &s, Plane plane = Plane::XZ);			//XZ = y number,  
