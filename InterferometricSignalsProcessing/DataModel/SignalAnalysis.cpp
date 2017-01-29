@@ -4,242 +4,245 @@
 
 #include "SignalAnalysis.h"
 
-using namespace dmod;
-
-array2d dmod::createArray2d(size_t h, size_t w)
+namespace dmod
 {
-	return array2d(h, array1d(w));
-}
 
-array3d dmod::createArray3d(size_t d, size_t h, size_t w)
-{
-	return array3d(d, createArray2d(h, w));
-}
-
-bool dmod::isEmpty(array1d &s)
-{
-	return s.empty();
-}
-
-bool dmod::isEmpty(array2d &s)
-{
-	if (!s.empty())
+	array2d createArray2d(size_t h, size_t w)
 	{
-		return isEmpty(s[0]);
-	}
-	return true;
-}
-
-bool dmod::isEmpty(array3d &s)
-{
-	if (!s.empty())
-	{
-		return isEmpty(s[0]);
-	}
-	return true;
-}
-
-cv::Mat dmod::matFromArray2d(array2d &input)
-{
-	if (isEmpty(input))
-	{
-		std::cout << "Array is empty!" << std::endl;
-		return cv::Mat();
+		return array2d(h, array1d(w));
 	}
 
-	size_t height = input.size();
-	size_t width = input[0].size();
-	cv::Mat mat(cv::Size(width, height), CV_8UC1);
-
-	uchar *ptr = mat.ptr();
-	for (int y = 0; y < height; ++y)
+	array3d createArray3d(size_t d, size_t h, size_t w)
 	{
-		for (int x = 0; x < width; ++x)
+		return array3d(d, createArray2d(h, w));
+	}
+
+	bool isEmpty(array1d &s)
+	{
+		return s.empty();
+	}
+
+	bool isEmpty(array2d &s)
+	{
+		if (!s.empty())
 		{
-			*ptr++ = input[y][x];
+			return isEmpty(s[0]);
 		}
+		return true;
 	}
 
-	return mat;
-}
-
-array2d dmod::array2dFromMat(cv::Mat &mat)
-{
-	if (mat.rows == 0 || mat.cols == 0)
+	bool isEmpty(array3d &s)
 	{
-		std::cout << "Mat is empty!" << std::endl;
-		return createArray2d(0, 0);
-	}
-	int height = mat.rows;
-	int width = mat.cols;
-
-	array2d res = createArray2d(height, width);
-
-	uchar *ptr = mat.ptr();
-	for (int y = 0; y < height; ++y)
-	{
-		for (int x = 0; x < width; ++x)
+		if (!s.empty())
 		{
-			res[y][x] = *ptr++;
+			return isEmpty(s[0]);
 		}
+		return true;
 	}
 
-	return res;
-}
-
-double dmod::mean(const array1d &s)
-{
-	size_t N = s.size();
-	double res = 0;
-	for (auto i = 0; i < N; i++)
+	cv::Mat matFromArray2d(array2d &input)
 	{
-		res += s[i];
-	}
-	res /= N;
-	return res;
-}
-
-double dmod::stdev(const array1d &s)
-{
-	return sqrt(var(s)) ;
-}
-
-double dmod::var(const array1d &s)
-{
-	size_t N = s.size();
-	double res = 0;
-	double mn2 = mean(s);
-	mn2 *= mn2 ;
-	for (int i = 0; i < N; i++)
-	{
-		res += s[i] * s[i] - mn2 ;
-	}
-	res /= N - 1;
-	return res;
-}
-
-double dmod::snr(const array1d &s, const array1d &noise)	//Signal-to-noise ratio
-{
-	return sqrt(10 * log10(var(s) / var(noise)));
-}
-
-double dmod::max(const array1d &s)
-{
-	size_t N = s.size();
-	double res = s[0];
-	for (int i = 1; i < N; i++)
-	{
-		if (s[i] > res)
+		if (isEmpty(input))
 		{
-			res = s[i];
+			std::cout << "Array is empty!" << std::endl;
+			return cv::Mat();
 		}
-	}
-	return res ;
-}
 
-double dmod::min(const array1d &s)
-{
-	size_t N = s.size();
-	double res = s[0];
-	for (int i = 1; i < N; i++)
-	{
-		if (s[i] < res)
+		size_t height = input.size();
+		size_t width = input[0].size();
+		cv::Mat mat(cv::Size(width, height), CV_8UC1);
+
+		uchar *ptr = mat.ptr();
+		for (int y = 0; y < height; ++y)
 		{
-			res = s[i];
+			for (int x = 0; x < width; ++x)
+			{
+				*ptr++ = input[y][x];
+			}
 		}
-	}
-	return res;
-}
 
-int dmod::max_index(const array1d &s)
-{
-	size_t N = s.size();
-	double res = s[0];
-	int index = 0 ;
-	for (int i = 1; i < N; i++)
+		return mat;
+	}
+
+	array2d array2dFromMat(cv::Mat &mat)
 	{
-		if (s[i] > res)
+		if (mat.rows == 0 || mat.cols == 0)
 		{
-			res = s[i];
-			index = i;
+			std::cout << "Mat is empty!" << std::endl;
+			return createArray2d(0, 0);
 		}
-	}
-	return index;
-}
+		int height = mat.rows;
+		int width = mat.cols;
 
-int dmod::min_index(const array1d &s)
-{
-	size_t N = s.size();
-	double res = s[0];
-	int index = 0;
-	for (int i = 1; i < N; i++)
-	{
-		if (s[i] < res)
+		array2d res = createArray2d(height, width);
+
+		uchar *ptr = mat.ptr();
+		for (int y = 0; y < height; ++y)
 		{
-			res = s[i];
-			index = i;
+			for (int x = 0; x < width; ++x)
+			{
+				res[y][x] = *ptr++;
+			}
 		}
-	}
-	return index;
-}
 
-array1d dmod::sub(const array1d &s1, const array1d &s2)
-{
-	if (s1.size() != s2.size())
+		return std::move(res);
+	}
+
+	double mean(const array1d &s)
 	{
-		return array1d(0);	//Invalid size
+		size_t N = s.size();
+		double res = 0;
+		for (auto i = 0; i < N; i++)
+		{
+			res += s[i];
+		}
+		res /= N;
+		return res;
 	}
-	size_t N = s1.size();
-	array1d target(N);
 
-	for (int i = 0; i < N; i++)
+	double stdev(const array1d &s)
 	{
-		target[i] = s1[i] - s2[i] ;
+		return sqrt(var(s));
 	}
 
-	return target;
-}
-
-array1d dmod::sum(const array1d &s1, const array1d &s2)
-{
-	if (s1.size() != s2.size())
+	double var(const array1d &s)
 	{
-		return array1d(0);	//Invalid size
+		size_t N = s.size();
+		double res = 0;
+		double mn2 = mean(s);
+		mn2 *= mn2;
+		for (int i = 0; i < N; i++)
+		{
+			res += s[i] * s[i] - mn2;
+		}
+		res /= N - 1;
+		return res;
 	}
-	size_t N = s1.size();
-	array1d target(N);
 
-	for (int i = 0; i < N; i++)
+	double snr(const array1d &s, const array1d &noise)	//Signal-to-noise ratio
 	{
-		target[i] = s1[i] + s2[i];
+		return sqrt(10 * log10(var(s) / var(noise)));
 	}
 
-	return target;
-}
-
-Eigen::Vector4d dmod::get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase)
-{
-	int N = states.size();
-	if (background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N)
+	double max(const array1d &s)
 	{
-		std::cout << "Error. Arrays sizes are mismatched." << std::endl;
-		return Eigen::Vector4d();
+		size_t N = s.size();
+		double res = s[0];
+		for (int i = 1; i < N; i++)
+		{
+			if (s[i] > res)
+			{
+				res = s[i];
+			}
+		}
+		return res;
 	}
 
-	array2d tmp = createArray2d(4, N);
-	for (int i = 0; i < N; ++i)
+	double min(const array1d &s)
 	{
-		tmp[0][i] = states[i](0) - background[i];
-		tmp[1][i] = states[i](1) - amplitude[i];
-		tmp[2][i] = states[i](2) - frequency[i];
-		tmp[3][i] = states[i](3) - phase[i];
+		size_t N = s.size();
+		double res = s[0];
+		for (int i = 1; i < N; i++)
+		{
+			if (s[i] < res)
+			{
+				res = s[i];
+			}
+		}
+		return res;
 	}
 
-	Eigen::Vector4d res;
-	for (int i = 0; i < 4; ++i)
+	int max_index(const array1d &s)
 	{
-		res(i) = stdev(tmp[i]);
+		size_t N = s.size();
+		double res = s[0];
+		int index = 0;
+		for (int i = 1; i < N; i++)
+		{
+			if (s[i] > res)
+			{
+				res = s[i];
+				index = i;
+			}
+		}
+		return index;
 	}
 
-	return res;
+	int min_index(const array1d &s)
+	{
+		size_t N = s.size();
+		double res = s[0];
+		int index = 0;
+		for (int i = 1; i < N; i++)
+		{
+			if (s[i] < res)
+			{
+				res = s[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	array1d sub(const array1d &s1, const array1d &s2)
+	{
+		if (s1.size() != s2.size())
+		{
+			return array1d(0);	//Invalid size
+		}
+		size_t N = s1.size();
+		array1d target(N);
+
+		for (int i = 0; i < N; i++)
+		{
+			target[i] = s1[i] - s2[i];
+		}
+
+		return std::move(target);
+	}
+
+	array1d sum(const array1d &s1, const array1d &s2)
+	{
+		if (s1.size() != s2.size())
+		{
+			return array1d(0);	//Invalid size
+		}
+		size_t N = s1.size();
+		array1d target(N);
+
+		for (int i = 0; i < N; i++)
+		{
+			target[i] = s1[i] + s2[i];
+		}
+
+		return std::move(target);
+	}
+
+	Eigen::Vector4d get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase)
+	{
+		int N = states.size();
+		if (background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N)
+		{
+			std::cout << "Error. Arrays sizes are mismatched." << std::endl;
+			return Eigen::Vector4d();
+		}
+
+		array2d tmp = createArray2d(4, N);
+		for (int i = 0; i < N; ++i)
+		{
+			tmp[0][i] = states[i](0) - background[i];
+			tmp[1][i] = states[i](1) - amplitude[i];
+			tmp[2][i] = states[i](2) - frequency[i];
+			tmp[3][i] = states[i](3) - phase[i];
+		}
+
+		Eigen::Vector4d res;
+		for (int i = 0; i < 4; ++i)
+		{
+			res(i) = stdev(tmp[i]);
+		}
+
+		return res;
+	}
+
 }

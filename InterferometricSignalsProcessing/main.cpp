@@ -72,6 +72,7 @@ EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, std::default_
 	tuner.createStates();
 	EKFState tunedParameters = tuner.tune();
 	printer::console_print_full_Kalman_state(tunedParameters);
+	
 	return EKF(tunedParameters);
 }
 
@@ -84,53 +85,79 @@ EKF getTunedKalman_Gradient(EKFState begin, EKFState step, std::vector<dmod::arr
 
 int main(int argc, char **argv)
 {
-	//OpenCV tests image loading
-
-
-
-	const int N = 500;				//Signals modeling
-	const double delta_z = 1;		
-
-	double E_max = 200;	//Max amplitude
-	double sigma = 200;
 	std::default_random_engine gen((unsigned int)time(NULL));
 
-	dmod::array1d background(N, 100);
-	dmod::array1d amplitude(N, 50);
-	dmod::array1d frequency(N);
+	//OpenCV tests image loading							//TODO think about initial structure maybe
+	dmod::Tomogram tomo;
+	tomo.initSizeFromImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 100);
+	tomo.loadImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 100);
+	
+	std::vector<dmod::array1d> learningData(100);
+	size_t h = tomo.getHeight();
+	size_t w = tomo.getWidth();
 
-	amplitude = dmod::sum(amplitude, dmod::fixedGaussianAmplitude(E_max, sigma, 250, N));
-
-	for (int i = 0; i < N; i++)
+	for (auto iter = learningData.begin(); iter != learningData.end(); ++iter)
 	{
-		frequency[i] = 0.105 - 0.00015*i;
+		size_t y = gen() % h;
+		size_t x = gen() % w;
+		*iter = tomo.getSignal1D(x, y, 0, dmod::Axis::Z);
 	}
 
-	//Estimated signal
+	EKF filter = getTunedKalman_TotalSearch(learningData, gen);
 
-	dmod::array1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
-	dmod::array1d noise = dmod::createNormalNoise(0, 10, N, gen);
-	dmod::array1d signal = dmod::createSignal1D(background, amplitude, phase, noise);
-	
-	printer::print_signal("MatlabScripts/out.txt", signal);
-	printer::print_states("MatlabScripts/data.txt", background, amplitude, frequency, phase);
-	std::cout << dmod::snr(signal, noise) << std::endl;
-
-	//Creation of EKF
-	Eigen::Vector4d beginState(100, 40, 0.17985, 0);
-	Eigen::Matrix4d Rw;
-	Rw << 0.1, 0, 0, 0,
-		0, 0.15, 0, 0,
-		0, 0, 0.0005, 0,
-		0, 0, 0, 0.002;
-	double Rn = 0.5;
-	EKF filter(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
-
+	dmod::array1d signal = tomo.getSignal1D(300, 350, 0, dmod::Axis::Z);
 	std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
 	dmod::array1d restoredSignal = filter.getRestoredSignal(states);
 
-	printer::print_states("MatlabScripts/EKF_data.txt", states);
-	printer::print_Kalman_stdev("MatlabScripts/EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal);
+	printer::print_states("MatlabScripts/EKF_real_data.txt", states);
+	printer::print_signal("MatlabScripts/signal.txt", signal);
+	printer::print_signal("MatlabScripts/restoredSignal.txt", restoredSignal);
 
-	return 0;
+
+
+	////Old signal processing
+	//const int N = 500;				//Signals modeling
+	//const double delta_z = 1;		
+
+	//double E_max = 200;	//Max amplitude
+	//double sigma = 200;
+
+
+	//dmod::array1d background(N, 100);
+	//dmod::array1d amplitude(N, 50);
+	//dmod::array1d frequency(N);
+
+	//amplitude = dmod::sum(amplitude, dmod::fixedGaussianAmplitude(E_max, sigma, N/2, N));
+
+	//for (int i = 0; i < N; i++)
+	//{
+	//	frequency[i] = 0.105 - 0.00015*i;
+	//}
+
+	////Estimated signal
+	//dmod::array1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
+	//dmod::array1d noise = dmod::createNormalNoise(0, 10, N, gen);
+	//dmod::array1d signal = dmod::createSignal1D(background, amplitude, phase, noise);
+	//
+	//printer::print_signal("MatlabScripts/out.txt", signal);
+	//printer::print_states("MatlabScripts/data.txt", background, amplitude, frequency, phase);
+	//std::cout << dmod::snr(signal, noise) << std::endl;
+
+	////Creation of EKF
+	//Eigen::Vector4d beginState(100, 40, 0.17985, 0);
+	//Eigen::Matrix4d Rw;
+	//Rw << 0.1, 0, 0, 0,
+	//	0, 0.15, 0, 0,
+	//	0, 0, 0.0005, 0,
+	//	0, 0, 0, 0.002;
+	//double Rn = 0.5;
+	//EKF filter(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
+
+	//std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
+	//dmod::array1d restoredSignal = filter.getRestoredSignal(states);
+
+	//printer::print_states("MatlabScripts/EKF_data.txt", states);
+	//printer::print_Kalman_stdev("MatlabScripts/EKF_deviations.txt", states, signal, noise, background, amplitude, frequency, phase, restoredSignal);
+
+	//return 0;
 }

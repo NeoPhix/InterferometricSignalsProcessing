@@ -18,15 +18,37 @@ namespace dmod
 		Tomogram(const char *path, const char *type, size_t number);
 		~Tomogram();
 
-		void loadImageSequence(const char *path, const char *type, size_t number, Plane plane = Plane::XY);
+		void loadImageSequence( const char *path, 
+								const char *type, 
+								size_t begin_number, 
+								size_t end_number, 
+								Plane plane = Plane::XY );
 
-		void setSignal1D(size_t x, size_t y, size_t z, array1d &s, Axis axis = Axis::Z);		//X, Y, Z
-		void setSignal2D(size_t n, array2d &s, Plane plane = Plane::XZ);			//XZ = y number,  
+		void initSizeFromImageSequence( const char *path,
+										const char *type, 
+										size_t begin_number,
+										size_t end_number,
+										Plane plane = Plane::XY );
+
+		void saveData( const char *path,
+					   const char *type,
+					   size_t begin_number,
+					   size_t end_number,
+					   Plane plane = Plane::XY );
+
+		void setSignal1D(size_t x, size_t y, size_t z, array1d &s, Axis axis = Axis::Z);	
+		void setSignal2D(size_t n, array2d &s, Plane plane = Plane::XZ);			 
 		void setSignal3D(array3d data_);
-
-		array1d getSignal1D(size_t x, size_t y, size_t z, Axis axis = Axis::Z);		//X, Y, Z
-		array2d getSignal2D(size_t n, Plane plane = Plane::XZ);		//XZ = y number,  
+		//param[in] x  -координата x
+		//param[in out] array1d - массив на заполнение...
+		array1d getSignal1D(size_t x, size_t y, size_t z, Axis axis = Axis::Z);		
+		array2d getSignal2D(size_t n, Plane plane = Plane::XZ);		
 		array3d getSignal3D();
+
+		size_t getDepth();
+		size_t getHeight();
+		size_t getWidth();
+
 	private:
 		size_t d;
 		size_t h;

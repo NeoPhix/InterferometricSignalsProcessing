@@ -43,7 +43,7 @@ void FilterTuning::TotalSearchTuner::createStates()
 {
 	if (filterStates.empty())
 	{
-		filterStates.reserve(filtersAmount);
+		filterStates.resize(filtersAmount);
 	}
 	for (int i = 0; i < filtersAmount; ++i)
 	{

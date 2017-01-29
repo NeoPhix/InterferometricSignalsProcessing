@@ -2,7 +2,6 @@
 	//to be or not to be with multivariate normal distribution? :)
 1. OpenCV image stack load and processing
 2. OpenCV functions of input/output image stacks 
-3. Symbolic regression
 4. Autoregression models?
 5. Neural networks for filter creation
 ~~Time tests? 
@@ -15,3 +14,20 @@ ToDo for pps
 1. Add real 3d data
 2. Add output of this data
 3. Add covariance matrixes analysis
+
+Todo refactoring
+
+Возвращать коды ошибок, передача параметров
+TotalSearchTuner.h Create возвращает указатель на интерфейс, Init - ничего или код ошибки
+TotalSearchTuner.cpp - KalmamConst.h 
+Вертикальный список для параметров
+		
+//param[in] x  -координата x
+		
+//param[in out] array1d - массив на заполнение...
+GradientTuner.cpp два одинаковых цикла
+#include "../DataModel/SignalAnalysis.h" - точки плохо, пиши все пути относительно одной папки
+GradientDescentFilterIS1D - обозвать 1, 2, 3, 4
+typedef to header
+swtich/case default
+организовать цивильные namespace

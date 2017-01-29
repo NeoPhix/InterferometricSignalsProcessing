@@ -9,8 +9,10 @@ namespace FilterTuning
 	class GradientTuner
 	{
 	public:
-		GradientTuner(std::vector<dmod::array1d> &inputSignals_, int iterationsCount_,
-			EKFState currentState_, EKFState step_);
+		GradientTuner( std::vector<dmod::array1d> &inputSignals_, 
+					   int iterationsCount_,
+					   EKFState currentState_, 
+					   EKFState step_ );
 		~GradientTuner();
 
 		void changeSignals(std::vector<dmod::array1d> &inputSignals_);

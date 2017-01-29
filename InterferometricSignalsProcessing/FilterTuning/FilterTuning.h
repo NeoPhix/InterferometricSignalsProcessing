@@ -3,7 +3,7 @@
 
 #include "../Filters/ExtendedKalmanFilterIS1D.h"
 
-#include "../DataModel/SignalAnalysis.h""
+#include "../DataModel/SignalAnalysis.h"
 
 namespace FilterTuning
 {
