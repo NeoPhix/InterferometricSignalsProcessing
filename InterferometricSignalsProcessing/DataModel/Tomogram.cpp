@@ -99,11 +99,39 @@ namespace dmod
 		data = createArray3d(d, h, w);
 	}
 
+	void Tomogram::saveImageSequence( const char *path,
+									  const char *type,
+									  Plane plane = Plane::XY )
+	{
+		size_t n = 0;
+		switch (plane)
+		{
+		case Plane::XZ:
+			n = h;
+			break;
+		case Plane::XY:
+			n = d;
+			break;
+		case Plane::YZ:
+			n = w;
+			break;
+		}
+		for (size_t i = 0; i < n; ++i)
+		{
+			array2d arr = getSignal2D(i, plane);
+			cv::Mat mat = matFromArray2d(arr);
+
+			std::stringstream str;
+			str << path << i << type;
+			cv::imwrite(str.str().c_str(), mat);
+		}
+	}
+
 	void Tomogram::setSignal1D( size_t x, 
 								size_t y, 
 								size_t z, 
 								array1d &s, 
-								Axis axis)
+								Axis axis )
 	{
 		if (x >= w || x < 0 || y >= h || y < 0 || z >= d || z < 0)
 		{

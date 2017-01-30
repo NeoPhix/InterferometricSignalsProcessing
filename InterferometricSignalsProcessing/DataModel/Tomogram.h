@@ -30,11 +30,9 @@ namespace dmod
 										size_t end_number,
 										Plane plane = Plane::XY );
 
-		void saveData( const char *path,
-					   const char *type,
-					   size_t begin_number,
-					   size_t end_number,
-					   Plane plane = Plane::XY );
+		void saveImageSequence( const char *path,
+								const char *type,
+								Plane plane = Plane::XY );
 
 		void setSignal1D(size_t x, size_t y, size_t z, array1d &s, Axis axis = Axis::Z);	
 		void setSignal2D(size_t n, array2d &s, Plane plane = Plane::XZ);			 
