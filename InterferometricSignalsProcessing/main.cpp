@@ -59,7 +59,7 @@ EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, size_t filter
 	minimal.R = minimal.Rw;
 	minimal.Rn = 0.1;
 
-	maximal.state = Eigen::Vector4d(255, 140, 0.158, 2 * M_PI);
+	maximal.state = Eigen::Vector4d(255, 5, 0.158, 2 * M_PI);
 	maximal.Rw <<
 		0.1, 0, 0, 0,
 		0, 0.15, 0, 0,
