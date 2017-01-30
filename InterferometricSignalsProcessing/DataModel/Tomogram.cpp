@@ -101,7 +101,7 @@ namespace dmod
 
 	void Tomogram::saveImageSequence( const char *path,
 									  const char *type,
-									  Plane plane = Plane::XY )
+									  Plane plane )
 	{
 		size_t n = 0;
 		switch (plane)
@@ -229,9 +229,19 @@ namespace dmod
 		switch (axis)
 		{
 		case Axis::X:
+			if (y >= h || y < 0 || z >= d || z < 0)
+			{
+				std::cout << "Error! There is no data row in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			return data[z][y];
 			break;
 		case Axis::Y:
+			if (x >= w || x < 0 || z >= d || z < 0)
+			{
+				std::cout << "Error! There is no data row in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			res.resize(h);
 			for (y = 0; y < h; ++y)
 			{
@@ -239,6 +249,11 @@ namespace dmod
 			}
 			break;
 		case Axis::Z:
+			if (x >= w || x < 0 || y >= h || y < 0)
+			{
+				std::cout << "Error! There is no data row in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			res.resize(d);
 			for (z = 0; z < d; ++z)
 			{
@@ -255,6 +270,11 @@ namespace dmod
 		switch (plane)
 		{
 		case Plane::XZ:
+			if (n >= h || n < 0)
+			{
+				std::cout << "Error! There is no data matrix in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			res = createArray2d(d, w);
 			for (int z = 0; z < d; ++z)
 			{
@@ -262,9 +282,19 @@ namespace dmod
 			}
 			break;
 		case Plane::XY:
+			if (n >= d || n < 0)
+			{
+				std::cout << "Error! There is no data matrix in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			return data[n];
 			break;
 		case Plane::YZ:
+			if (n >= w || n < 0)
+			{
+				std::cout << "Error! There is no data matrix in the tomogram!" << std::endl;
+				return std::move(res);
+			}
 			res = createArray2d(d, h);
 			for (int z = 0; z < d; ++z)
 			{

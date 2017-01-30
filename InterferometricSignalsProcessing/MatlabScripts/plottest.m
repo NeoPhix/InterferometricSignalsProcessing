@@ -25,7 +25,7 @@ ylabel('Signal value');
 legend('Signal') ;
 
 subplot(2,3,3)
-plot(1:N, EKF(1:N, 2));
+plot(1:N, EKF(1:N, 1));
 grid on;
 title('Background');
 xlabel('Discrete sample number');

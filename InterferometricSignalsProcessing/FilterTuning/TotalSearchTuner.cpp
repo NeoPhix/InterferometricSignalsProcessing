@@ -74,7 +74,9 @@ EKFState FilterTuning::TotalSearchTuner::tune()
 	for (int j = 0; j < filtersAmount; ++j)
 	{
 		variations[j] = fitness(inputSignals, filterStates[j]);
+		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << (double)(j+1)/filtersAmount << "%%";
 	}
+	std::cout << std::endl;
 	
 	int best_index = dmod::min_index(variations);
 	
