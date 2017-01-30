@@ -23,7 +23,7 @@
 #include "DataModel/Tomogram.h"
 
 std::vector<dmod::array1d> getLearningSignals(int signalsAmount, dmod::array1d &background, dmod::array1d &frequency, 
-	double E_min, double E_max, double sigma, double delta_z, std::default_random_engine &gen)
+	float E_min, float E_max, float sigma, float delta_z, std::default_random_engine &gen)
 {
 	size_t N = background.size();
 	if (frequency.size() != N)
@@ -34,17 +34,17 @@ std::vector<dmod::array1d> getLearningSignals(int signalsAmount, dmod::array1d &
 	std::vector<dmod::array1d> signals(signalsAmount);
 	for (int k = 0; k < signalsAmount; k++)
 	{
-		double startPhase = (double)(gen() % 100000000) / 100000000 * 2 * M_PI;
+		float startPhase = (float)(gen() % 100000000) / 100000000 * 2 * M_PI;
 		dmod::array1d phase = dmod::phaseFromFrequency(frequency, startPhase, delta_z);
 		dmod::array1d noise = dmod::createNormalNoise(0, 10, N, gen);
-		dmod::array1d amplitude = dmod::randomGaussianAmplitude(static_cast<double>(N), E_min, E_max, sigma, 6, gen);
+		dmod::array1d amplitude = dmod::randomGaussianAmplitude(static_cast<float>(N), E_min, E_max, sigma, 6, gen);
 
 		signals[k] = dmod::createSignal1D(background, amplitude, phase, noise);
 	}
 	return signals;
 }
 
-EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, std::default_random_engine &gen)
+EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, size_t filtersAmount, std::default_random_engine &gen)
 {
 	//Creation of EKF tuned by TotalSearch
 	EKFState minimal;
@@ -68,7 +68,7 @@ EKF getTunedKalman_TotalSearch(std::vector<dmod::array1d> signals, std::default_
 	maximal.R = maximal.Rw;
 	maximal.Rn = 10;
 
-	FilterTuning::TotalSearchTuner tuner(signals, 10, gen, minimal, maximal);
+	FilterTuning::TotalSearchTuner tuner(signals, filtersAmount, gen, minimal, maximal);
 	tuner.createStates();
 	EKFState tunedParameters = tuner.tune();
 	printer::console_print_full_Kalman_state(tunedParameters);
@@ -89,10 +89,10 @@ int main(int argc, char **argv)
 
 	//OpenCV tests image loading							//TODO think about initial structure maybe
 	dmod::Tomogram tomo;
-	tomo.initSizeFromImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 100);
-	tomo.loadImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 100);
+	tomo.initSizeFromImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 400);
+	tomo.loadImageSequence("G:/data/21.01.2014/narost1/img", ".bmp", 1, 400);
 	
-	std::vector<dmod::array1d> learningData(100);
+	std::vector<dmod::array1d> learningData(15);
 	size_t h = tomo.getHeight();
 	size_t w = tomo.getWidth();
 
@@ -103,9 +103,9 @@ int main(int argc, char **argv)
 		*iter = tomo.getSignal1D(x, y, 0, dmod::Axis::Z);
 	}
 
-	EKF filter = getTunedKalman_TotalSearch(learningData, gen);
+	EKF filter = getTunedKalman_TotalSearch(learningData, 50, gen);
 
-	dmod::array1d signal = tomo.getSignal1D(300, 350, 0, dmod::Axis::Z);
+	dmod::array1d signal = tomo.getSignal1D(800, 350, 0, dmod::Axis::Z);
 	std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
 	dmod::array1d restoredSignal = filter.getRestoredSignal(states);
 
@@ -117,10 +117,10 @@ int main(int argc, char **argv)
 
 	////Old signal processing
 	//const int N = 500;				//Signals modeling
-	//const double delta_z = 1;		
+	//const float delta_z = 1;		
 
-	//double E_max = 200;	//Max amplitude
-	//double sigma = 200;
+	//float E_max = 200;	//Max amplitude
+	//float sigma = 200;
 
 
 	//dmod::array1d background(N, 100);
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 	//	0, 0.15, 0, 0,
 	//	0, 0, 0.0005, 0,
 	//	0, 0, 0, 0.002;
-	//double Rn = 0.5;
+	//float Rn = 0.5;
 	//EKF filter(beginState, Eigen::Matrix4d::Identity(), Rw, Rn);
 
 	//std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);

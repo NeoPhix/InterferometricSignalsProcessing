@@ -46,7 +46,7 @@ namespace dmod
 									  size_t end_number,
 									  Plane plane )
 	{
-		for (size_t n = begin_number; n < end_number; ++n)
+		for (size_t n = begin_number; n <= end_number; ++n)
 		{
 			std::stringstream str;
 			str << path << n << type;
