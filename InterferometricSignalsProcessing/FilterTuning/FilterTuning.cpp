@@ -4,9 +4,9 @@
 
 #include "FilterTuning.h"
 
-double FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
+float FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
 {
-	double sum = 0;
+	float sum = 0;
 	for (auto iter = inputSignals.begin(); iter != inputSignals.end(); ++iter)
 	{
 		EKF filter(filterState);

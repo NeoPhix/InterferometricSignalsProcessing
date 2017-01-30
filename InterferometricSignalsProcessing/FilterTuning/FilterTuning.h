@@ -10,7 +10,7 @@ namespace FilterTuning
 	typedef ExtendedKalmanFilterIS1DState EKFState;
 	typedef ExtendedKalmanFilterIS1D EKF;
 
-	double fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState);
+	float fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState);
 }
 
 #endif

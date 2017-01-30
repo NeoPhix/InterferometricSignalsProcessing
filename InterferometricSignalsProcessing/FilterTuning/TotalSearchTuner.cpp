@@ -56,11 +56,11 @@ void FilterTuning::TotalSearchTuner::changeSignals(std::vector<dmod::array1d> &i
 	inputSignals = std::move(inputSignals_);
 }
 
-double FilterTuning::TotalSearchTuner::getRandom(double min, double max)
+float FilterTuning::TotalSearchTuner::getRandom(float min, float max)
 {
 	if (abs(max - min) < 0.000000001)		// if max == min (max - min == 0)
 		return min;
-	return ((double)(gen() % 100000000)) / double(100000000) * (max - min) + min;
+	return ((float)(gen() % 100000000)) / float(100000000) * (max - min) + min;
 }
 
 EKFState FilterTuning::TotalSearchTuner::tune()

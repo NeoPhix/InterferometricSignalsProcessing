@@ -88,10 +88,10 @@ namespace dmod
 		return std::move(res);
 	}
 
-	double mean(const array1d &s)
+	float mean(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = 0;
+		float res = 0;
 		for (auto i = 0; i < N; i++)
 		{
 			res += s[i];
@@ -100,16 +100,16 @@ namespace dmod
 		return res;
 	}
 
-	double stdev(const array1d &s)
+	float stdev(const array1d &s)
 	{
 		return sqrt(var(s));
 	}
 
-	double var(const array1d &s)
+	float var(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = 0;
-		double mn2 = mean(s);
+		float res = 0;
+		float mn2 = mean(s);
 		mn2 *= mn2;
 		for (int i = 0; i < N; i++)
 		{
@@ -119,15 +119,15 @@ namespace dmod
 		return res;
 	}
 
-	double snr(const array1d &s, const array1d &noise)	//Signal-to-noise ratio
+	float snr(const array1d &s, const array1d &noise)	//Signal-to-noise ratio
 	{
 		return sqrt(10 * log10(var(s) / var(noise)));
 	}
 
-	double max(const array1d &s)
+	float max(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = s[0];
+		float res = s[0];
 		for (int i = 1; i < N; i++)
 		{
 			if (s[i] > res)
@@ -138,10 +138,10 @@ namespace dmod
 		return res;
 	}
 
-	double min(const array1d &s)
+	float min(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = s[0];
+		float res = s[0];
 		for (int i = 1; i < N; i++)
 		{
 			if (s[i] < res)
@@ -155,7 +155,7 @@ namespace dmod
 	int max_index(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = s[0];
+		float res = s[0];
 		int index = 0;
 		for (int i = 1; i < N; i++)
 		{
@@ -171,7 +171,7 @@ namespace dmod
 	int min_index(const array1d &s)
 	{
 		size_t N = s.size();
-		double res = s[0];
+		float res = s[0];
 		int index = 0;
 		for (int i = 1; i < N; i++)
 		{

@@ -9,12 +9,12 @@
 namespace dmod
 {
 
-	double getSignalValue(double background, double amplitude, double phase)
+	float getSignalValue(float background, float amplitude, float phase)
 	{
 		return background + amplitude * cos(phase);
 	}
 
-	double getGaussValue(double x, double mean, double sigma)
+	float getGaussValue(float x, float mean, float sigma)
 	{
 		return exp(-((x - mean)*(x - mean)) / (sigma*sigma));
 	}
@@ -36,10 +36,10 @@ namespace dmod
 		return std::move(signal);
 	}
 
-	array1d createNormalNoise(double mean, double sigma, size_t N, std::default_random_engine &gen)
+	array1d createNormalNoise(float mean, float sigma, size_t N, std::default_random_engine &gen)
 	{
 		array1d noise(N);
-		std::normal_distribution<double> distribution(mean, sigma);
+		std::normal_distribution<float> distribution(mean, sigma);
 		for (int i = 0; i < N; ++i)
 		{
 			noise[i] = distribution(gen);
@@ -47,7 +47,7 @@ namespace dmod
 		return std::move(noise);
 	}
 
-	array1d phaseFromFrequency(array1d &frequency, double startPhase, double delta_z)
+	array1d phaseFromFrequency(array1d &frequency, float startPhase, float delta_z)
 	{
 		size_t N = frequency.size();
 		array1d phase(N);
@@ -60,7 +60,7 @@ namespace dmod
 	}
 
 
-	array1d fixedGaussianAmplitude(double max, double sigma, double mean, size_t N, double delta_z)
+	array1d fixedGaussianAmplitude(float max, float sigma, float mean, size_t N, float delta_z)
 	{
 		array1d amplitude(N);
 
@@ -72,7 +72,7 @@ namespace dmod
 		return std::move(amplitude);
 	}
 
-	array1d randomGaussianAmplitude(double max, double sigma, size_t N, size_t minDistance, int maxAmount, std::default_random_engine &gen, double delta_z)
+	array1d randomGaussianAmplitude(float max, float sigma, size_t N, size_t minDistance, int maxAmount, std::default_random_engine &gen, float delta_z)
 	{
 		array1d amplitude(N);
 		int amount = gen() % maxAmount + 1;		//Count of gaussian amplitudes in out signal
@@ -80,7 +80,7 @@ namespace dmod
 		for (int i = 0; i < amount; ++i)
 		{
 			size_t pos = (gen() % (N / minDistance)) * minDistance;	//Minimal distance between two random gaussian functions must be kept
-			double mean = pos*delta_z;
+			float mean = pos*delta_z;
 			amplitude = sum(amplitude, fixedGaussianAmplitude(max, sigma, mean, N, delta_z));
 		}
 

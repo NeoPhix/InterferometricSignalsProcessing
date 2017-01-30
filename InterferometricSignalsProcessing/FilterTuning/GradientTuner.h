@@ -24,7 +24,7 @@ namespace FilterTuning
 		EKFState currentState;
 		EKFState step;
 
-		int gradSign(double s, double interval = 1.);
+		int gradSign(float s, float interval = 1.);
 	};
 }
 

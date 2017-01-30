@@ -9,7 +9,7 @@
 
 namespace dmod
 {
-	typedef std::vector<double> array1d;
+	typedef std::vector<float> array1d;
 	typedef std::vector<array1d> array2d;
 	typedef std::vector<array2d> array3d;
 
@@ -23,16 +23,16 @@ namespace dmod
 	cv::Mat matFromArray2d(array2d &input);
 	array2d array2dFromMat(cv::Mat &mat);
 
-	double max(const array1d &s);
-	double min(const array1d &s);
+	float max(const array1d &s);
+	float min(const array1d &s);
 
 	int max_index(const array1d &s);
 	int min_index(const array1d &s);
 
-	double mean(const array1d &s);
-	double stdev(const array1d &s);
-	double var(const array1d &s);
-	double snr(const array1d &s, const array1d &noise);
+	float mean(const array1d &s);
+	float stdev(const array1d &s);
+	float var(const array1d &s);
+	float snr(const array1d &s, const array1d &noise);
 	
 	array1d sub(const array1d &s1, const array1d &s2);
 	array1d sum(const array1d &s1, const array1d &s2);

@@ -25,7 +25,7 @@ namespace FilterTuning
 		EKFState tune();
 	private:
 		EKFState createRandomState();
-		double getRandom(double min, double max);
+		float getRandom(float min, float max);
 
 	private:
 		std::vector<dmod::array1d> inputSignals;

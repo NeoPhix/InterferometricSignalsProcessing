@@ -37,8 +37,8 @@ void FilterTuning::GradientTuner::makeStep()
 			EKFState tmp = EKFState();
 			tmp.state(i) += step.state(i);
 
-			double var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-			double var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+			float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+			float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
 			coef.state(i) = var_plus - var_minus;
 		}
 	}
@@ -50,8 +50,8 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				EKFState tmp = EKFState();
 				tmp.Rw(i, j) += step.Rw(i, j);
-				double var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-				double var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+				float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+				float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
 				coef.Rw(i) = gradSign(var_plus - var_minus);
 			}
 		}
@@ -64,16 +64,16 @@ void FilterTuning::GradientTuner::makeStep()
 			{
 				EKFState tmp = EKFState();
 				tmp.R(i, j) += step.R(i, j);
-				double var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-				double var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+				float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+				float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
 				coef.R(i) = gradSign(var_plus - var_minus);
 			}
 		}
 	}
 	EKFState tmp = EKFState();
 	tmp.Rn += step.Rn;
-	double var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-	double var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+	float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+	float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
 	coef.Rn = gradSign(var_plus - var_minus);
 
 	currentState += coef*step;
@@ -86,7 +86,7 @@ EKFState FilterTuning::GradientTuner::tune()
 	return currentState;
 }
 
-int FilterTuning::GradientTuner::gradSign(double s, double interval)
+int FilterTuning::GradientTuner::gradSign(float s, float interval)
 {
 	if (s > interval)
 		return 1;
