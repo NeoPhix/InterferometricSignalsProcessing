@@ -78,7 +78,25 @@ std::vector<dmod::array1d> getLearningSignals( int signalsAmount,
 	return signals;
 }
 
-EKF getTunedKalman_TotalSearch( std::vector<dmod::array1d> signals, 
+std::vector<dmod::array1d> getLearningSignals( int signalsAmount, 
+											   dmod::Tomogram &tomo, 
+											   std::default_random_engine &gen )
+{
+	std::vector<dmod::array1d> signals(signalsAmount);
+	size_t h = tomo.getHeight();
+	size_t w = tomo.getWidth();
+
+	for (auto iter = signals.begin(); iter != signals.end(); ++iter)
+	{
+		size_t y = gen() % h;
+		size_t x = gen() % w;
+		*iter = tomo.getSignal1D(x, y, 0, dmod::Axis::Z);
+	}
+
+	return signals;
+}
+
+EKFState getTunedKalmanState_TotalSearch( std::vector<dmod::array1d> signals, 
 								size_t filtersAmount, 
 								std::default_random_engine &gen )
 {
@@ -95,7 +113,7 @@ EKF getTunedKalman_TotalSearch( std::vector<dmod::array1d> signals,
 	minimal.R = minimal.Rw;
 	minimal.Rn = 0.1;
 
-	maximal.state = Eigen::Vector4d(255, 5, 0.158, 2 * M_PI);
+	maximal.state = Eigen::Vector4d(255, 10, 0.158, 2 * M_PI);
 	maximal.Rw <<
 		0.4, 0, 0, 0,
 		0, 0.4, 0, 0,
@@ -127,48 +145,75 @@ EKF getTunedKalman_TotalSearch( std::vector<dmod::array1d> signals,
 	EKFState tunedParameters = tuner.tune();
 	printer::console_print_full_Kalman_state(tunedParameters);
 	
-	return EKF(tunedParameters);
+	return tunedParameters;
 }
 
-EKF getTunedKalman_Gradient( EKFState begin, 
+EKFState getTunedKalmanState_Gradient( EKFState begin, 
 							 EKFState step, 
 							 std::vector<dmod::array1d> signals, 
 							 int iterationsNumber )
 {
 	FilterTuning::GradientTuner tuner(signals, iterationsNumber, begin, step);
 	EKFState tunedParameters = tuner.tune();
-	return EKF(tunedParameters);
+	return tunedParameters;
 }
 
 void sceanrioRealDataOCT_TotalSearch( const char *path,
-								   const char *type,
-								   size_t begin_number,
-								   size_t end_number,
-						           const char *maskname,
-								   size_t signalsAmount,
-								   size_t filtersAmount, 
-								   std::default_random_engine &gen)
+								      const char *type,
+								      size_t begin_number,
+								      size_t end_number,
+						              const char *maskname,
+								      size_t signalsAmount,
+								      size_t filtersAmount, 
+								      std::default_random_engine &gen,
+								      const char *outpath,
+									  const char *outtype )
 {
 	dmod::Tomogram tomo;
-	tomo.initSizeFromImageSequence("D:/Data/21.01.2014/narost1_resized/img", ".bmp", 1, 400);
-	tomo.loadImageSequence("D:/Data/21.01.2014/narost1_resized/img", ".bmp", 1, 400);
+	tomo.initSizeFromImageSequence(path, type, begin_number, end_number);
+	tomo.loadImageSequence(path, type, begin_number, end_number);
 
-	cv::Mat mask = cv::imread("D:/Data/21.01.2014/narost1_resized/mask.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+	cv::Mat mask = cv::imread(maskname, CV_LOAD_IMAGE_GRAYSCALE);
+	std::vector<dmod::array1d> learningData = getLearningSignals(signalsAmount, tomo, gen, mask);
 
-	std::vector<dmod::array1d> learningData = getLearningSignals(15, tomo, gen, mask);
-	EKF filter = getTunedKalman_TotalSearch(learningData, filtersAmount, gen);
+	//std::vector<dmod::array1d> learningData = getLearningSignals(signalsAmount, tomo, gen);
+	EKFState tunedState = getTunedKalmanState_TotalSearch(learningData, filtersAmount, gen);
+	
+	size_t d = tomo.getDepth();
+	size_t h = tomo.getHeight();
+	size_t w = tomo.getWidth();
 
-	EKFState outState = filter.getFullState();
-	dmod::array1d signal = tomo.getSignal1D(300, 45, 0, dmod::Axis::Z);
+	dmod::Tomogram tomo_out(d, h, w);
 
-	std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
-	dmod::array1d restoredSignal = filter.getRestoredSignal(states);
+	for (size_t y = 0; y < h; ++y)
+	{
+		for (size_t x = 0; x < w; ++x)
+		{
+			EKF filter(tunedState);
+			dmod::array1d signal = tomo.getSignal1D(x, y, 0, dmod::Axis::Z);
+			std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
 
-	printer::print_states("MatlabScripts/EKF_real_data.txt", states);
-	printer::print_signal("MatlabScripts/signal.txt", signal);
-	printer::print_signal("MatlabScripts/restoredSignal.txt", restoredSignal);
+			dmod::array1d amplitude = dmod::get_parameter_vector(states, AMPLITUDE);
+			dmod::absolute(amplitude);
+			dmod::normalize(amplitude, 0, 255);
+			tomo_out.setSignal1D(x, y, 0, amplitude, dmod::Axis::Z);
 
-	printer::print_full_Kalman_states("MatlabScripts/restoredSignal.txt", std::vector<EKFState>(1, outState));
+			dmod::array1d restoredSignal = filter.getRestoredSignal(states);
+			printer::print_states("MatlabScripts/EKF_real_data.txt", states);
+			printer::print_signal("MatlabScripts/signal.txt", signal);
+			printer::print_signal("MatlabScripts/restoredSignal.txt", restoredSignal);
+		}
+	}
+
+	tomo_out.saveImageSequence(outpath, outtype, dmod::Plane::XZ);
+
+	////For one signal (graphics)
+	//EKF filter(tunedState);
+	//dmod::array1d signal = tomo.getSignal1D(350, 50, 0, dmod::Axis::Z);
+	//std::vector<Eigen::Vector4d> states = filter.estimateAll(signal);
+
+
+	printer::print_full_Kalman_states("MatlabScripts/state.txt", std::vector<EKFState>(1, tunedState));
 }
 
 void scenarioModelSignalProcessing(std::default_random_engine &gen)
@@ -222,9 +267,10 @@ int main( int argc, char **argv )
 {
 	std::default_random_engine gen((unsigned int)time(NULL));
 
-	sceanrioRealDataOCT_TotalSearch( "D:/Data/21.01.2014/narost1_resized/img", ".bmp", 1, 400,
-									 "D:/Data/21.01.2014/narost1_resized/mask.bmp",
-									 15, 100000, gen );
+	sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/egg1_resized/img", ".bmp", 1, 500,
+									 "D:/Data/ZhukovaSignals/egg1_resized/mask.bmp",
+									 50, 10000, gen,
+									 "D:/Data/ZhukovaSignals/egg1_resized/output/out", ".bmp");
 
 	return 0;
 }

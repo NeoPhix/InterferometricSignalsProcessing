@@ -33,11 +33,20 @@ namespace dmod
 	float stdev(const array1d &s);
 	float var(const array1d &s);
 	float snr(const array1d &s, const array1d &noise);
+
+	void absolute(array1d &signal);
+	void normalize(array1d &signal, float minimum, float maximum);
 	
 	array1d sub(const array1d &s1, const array1d &s2);
 	array1d sum(const array1d &s1, const array1d &s2);
 	
 	Eigen::Vector4d get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase);
+	array1d get_parameter_vector(std::vector<Eigen::Vector4d> &states, int parameter);
 }
+
+#define BACKGROUND 0
+#define AMPLITUDE 1
+#define FREQUENCY 2
+#define PHASE 3
 
 #endif

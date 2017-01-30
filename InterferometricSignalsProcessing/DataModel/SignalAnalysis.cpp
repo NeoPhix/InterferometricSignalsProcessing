@@ -218,9 +218,13 @@ namespace dmod
 		return std::move(target);
 	}
 
-	Eigen::Vector4d get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase)
-	{
-		int N = states.size();
+	Eigen::Vector4d get_deviations( std::vector<Eigen::Vector4d> &states, 
+									array1d &background, 
+									array1d &amplitude, 
+									array1d &frequency, 
+									array1d &phase )
+	{ 
+		size_t N = states.size();
 		if (background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N)
 		{
 			std::cout << "Error. Arrays sizes are mismatched." << std::endl;
@@ -245,4 +249,39 @@ namespace dmod
 		return res;
 	}
 
+	array1d get_parameter_vector( std::vector<Eigen::Vector4d> &states, int parameter )
+	{
+		size_t N = states.size();
+		array1d res(N);
+
+		for (size_t i = 0; i < N; ++i)
+		{
+			res[i] = states[i](parameter);
+		}
+		
+		return std::move(res);
+	}
+
+	void normalize(array1d &signal, float minimum, float maximum)
+	{
+
+		float max_origin = max(signal);
+		float min_origin = min(signal);
+		for (auto iter = signal.begin(); iter != signal.end(); ++iter)
+		{
+			*iter = (*iter - min_origin) / (max_origin - min_origin); //0 to 1 range
+			*iter = (*iter * maximum) + minimum;
+		}
+	}
+
+	void absolute(array1d &signal)
+	{
+
+		float max_origin = max(signal);
+		float min_origin = min(signal);
+		for (auto iter = signal.begin(); iter != signal.end(); ++iter)
+		{
+			*iter = abs(*iter);
+		}
+	}
 }

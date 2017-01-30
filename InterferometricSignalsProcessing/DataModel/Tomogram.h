@@ -24,6 +24,11 @@ namespace dmod
 								size_t end_number, 
 								Plane plane = Plane::XY );
 
+		//path[in] - path to thi input image sequence
+		//type[in] - type of each image in the sequence
+		//begin_number[in] - number of the first loaded image
+		//end_number[in] - number of the last loaded image
+		//plane[in] - cutting plane  
 		void initSizeFromImageSequence( const char *path,
 										const char *type, 
 										size_t begin_number,

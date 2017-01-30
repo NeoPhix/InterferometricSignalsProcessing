@@ -81,7 +81,7 @@ float ExtendedKalmanFilterIS1D::evaluateSignalValue(Eigen::Vector4d &st)
 std::vector<float> ExtendedKalmanFilterIS1D::getRestoredSignal(std::vector<float> &signal)
 {
 	std::vector<Eigen::Vector4d> states = estimateAll(signal);
-	return getRestoredSignal(states);
+	return std::move( getRestoredSignal(states) );
 }
 
 std::vector<float> ExtendedKalmanFilterIS1D::getRestoredSignal(std::vector<Eigen::Vector4d> &states)
@@ -92,7 +92,7 @@ std::vector<float> ExtendedKalmanFilterIS1D::getRestoredSignal(std::vector<Eigen
 	{
 		restoredSignal[i] = evaluateSignalValue(states[i]);
 	}
-	return restoredSignal;
+	return std::move(restoredSignal);
 }
 
 std::vector<Eigen::Vector4d> ExtendedKalmanFilterIS1D::estimateAll(std::vector<float> &signal)
@@ -104,7 +104,7 @@ std::vector<Eigen::Vector4d> ExtendedKalmanFilterIS1D::estimateAll(std::vector<f
 		estimate(signal[i]);
 		states[i] = getState();
 	}
-	return states;
+	return std::move(states);
 }
 
 
