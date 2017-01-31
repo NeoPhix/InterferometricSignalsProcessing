@@ -107,6 +107,18 @@ std::vector<Eigen::Vector4d> ExtendedKalmanFilterIS1D::estimateAll(std::vector<f
 	return std::move(states);
 }
 
+//
+std::vector<ExtendedKalmanFilterIS1DState> ExtendedKalmanFilterIS1D::estimateAllFullStates(std::vector<float> &signal)
+{
+	size_t N = signal.size();
+	std::vector<ExtendedKalmanFilterIS1DState> states(N);
+	for (int i = 0; i < N; ++i)
+	{
+		estimate(signal[i]);
+		states[i] = getFullState();
+	}
+	return std::move(states);
+}
 
 //State methods
 ExtendedKalmanFilterIS1DState ExtendedKalmanFilterIS1DState::operator+(ExtendedKalmanFilterIS1DState &s)

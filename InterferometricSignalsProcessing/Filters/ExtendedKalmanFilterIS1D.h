@@ -40,11 +40,12 @@ public:
 	float evaluateSignalValue();
 	float evaluateSignalValue(Eigen::Vector4d &st);
 
+	//!!!its important to understand the following moment:
+	//getRestoredSignal(signal) = getRestoredSignal(estimateAll(signal));
 	std::vector<float> getRestoredSignal(std::vector<float> &signal);				
 	std::vector<float> getRestoredSignal(std::vector<Eigen::Vector4d> &states);
 	std::vector<Eigen::Vector4d> estimateAll(std::vector<float> &signal);	
-	//!!!its important to understand the following moment:
-	//getRestoredSignal(signal) = getRestoredSignal(estimateAll(signal));
+	std::vector<ExtendedKalmanFilterIS1DState> estimateAllFullStates(std::vector<float> &signal);
 private:
 	Eigen::Vector4d state;
 	Eigen::Matrix4d R;

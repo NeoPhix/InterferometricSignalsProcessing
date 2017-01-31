@@ -39,7 +39,7 @@ void FilterTuning::GradientTuner::makeStep()
 
 			float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
 			float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
-			coef.state(i) = var_plus - var_minus;
+			coef.state(i) = gradSign(var_plus - var_minus);
 		}
 	}
 	for (int i = 0; i < 4; i++)		//Rw
@@ -82,7 +82,12 @@ void FilterTuning::GradientTuner::makeStep()
 EKFState FilterTuning::GradientTuner::tune()
 {
 	for (int i = 0; i < iterationsCount; i++)
-		makeStep() ;
+	{
+		makeStep();
+		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << (double)(i+1)/iterationsCount * 100 << "%%";
+		//printer::console_print_full_Kalman_state(currentState);
+	}
+	std::cout << std::endl;
 	return currentState;
 }
 

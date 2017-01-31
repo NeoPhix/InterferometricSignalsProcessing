@@ -4,6 +4,7 @@
 *.dll
 *.txt
 *.rar
+*.json
 !todo.txt
 
 
