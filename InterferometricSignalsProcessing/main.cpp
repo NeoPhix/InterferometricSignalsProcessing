@@ -385,17 +385,17 @@ int main( int argc, char **argv )
 
 	sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/onion1_resized/img", ".bmp", 1, 500,
 									 "D:/Data/ZhukovaSignals/onion1_resized/mask.bmp",
-									 15, 50000, gen,
+									 15, 20000, gen,
 									 "D:/Data/ZhukovaSignals/onion1_resized/output/", ".bmp");
 
 	sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/onion2_resized/img", ".bmp", 1, 500,
 									 "D:/Data/ZhukovaSignals/onion2_resized/mask.bmp",
-									 15, 50000, gen,
+									 15, 20000, gen,
 									 "D:/Data/ZhukovaSignals/onion2_resized/output/", ".bmp");
 
 	sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/egg1_resized/img", ".bmp", 1, 500,
 									 "D:/Data/ZhukovaSignals/egg1_resized/mask.bmp",
-									 15, 50000, gen,
+									 15, 20000, gen,
 									 "D:/Data/ZhukovaSignals/egg1_resized/output/", ".bmp");
 
 	return 0;
