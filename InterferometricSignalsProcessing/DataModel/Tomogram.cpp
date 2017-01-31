@@ -15,26 +15,14 @@ namespace dmod
 		data = createArray3d(d, h, w);
 	}
 
-	Tomogram::Tomogram(size_t d_, size_t h_, size_t w_)
+	Tomogram::Tomogram( size_t d_, size_t h_, size_t w_)
 		: d(d_), h(h_), w(w_)
 	{
 		data = createArray3d(d, h, w);
 	}
 
 	Tomogram::Tomogram(const char *path, const char *type, size_t number)
-		: d(number), h(0), w(0)
-	{
-
-		//for (d = 1; ; ++d)
-		//{
-		//	std::stringstream str;
-		//	str << d << type;
-		//	if (INVALID_FILE_ATTRIBUTES == GetFileAttributesA(str.str().c_str()))
-		//		break;
-		//}
-
-		data = createArray3d(d, h, w);
-	}
+		: d(number), h(0), w(0) {}
 
 	Tomogram::~Tomogram()
 	{
@@ -103,6 +91,10 @@ namespace dmod
 									  const char *type,
 									  Plane plane )
 	{
+		std::stringstream str;
+		str << path;
+		CreateDirectoryA(path, NULL);
+
 		size_t n = 0;
 		switch (plane)
 		{
