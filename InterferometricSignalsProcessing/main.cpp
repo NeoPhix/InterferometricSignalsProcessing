@@ -135,7 +135,7 @@ void paintBScans( const char *outpath,
 			dmod::array1d amplitude = dmod::get_parameter_vector(states, AMPLITUDE);
 			dmod::absolute(amplitude);
 			dmod::normalize(amplitude, 0, 255);
-			if (dmod::mean(amplitude) > 170)
+			if (dmod::mean(amplitude) > 90)
 			{
 				amplitude = dmod::array1d(signal.size(), 0);
 			}
@@ -398,7 +398,7 @@ int main( int argc, char **argv )
 
 	sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/onion1_resized/img", ".bmp", 1, 500,
 									 "D:/Data/ZhukovaSignals/onion1_resized/mask.bmp",
-									 500, 1000, gen,
+									 100, 5000, gen,
 									 "D:/Data/ZhukovaSignals/onion1_resized/output/", ".bmp" );
 
 	//sceanrioRealDataOCT_TotalSearch( "D:/Data/ZhukovaSignals/onion2_resized/img", ".bmp", 1, 500,
