@@ -85,7 +85,7 @@ EKFState FilterTuning::GradientTuner::tune()
 	{
 		makeStep();
 		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << (double)(i+1)/iterationsCount * 100 << "%%";
-		//printer::console_print_full_Kalman_state(currentState);
+		printer::console_print_full_Kalman_state(currentState);
 	}
 	std::cout << std::endl;
 	return currentState;

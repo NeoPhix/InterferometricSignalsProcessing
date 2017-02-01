@@ -47,6 +47,17 @@ namespace dmod
 		return std::move(noise);
 	}
 
+	array1d createUniformNoise(float minimal, float maximal, size_t N, std::default_random_engine &gen)
+	{
+		array1d noise(N);
+		std::uniform_real_distribution<float> distribution(minimal, maximal);
+		for (int i = 0; i < N; ++i)
+		{
+			noise[i] = distribution(gen);
+		}
+		return std::move(noise);
+	}
+
 	array1d phaseFromFrequency(array1d &frequency, float startPhase, float delta_z)
 	{
 		size_t N = frequency.size();

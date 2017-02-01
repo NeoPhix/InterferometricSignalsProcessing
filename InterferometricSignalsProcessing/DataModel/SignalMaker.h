@@ -10,6 +10,7 @@ namespace dmod
 
 	array1d createSignal1D(const array1d &background, const array1d &amplitude, const array1d &phase, const array1d &noise);
 	array1d createNormalNoise(float mean, float sigma, size_t N, std::default_random_engine &gen);
+	array1d createUniformNoise(float minimal, float maximal, size_t N, std::default_random_engine &gen);
 
 	array1d phaseFromFrequency(array1d &frequency, float startPhase = 0, float delta_z = 1);
 	
