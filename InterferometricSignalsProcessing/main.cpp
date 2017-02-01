@@ -452,7 +452,7 @@ void scenarioCovMatAnalysis(const char *path, dmod::array1d &signal, EKFState &s
 	EKF filter(state);
 	std::vector<EKFState> fullStates = filter.estimateAllFullStates(signal);
 	printer::print_cov_matrices(path, fullStates);
-	
+	printer::print_full_Kalman_states("MatlabScripts/full_states.txt", fullStates);
 	//for (auto iter = fullStates.begin(); iter != fullStates.end(); ++iter)
 	//{
 	//	printer::console_print_full_Kalman_state(*iter);
@@ -469,10 +469,16 @@ void scenarioCovMatAnalysis(const char *path, dmod::array1d &signal, EKFState &s
 dmod::array1d makeSignal(size_t N, float delta_z, std::default_random_engine &gen)
 {
 	dmod::array1d background(N, 0);
-	dmod::array1d amplitude(N, 1);
+	dmod::array1d amplitude = dmod::sum(dmod::fixedGaussianAmplitude(0.8, 30, 250, N, 1), dmod::array1d(N, 0.2));
 	dmod::array1d frequency(N, 0.1);
+
+	//for (int i = 1; i < N; ++i)
+	//{
+	//	frequency[i] = frequency[0] - 0.0006*i;
+	//}
+
 	dmod::array1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
-	//dmod::array1d noise = dmod::createNormalNoise(0, 0.03, N, gen);
+	//dmod::array1d noise = dmod::createNormalNoise(0, 0.01, N, gen);
 	dmod::array1d noise(N, 0);
 	dmod::array1d signal = dmod::createSignal1D(background, amplitude, phase, noise); 
 	return std::move(signal);
@@ -486,14 +492,14 @@ int main( int argc, char **argv )
 	dmod::array1d signal = makeSignal(500, 1, gen);
 
 	EKFState state;
-	state.state = Eigen::Vector4d(0, 1, 0.1, 0);
+	state.state = Eigen::Vector4d(0, 0.2, 0.1, 0);
 	state.Rw <<
 		0.01, 0, 0, 0,
 		0, 0.01, 0, 0,
 		0, 0, 0.001, 0,
 		0, 0, 0, 0.01;
 	state.R = state.Rw;
-	state.Rn = 0.1;
+	state.Rn = 0;
 
 	scenarioCovMatAnalysis("MatlabScripts/cov_mats.txt", signal, state);
 

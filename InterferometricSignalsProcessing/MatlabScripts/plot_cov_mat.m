@@ -1,4 +1,5 @@
 signal = importdata('signal.txt');
+restoredSignal = importdata('restoredSignal.txt');
 CM = importdata('cov_mats.txt');
 EKF = importdata('EKF_real_data.txt');
 
@@ -54,3 +55,4 @@ title('Phase');
 xlabel('Discrete sample number');
 ylabel('Phase value, rad');
 legend('EKF estimation') ;
+
