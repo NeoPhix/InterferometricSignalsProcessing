@@ -478,8 +478,8 @@ dmod::array1d makeSignal(size_t N, float delta_z, std::default_random_engine &ge
 	//}
 
 	dmod::array1d phase = dmod::phaseFromFrequency(frequency, 0, delta_z);
-	//dmod::array1d noise = dmod::createNormalNoise(0, 0.01, N, gen);
-	dmod::array1d noise(N, 0);
+	dmod::array1d noise = dmod::createNormalNoise(0, 0.1, N, gen);
+	//dmod::array1d noise(N, 0);
 	dmod::array1d signal = dmod::createSignal1D(background, amplitude, phase, noise); 
 	return std::move(signal);
 }
@@ -488,18 +488,32 @@ dmod::array1d makeSignal(size_t N, float delta_z, std::default_random_engine &ge
 int main( int argc, char **argv ) 
 {
 	std::default_random_engine gen((unsigned int)time(NULL));
-	
 	dmod::array1d signal = makeSignal(500, 1, gen);
+
+	//dmod::Tomogram tomo;
+	//tomo.initSizeFromImageSequence("D:/Data/ZhukovaSignals/egg1_resized/img", ".bmp", 1, 500);
+	//tomo.loadImageSequence("D:/Data/ZhukovaSignals/egg1_resized/img", ".bmp", 1, 500);
+
+	//std::vector<dmod::array1d> learningData;
+	//learningData = getLearningSignals(150, tomo, gen);
+
+	//EKFState state = getTunedKalmanState_TotalSearch(learningData, 10000, gen);
+
+
+
+	//dmod::array1d signal = tomo.getSignal1D(200, 150, 0, dmod::Axis::Z);
 
 	EKFState state;
 	state.state = Eigen::Vector4d(0, 0.2, 0.1, 0);
 	state.Rw <<
-		0.01, 0, 0, 0,
-		0, 0.01, 0, 0,
+		0.09, 0, 0, 0,
+		0, 0.05, 0, 0,
 		0, 0, 0.001, 0,
-		0, 0, 0, 0.01;
+		0, 0, 0, 0.02;
 	state.R = state.Rw;
-	state.Rn = 0;
+	state.Rn = 0.4;
+
+
 
 	scenarioCovMatAnalysis("MatlabScripts/cov_mats.txt", signal, state);
 
