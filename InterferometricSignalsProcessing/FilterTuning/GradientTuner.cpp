@@ -8,95 +8,104 @@
 #include "FilterTuning.h"
 #include "GradientTuner.h"
 
-using namespace FilterTuning;
-
-FilterTuning::GradientTuner::GradientTuner(std::vector<dmod::array1d> &inputSignals_, int iterationsCount_, EKFState currentState_, EKFState step_)
-	: inputSignals(inputSignals_), iterationsCount(iterationsCount_), currentState(currentState_), step(step_) {}
-
-
-FilterTuning::GradientTuner::~GradientTuner() {}
-
-void FilterTuning::GradientTuner::changeSignals(std::vector<dmod::array1d> &inputSignals_)
+namespace FilterTuning
 {
-	inputSignals = inputSignals_;
-}
 
-void FilterTuning::GradientTuner::makeStep()
-{
-	//Non adaptive step!
-	//Classic variant
-	//Step of descent, which is influenced by variations of difference between estimation results and original signals
-	EKFState coef = EKFState();
-	EKF filter; 
+	GradientTuner::GradientTuner( std::vector<dmod::array1d> &inputSignals_,
+								  int iterationsCount_,
+								  EKFState currentState_,
+								  EKFState step_)
+		: inputSignals(inputSignals_),
+	      iterationsCount(iterationsCount_),
+		  currentState(currentState_),
+		  step(step_) {}
 
-	//Estimate varriances with descenct
-	for (int i = 0; i < 4; i++)		//state
+
+	GradientTuner::~GradientTuner() {}
+
+	void FilterTuning::GradientTuner::changeSignals(std::vector<dmod::array1d> &inputSignals_)
 	{
-		if (abs(step.state(i)) > 0.000000001)
-		{
-			EKFState tmp = EKFState();
-			tmp.state(i) += step.state(i);
-
-			float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-			float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
-			coef.state(i) = gradSign(var_plus - var_minus);
-		}
+		inputSignals = inputSignals_;
 	}
-	for (int i = 0; i < 4; i++)		//Rw
+
+	EKFState GradientTuner::gradDirection(EKFState &step)
 	{
-		for (int j = 0; j < 4; j++)
+		EKFState coef = EKFState();
+		for (int i = 0; i < 4; i++)		//state
 		{
-			if (abs(step.Rw(i, j)) > 0.000000001)
+			if (abs(step.state(i)) > 0.000000001)
 			{
 				EKFState tmp = EKFState();
-				tmp.Rw(i, j) += step.Rw(i, j);
+				tmp.state(i) += step.state(i);
+
 				float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
 				float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
-				coef.Rw(i) = gradSign(var_plus - var_minus);
+				coef.state(i) = gradSign(var_plus - var_minus);
 			}
 		}
-	}
-	for (int i = 0; i < 4; i++)		//R
-	{
-		for (int j = 0; j < 4; j++)
+		for (int i = 0; i < 4; i++)		//Rw
 		{
-			if (abs(step.R(i, j)) > 0.000000001)
+			for (int j = 0; j < 4; j++)
 			{
-				EKFState tmp = EKFState();
-				tmp.R(i, j) += step.R(i, j);
-				float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-				float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
-				coef.R(i) = gradSign(var_plus - var_minus);
+				if (abs(step.Rw(i, j)) > 0.000000001)
+				{
+					EKFState tmp = EKFState();
+					tmp.Rw(i, j) += step.Rw(i, j);
+					float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+					float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+					coef.Rw(i) = gradSign(var_plus - var_minus);
+				}
 			}
 		}
+		for (int i = 0; i < 4; i++)		//R
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (abs(step.R(i, j)) > 0.000000001)
+				{
+					EKFState tmp = EKFState();
+					tmp.R(i, j) += step.R(i, j);
+					float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+					float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+					coef.R(i) = gradSign(var_plus - var_minus);
+				}
+			}
+		}
+		EKFState tmp = EKFState();
+		tmp.Rn += step.Rn;
+		float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
+		float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
+		coef.Rn = gradSign(var_plus - var_minus);
+		return coef;
 	}
-	EKFState tmp = EKFState();
-	tmp.Rn += step.Rn;
-	float var_plus = FilterTuning::fitness(inputSignals, currentState + tmp);
-	float var_minus = FilterTuning::fitness(inputSignals, currentState - tmp);
-	coef.Rn = gradSign(var_plus - var_minus);
 
-	currentState += coef*step;
-}
 
-EKFState FilterTuning::GradientTuner::tune()
-{
-	for (int i = 0; i < iterationsCount; i++)
+	void GradientTuner::makeStep()
 	{
-		makeStep();
-		std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << (double)(i+1)/iterationsCount * 100 << "%%";
-		printer::console_print_full_Kalman_state(currentState);
+		EKFState coef = gradDirection(step);
+		currentState += coef*step;
 	}
-	std::cout << std::endl;
-	return currentState;
-}
 
-int FilterTuning::GradientTuner::gradSign(float s, float interval)
-{
-	if (s > interval)
-		return 1;
-	else if (s < -interval)
-		return -1;
-	else
-		return 0;
+	EKFState GradientTuner::tune()
+	{
+		for (int i = 0; i < iterationsCount; i++)
+		{
+			makeStep();
+			std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << (double)(i + 1) / iterationsCount * 100 << "%%";
+			printer::console_print_full_Kalman_state(currentState);
+		}
+		std::cout << std::endl;
+		return currentState;
+	}
+
+	int GradientTuner::gradSign(float s, float interval)
+	{
+		if (s > interval)
+			return 1;
+		else if (s < -interval)
+			return -1;
+		else
+			return 0;
+	}
+
 }

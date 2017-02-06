@@ -1,6 +1,11 @@
 #ifndef ExtendedKalmanFilterIS1D_H
 #define ExtendedKalmanFilterIS1D_H
 
+#define BACKGROUND 0
+#define AMPLITUDE 1
+#define FREQUENCY 2
+#define PHASE 3
+
 #include <vector>
 
 #include <Eigen/Dense>

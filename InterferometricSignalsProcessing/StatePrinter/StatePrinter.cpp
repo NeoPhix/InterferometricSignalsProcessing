@@ -101,7 +101,13 @@ namespace printer
 							 dmod::array1d &restoredSignal )
 	{
 		size_t N = states.size();
-		if (signal.size() != N || noise.size() != N || background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N || restoredSignal.size() != N)
+		if ( signal.size() != N		||
+			 noise.size() != N		|| 
+			 background.size() != N || 
+			 amplitude.size() != N	|| 
+			 frequency.size() != N	|| 
+			 phase.size() != N		|| 
+			 restoredSignal.size() != N )
 		{
 			std::cout << "Error. Arrays sizes are mismatched." << std::endl;
 			return;
@@ -136,11 +142,23 @@ namespace printer
 		out.close();
 	}
 
-	void console_print_Kalman_stdev(std::vector<Eigen::Vector4d> &states, dmod::array1d &signal, dmod::array1d &noise,
-		dmod::array1d &background, dmod::array1d &amplitude, dmod::array1d &frequency, dmod::array1d &phase, dmod::array1d &restoredSignal)
+	void console_print_Kalman_stdev( std::vector<Eigen::Vector4d> &states, 
+									 dmod::array1d &signal, 
+									 dmod::array1d &noise,
+									 dmod::array1d &background, 
+									 dmod::array1d &amplitude, 
+									 dmod::array1d &frequency, 
+									 dmod::array1d &phase, 
+									 dmod::array1d &restoredSignal)
 	{
 		size_t N = states.size();
-		if (signal.size() != N || noise.size() != N || background.size() != N || amplitude.size() != N || frequency.size() != N || phase.size() != N || restoredSignal.size() != N)
+		if ( signal.size() != N		|| 
+			 noise.size() != N		|| 
+			 background.size() != N || 
+			 amplitude.size() != N	|| 
+			 frequency.size() != N	|| 
+			 phase.size() != N		|| 
+			 restoredSignal.size() != N )
 		{
 			std::cout << "Error. Arrays sizes are mismatched." << std::endl;
 			return;

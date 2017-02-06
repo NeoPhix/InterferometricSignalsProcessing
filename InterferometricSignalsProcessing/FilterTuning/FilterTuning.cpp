@@ -4,15 +4,20 @@
 
 #include "FilterTuning.h"
 
-float FilterTuning::fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
+namespace FilterTuning
 {
-	float sum = 0;
-	for (auto iter = inputSignals.begin(); iter != inputSignals.end(); ++iter)
+
+	float fitness(std::vector<dmod::array1d> &inputSignals, EKFState filterState)
 	{
-		EKF filter(filterState);
-		dmod::array1d reconstructedSignal = filter.getRestoredSignal(*iter);
-		dmod::array1d diff = dmod::sub(*iter, reconstructedSignal);
-		sum += dmod::var(diff);
+		float sum = 0;
+		for (auto iter = inputSignals.begin(); iter != inputSignals.end(); ++iter)
+		{
+			EKF filter(filterState);
+			dmod::array1d reconstructedSignal = filter.getRestoredSignal(*iter);
+			dmod::array1d diff = dmod::sub(*iter, reconstructedSignal);
+			sum += dmod::var(diff);
+		}
+		return sum;		//sum of variations of differences between original and reconstructed by EKF results signals
 	}
-	return sum;		//sum of variations of differences between original and reconstructed by EKF results signals
+
 }

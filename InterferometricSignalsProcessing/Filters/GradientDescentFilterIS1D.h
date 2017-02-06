@@ -8,7 +8,9 @@ enum class StopCriterion {FixedIterationsCount, AdaptiveStep};
 class GradientDescentFilterIS1D
 {
 public:
-	GradientDescentFilterIS1D(Eigen::Vector4d state_, Eigen::Vector4d step_, int iterNumber_);
+	GradientDescentFilterIS1D( Eigen::Vector4d state_, 
+		                       Eigen::Vector4d step_, 
+							   int iterNumber_ );
 	GradientDescentFilterIS1D();
 	~GradientDescentFilterIS1D();
 

@@ -1,6 +1,11 @@
 #ifndef SIGNAL_ANALYSIS_H
 #define SIGNAL_ANALYSIS_H
 
+#define BACKGROUND 0
+#define AMPLITUDE 1
+#define FREQUENCY 2
+#define PHASE 3
+
 #include <vector>
 
 #include <opencv/cv.h>
@@ -43,10 +48,5 @@ namespace dmod
 	Eigen::Vector4d get_deviations(std::vector<Eigen::Vector4d> &states, array1d &background, array1d &amplitude, array1d &frequency, array1d &phase);
 	array1d get_parameter_vector(std::vector<Eigen::Vector4d> &states, int parameter);
 }
-
-#define BACKGROUND 0
-#define AMPLITUDE 1
-#define FREQUENCY 2
-#define PHASE 3
 
 #endif

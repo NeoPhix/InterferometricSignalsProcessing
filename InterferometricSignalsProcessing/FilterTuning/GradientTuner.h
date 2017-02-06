@@ -15,16 +15,20 @@ namespace FilterTuning
 					   EKFState step_ );
 		~GradientTuner();
 
-		void changeSignals(std::vector<dmod::array1d> &inputSignals_);
-		EKFState tune();
+		void changeSignals( std::vector<dmod::array1d> &inputSignals_ );
+		EKFState tune();		
+
+	private:
 		void makeStep();
+		EKFState gradDirection(EKFState &step);
+		int gradSign(float s, float interval = 1.);
+
 	private:
 		std::vector<dmod::array1d> inputSignals;
 		int iterationsCount;
 		EKFState currentState;
 		EKFState step;
 
-		int gradSign(float s, float interval = 1.);
 	};
 }
 

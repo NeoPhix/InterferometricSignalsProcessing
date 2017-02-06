@@ -15,8 +15,11 @@ namespace FilterTuning
 	class TotalSearchTuner
 	{
 	public:
-		TotalSearchTuner(std::vector<dmod::array1d> &inputSignals_, int filtersAmount_,
-			std::default_random_engine &gen_, EKFState min_, EKFState max_);
+		TotalSearchTuner( std::vector<dmod::array1d> &inputSignals_, 
+					      int filtersAmount_,
+						  std::default_random_engine &gen_, 
+						  EKFState min_, 
+						  EKFState max_);
 		~TotalSearchTuner();
 
 		void createStates();
