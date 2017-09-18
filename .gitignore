@@ -43,6 +43,7 @@
 .builds
 **/*.dotCover
 **/packages/
+*.VC.db
 
 packages
 
